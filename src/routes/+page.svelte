@@ -101,15 +101,15 @@ function flashes(count, boxColor, boxDistance) {
     if (count === targetIndex * 2) {
         currentLetter = targetLetter;
         isTarget = true;
+        textColor = "red";
         startTime = Date.now();
     } else if (showLetter) {
         isTarget = false;
+        textColor = distractors[randomRange(6)];
         currentLetter = letters[Math.floor(Math.random() * letters.length)];
     } else {
         currentLetter = ' '; 
     }
-
-    textColor = distractors[randomRange(6)];
 
     // either 3 or 8 items before target for 100ms
     let boxIndex = targetIndex * 2 - boxDistance;
