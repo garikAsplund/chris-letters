@@ -30,12 +30,12 @@ const targets = [
 ];
 
 const distractors = [
-    [0,0,255],      // blue
-    [200,200,0],    // yellow
-    [200,0,200],    // magenta
-    [0,200,200],    // cyan
-    [200,200,200],  // light grey
-    [50,50,50],     // dark grey
+    "rgb(0,0,255)",      // blue
+    "rgb(200,200,0)",    // yellow
+    "rgb(200,0,200)",    // magenta
+    "rgb(0,200,200)",    // cyan
+    "rgb(200,200,200)",  // light grey
+    "rgb(50,50,50)",     // dark grey
 ];
 
 // 16 items per array
@@ -51,28 +51,34 @@ const distractors = [
 // reverse responses are correct
 
 let currentLetter;
+let receivedLetter = ' ';
 let showLetter = true;
 let targetLetter = "X";
 let targetIndex = 14;
 let isTarget = false;
-let isDistractorRed = false;
-let isDistractorGreen = false;
+let isBoxRed = false;
+let isBoxGreen = false;
+let textColor;
 let plays = 0;
+
+function randomRange(max) {
+  return Math.ceil(Math.random() * max);
+}
 
 function begin() {
     // display = letters[i++ % letters.length];
     let count = 0;
-    let distractorColor = Math.random() < 0.5 ?  "red" : "green";
-    let distractorDistance = Math.random() < 0.5 ?  6 : 16;
+    let boxColor = Math.random() < 0.5 ?  "red" : "green";
+    let boxDistance = Math.random() < 0.5 ?  6 : 16;
     targetLetter = targets[plays++ % targets.length];
 
     const flash = setInterval(() => {
-        flashes(count++, distractorColor, distractorDistance);
+        flashes(count++, boxColor, boxDistance);
         if (count >= 32) clearInterval(flash);
     }, 50);
 }
 
-function flashes(count, distractorColor, distractorDistance) {
+function flashes(count, boxColor, boxDistance) {
     if (count === targetIndex * 2) {
         currentLetter = targetLetter;
         isTarget = true;
@@ -83,25 +89,38 @@ function flashes(count, distractorColor, distractorDistance) {
         currentLetter = ' '; 
     }
 
+    textColor = distractors[randomRange(6)];
+
     // either 3 or 8 items before target for 100ms
-    if (distractorColor === "green") {
-        if (count === targetIndex * 2 - distractorDistance || count === targetIndex * 2 - distractorDistance + 1) {
-            isDistractorGreen = true;
+    let boxIndex = targetIndex * 2 - boxDistance;
+    if (boxColor === "green") {
+        if (count === boxIndex || count === boxIndex + 1) {
+            isBoxGreen = true;
         } else {
-            isDistractorGreen = false;
+            isBoxGreen = false;
         }
     }
-    if (distractorColor === "red") {
-        if (count === targetIndex * 2 - distractorDistance || count === targetIndex * 2 - distractorDistance + 1) {
-            isDistractorRed = true;
+    if (boxColor === "red") {
+        if (count === boxIndex || count === boxIndex + 1) {
+            isBoxRed = true;
         } else {
-            isDistractorRed = false;
+            isBoxRed = false;
         } 
     }
     
     showLetter = !showLetter;
 }
+
+function handleKeydown(event) {
+    if (event.key && event.key.length === 1) {
+        if (letters.includes(event.key.toUpperCase())) {
+            receivedLetter = event.key.toUpperCase();
+        }
+    }
+}
 </script>
+
+<svelte:window on:keydown={handleKeydown}/>
 
 <h1 class="transform translate-y-20 flex justify-center text-4xl font-bold underline">
     Welcome to our experiment :)
@@ -116,9 +135,12 @@ function flashes(count, distractorColor, distractorDistance) {
         Start
     </button>
 
-    <div class="flex justify-center w-32 h-32 border-4 transform translate-y-80" class:border-red-500={isDistractorRed} class:border-green-500={isDistractorGreen}>
-        <p class="self-center text-8xl font-courier-new text-center font-thin" class:text-red-500={isTarget}>{currentLetter}</p>
+    <div class="flex justify-center w-32 h-32 border-4 transform translate-y-80" class:border-red-500={isBoxRed} class:border-green-500={isBoxGreen}>
+        <p class="self-center text-8xl font-courier-new text-center font-thin" class:text-red-500={isTarget} style="color: {textColor}">{currentLetter}</p>
     </div>
+    <p class="self-center text font-courier-new text-center font-thin translate-y-96">Your guess:</p>
+    <p class="self-center text-8xl font-courier-new text-center font-thin translate-y-96">{receivedLetter}</p>
+
 
     <input class="translate-y-96 w-8 text-center capitalize">
 </div>
