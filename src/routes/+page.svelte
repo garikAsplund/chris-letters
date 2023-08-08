@@ -55,18 +55,21 @@ let showLetter = true;
 let targetLetter = "A";
 let targetIndex = 8;
 let isTarget = false;
+let isDistractorRed = false;
+let isDistractorGreen = false;
 
 function begin() {
     // display = letters[i++ % letters.length];
     let count = 0;
+    let distractorColor = Math.random() < 0.5 ?  "red" : "green";
 
     const flash = setInterval(() => {
-        flashes(count++);
+        flashes(count++, distractorColor);
         if (count >= 32) clearInterval(flash);
     }, 50);
 }
 
-function flashes(count) {
+function flashes(count, distractorColor) {
     if (count === targetIndex * 2) {
         currentLetter = targetLetter;
         isTarget = true;
@@ -77,12 +80,25 @@ function flashes(count) {
         currentLetter = ' '; 
     }
 
+    // either 3 or 8 items before target for 100ms
+    if (distractorColor === "green") {
+        if (count === targetIndex || count === targetIndex + 1) {
+            isDistractorGreen = true;
+        } else {
+            isDistractorGreen = false;
+        }
+    }
+    if (distractorColor === "red") {
+        if (count === targetIndex || count === targetIndex + 1) {
+            isDistractorRed = true;
+        } else {
+            isDistractorRed = false;
+        } 
+    }
+    
+
     showLetter = !showLetter;
 }
-
-
-
-
 </script>
 
 <h1 class="transform translate-y-20 flex justify-center text-4xl font-bold underline">
@@ -98,7 +114,7 @@ function flashes(count) {
         Start
     </button>
 
-    <div class="flex justify-center w-32 h-32 border-4 transform translate-y-80">
+    <div class="flex justify-center w-32 h-32 border-4 transform translate-y-80" class:border-red-500={isDistractorRed} class:border-green-500={isDistractorGreen}>
         <p class="self-center text-8xl font-courier-new text-center font-thin" class:text-red-500={isTarget}>{currentLetter}</p>
     </div>
 
