@@ -50,12 +50,38 @@ const distractors = [
 
 // reverse responses are correct
 
-let display = "A";
-let i = 0;
+let currentLetter;
+let showLetter = true;
+let targetLetter = "A";
+let targetIndex = 8;
+let isTarget = false;
 
 function begin() {
-    display = letters[i++ % letters.length];
+    // display = letters[i++ % letters.length];
+    let count = 0;
+
+    const flash = setInterval(() => {
+        flashes(count++);
+        if (count >= 32) clearInterval(flash);
+    }, 50);
 }
+
+function flashes(count) {
+    if (count === targetIndex * 2) {
+        currentLetter = targetLetter;
+        isTarget = true;
+    } else if (showLetter) {
+        isTarget = false;
+        currentLetter = letters[Math.floor(Math.random() * letters.length)];
+    } else {
+        currentLetter = ' '; 
+    }
+
+    showLetter = !showLetter;
+}
+
+
+
 
 </script>
 
@@ -73,8 +99,10 @@ function begin() {
     </button>
 
     <div class="flex justify-center w-32 h-32 border-4 transform translate-y-80">
-        <p class="self-center text-6xl font-mono text-center font-thin">{display}</p>
+        <p class="self-center text-8xl font-courier-new text-center font-thin" class:text-red-500={isTarget}>{currentLetter}</p>
     </div>
+
+    <input class="translate-y-96 w-8 text-center capitalize">
 </div>
 
 <style lang="postcss">
