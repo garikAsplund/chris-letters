@@ -52,24 +52,27 @@ const distractors = [
 
 let currentLetter;
 let showLetter = true;
-let targetLetter = "A";
-let targetIndex = 8;
+let targetLetter = "X";
+let targetIndex = 14;
 let isTarget = false;
 let isDistractorRed = false;
 let isDistractorGreen = false;
+let plays = 0;
 
 function begin() {
     // display = letters[i++ % letters.length];
     let count = 0;
     let distractorColor = Math.random() < 0.5 ?  "red" : "green";
+    let distractorDistance = Math.random() < 0.5 ?  6 : 16;
+    targetLetter = targets[plays++ % targets.length];
 
     const flash = setInterval(() => {
-        flashes(count++, distractorColor);
+        flashes(count++, distractorColor, distractorDistance);
         if (count >= 32) clearInterval(flash);
     }, 50);
 }
 
-function flashes(count, distractorColor) {
+function flashes(count, distractorColor, distractorDistance) {
     if (count === targetIndex * 2) {
         currentLetter = targetLetter;
         isTarget = true;
@@ -82,21 +85,20 @@ function flashes(count, distractorColor) {
 
     // either 3 or 8 items before target for 100ms
     if (distractorColor === "green") {
-        if (count === targetIndex || count === targetIndex + 1) {
+        if (count === targetIndex * 2 - distractorDistance || count === targetIndex * 2 - distractorDistance + 1) {
             isDistractorGreen = true;
         } else {
             isDistractorGreen = false;
         }
     }
     if (distractorColor === "red") {
-        if (count === targetIndex || count === targetIndex + 1) {
+        if (count === targetIndex * 2 - distractorDistance || count === targetIndex * 2 - distractorDistance + 1) {
             isDistractorRed = true;
         } else {
             isDistractorRed = false;
         } 
     }
     
-
     showLetter = !showLetter;
 }
 </script>
