@@ -66,7 +66,8 @@ let currentTrial = 0;
 const totalTrials = 96;
 let started = false;
 let guessed = true;
-let reactionTime = '0';
+let reactionTime = 0;
+let startTime = null;
 
 function randomRange(max) {
   return Math.ceil(Math.random() * max);
@@ -100,6 +101,7 @@ function flashes(count, boxColor, boxDistance) {
     if (count === targetIndex * 2) {
         currentLetter = targetLetter;
         isTarget = true;
+        startTime = Date.now();
     } else if (showLetter) {
         isTarget = false;
         currentLetter = letters[Math.floor(Math.random() * letters.length)];
@@ -130,15 +132,20 @@ function flashes(count, boxColor, boxDistance) {
 }
 
 function handleKeydown(event) {
-    guessed = true;
     if (event.key && event.key.length === 1) {
         if (letters.includes(event.key.toUpperCase())) {
+            if (startTime) {
+                reactionTime = Date.now() - startTime;
+                startTime = null;
+            }
+            guessed = true;
             receivedLetter = event.key.toUpperCase();
         }
     }
 }
 
 function nextTrial(event) {
+    if (guessed === false) return;
     if (event.key == " " && event.key.length === 1) {
         begin();
     }
