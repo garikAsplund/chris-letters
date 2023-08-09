@@ -155,11 +155,10 @@ function nextTrial(event) {
         begin();
     }
 }
-
 </script>
 
 <svelte:window on:keydown={handleKeydown} on:keyup={nextTrial}/>
-
+{#if currentTrial < 96}
 <h1 class="transform translate-y-20 flex justify-center text-4xl font-bold ">
     🪇 Welcome to our experiment 🧑‍🔬
 </h1>
@@ -189,6 +188,17 @@ function nextTrial(event) {
         <ProgressBar current={currentTrial} total={totalTrials}/>
     </div>
 </div>
+{:else}
+<h1 class="transform translate-y-20 flex justify-center text-4xl font-bold ">
+    😍 Thanks for playing!!! 😎
+</h1>
+
+<div class="flex flex-col items-center">
+    <h3 class="text-center transform translate-y-40 text-xl w-2/5">
+        See you next time.
+    </h3>
+</div>
+{/if}
 
 <style lang="postcss">
     :global(html) {
