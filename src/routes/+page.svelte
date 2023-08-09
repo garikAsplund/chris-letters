@@ -1,5 +1,6 @@
 <script>
 import ProgressBar from '$lib/components/ProgressBar.svelte';
+import { emojisplosion } from 'emojisplosion';
 
 const letters = [
     "B",
@@ -40,18 +41,6 @@ const distractors = [
     "rgb(50,50,50)",     // dark grey
 ];
 
-// 16 items per array
-// place target letter at _ index
-
-// start 400ms blank
-
-// 50ms per frame
-// alternating letter, blank frame
-
-// T1/T2 lag either 300ms or 800ms
-
-// reverse responses are correct
-
 let currentLetter = ' ';
 let receivedLetter = ' ';
 let showLetter = true;
@@ -62,7 +51,7 @@ let isBoxRed = false;
 let isBoxGreen = false;
 let textColor;
 let plays = 0;
-let currentTrial = 0;
+let currentTrial = 93;
 const totalTrials = 96;
 let started = false;
 let guessed = true;
@@ -129,6 +118,22 @@ function flashes(count, boxColor, boxDistance) {
     }
     
     showLetter = !showLetter;
+
+    if (currentTrial === 96) {
+        const { cancel } = emojisplosion({
+            emojis: ["🍕", "🍷", "🙌", "🎆", "🍻", "🎊","🥮", "🏆", "🍾", "🪇", "🥇", "🎇", "🎉", "🪅", "🎁", "🪩", "✨", "🌠", "💯", "🔥", ],
+            interval: 40,
+            physics: {
+                fontSize: {
+                    max: 54,
+                    min: 24,
+                },
+            },
+        });
+
+        setTimeout(cancel, 3000);  
+    }
+    
 }
 
 function handleKeydown(event) {
@@ -150,6 +155,7 @@ function nextTrial(event) {
         begin();
     }
 }
+
 </script>
 
 <svelte:window on:keydown={handleKeydown} on:keyup={nextTrial}/>
