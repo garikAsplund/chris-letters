@@ -61,6 +61,7 @@
     let CC = false; 
     let SiB = false;
     let guesses = [];
+    let displayFace = false;
 
     function randomRange(max) {
         return Math.ceil(Math.random() * max);
@@ -152,7 +153,21 @@
         }
 
         if (SiB === true) {
-            
+            if (count === targetIndex * 2 - 6 || count === targetIndex * 2 - 5) {
+                displayFace = true;
+            } else if (count === targetIndex * 2) {
+                displayFace = false;
+                currentLetter = targetLetter;
+                isTarget = true;
+                textColor = "red";
+                startTime = Date.now();
+            } else if (showLetter) {
+                isTarget = false;
+                textColor = distractors[randomRange(6)];
+                currentLetter = letters[Math.floor(Math.random() * letters.length)];
+            } else {
+                currentLetter = ' '; 
+            }
         }
         
         showLetter = !showLetter;
@@ -276,7 +291,13 @@
             <p class="self-center text-lg text-center translate-y-60">Then hit spacebar to start the next trial</p>
 
             <div class="flex justify-center w-32 h-32 transform border-4 translate-y-80" class:border-red-500={isBoxRed} class:border-green-500={isBoxGreen} class:border-slate-500={!isBoxGreen && !isBoxRed}>
-                <p class="self-center font-thin text-center text-8xl font-courier-new" class:text-red-500={isTarget} style="color: {textColor}">{currentLetter}</p>
+                <p class="self-center font-thin text-center text-8xl font-courier-new" class:text-red-500={isTarget} style="color: {textColor}">
+                    {#if displayFace}
+                        <img src="garik_bw.jpg" alt="Garik!!!">
+                    {:else}
+                        {currentLetter}
+                    {/if}
+                </p>
             </div>
             <p class="self-center text-center text translate-y-96">
                 {#if AB}
