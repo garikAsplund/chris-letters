@@ -51,7 +51,7 @@
     let isBoxGreen = false;
     let textColor;
     let plays = 0;
-    let currentTrial = 93;
+    let currentTrial = 92;
     const totalTrials = 96;
     let started = false;
     let guessed = true;
@@ -61,7 +61,22 @@
     let CC = false; 
     let SiB = false;
     let guesses = [];
+    let surpriseTrials = [];
     let displayFace = false;
+
+    while (surpriseTrials.length < 6) {
+        let trial = randomRange(totalTrials - 2);
+
+        if (surpriseTrials.includes(trial)
+            || surpriseTrials.includes(trial - 1)
+            || surpriseTrials.includes(trial + 1)) {
+            continue;
+        }
+        
+        surpriseTrials.push(trial);
+    }
+
+    console.log(surpriseTrials);
 
     function randomRange(max) {
         return Math.ceil(Math.random() * max);
@@ -87,10 +102,15 @@
         let targetOffset = Math.random() < 0.5 ?  3 : 8;
 
         
-        if (AB === true) {
+        if (AB) {
             targetIndex = 4;
             T1Index = targetIndex + randomRange(3);
             T2Index = T1Index + targetOffset; 
+        }
+
+        if (SiB) {
+            targetIndex = 6;
+            targetIndex += randomRange(8);
         }
 
         const flash = setInterval(() => {                
@@ -104,7 +124,7 @@
         }, 50 * 32);
     }
 
-    function flashes(count, boxColor, boxDistance, T1Index, secondRedLetterIndex) {
+    function flashes(count, boxColor, boxDistance, T1Index, T2Index) {
         if (CC === true) {
             if (count === targetIndex * 2) {
                 currentLetter = targetLetter;
@@ -137,7 +157,7 @@
         }
 
         if (AB === true) {
-            if (count === T1Index * 2 || count === secondRedLetterIndex * 2) {
+            if (count === T1Index * 2 || count === T2Index * 2) {
                 currentLetter = targetLetter;
                 isTarget = true;
                 textColor = "red";
@@ -153,7 +173,8 @@
         }
 
         if (SiB === true) {
-            if (count === targetIndex * 2 - 6 || count === targetIndex * 2 - 5) {
+            console.log(targetIndex);
+            if (surpriseTrials.includes(currentTrial) && (count === targetIndex * 2 - 6 || count === targetIndex * 2 - 5)) {
                 displayFace = true;
             } else if (count === targetIndex * 2) {
                 displayFace = false;
