@@ -47,6 +47,7 @@
     let targetLetter = "X";
     let targetIndex = 14;
     let isTarget = false;
+    let boxIndex;
     let isBoxRed = false;
     let isBoxGreen = false;
     let textColor;
@@ -93,19 +94,26 @@
 
         let count = 0;
         currentTrial++;
-        let boxColor = Math.random() < 0.5 ?  "red" : "green";
-        let boxDistance = Math.random() < 0.5 ?  6 : 16;
         targetLetter = targets[plays++ % targets.length];
+
+        let boxColor;
 
         let T1Index;
         let T2Index;
         let targetOffset = Math.random() < 0.5 ?  3 : 8;
-
         
         if (AB) {
             targetIndex = 4;
             T1Index = targetIndex + randomRange(3);
             T2Index = T1Index + targetOffset; 
+        }
+
+        if (CC) {
+            boxIndex = 4;
+            boxIndex += randomRange(3);
+            boxIndex *= 2;
+            targetOffset *= 2;
+            boxColor = Math.random() < 0.5 ?  "red" : "green";
         }
 
         if (SiB) {
@@ -114,7 +122,7 @@
         }
 
         const flash = setInterval(() => {                
-            flashes(count++, boxColor, boxDistance, T1Index, T2Index);
+            flashes(count++, boxColor, targetOffset, T1Index, T2Index);
             
             if (count >= 32) clearInterval(flash);
         }, 50);
@@ -124,9 +132,9 @@
         }, 50 * 32);
     }
 
-    function flashes(count, boxColor, boxDistance, T1Index, T2Index) {
+    function flashes(count, boxColor, targetOffset, T1Index, T2Index) {
         if (CC) {
-            if (count === targetIndex * 2) {
+            if (count === boxIndex + targetOffset) {
                 currentLetter = targetLetter;
                 isTarget = true;
                 textColor = "red";
@@ -139,7 +147,6 @@
                 currentLetter = ' '; 
             }
         
-            let boxIndex = targetIndex * 2 - boxDistance;
             if (boxColor === "green") {
                 if (count === boxIndex || count === boxIndex + 1) {
                     isBoxGreen = true;
