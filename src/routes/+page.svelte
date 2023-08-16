@@ -320,7 +320,7 @@
             </h3>
             <p class="self-center text-lg text-center translate-y-56">Then hit spacebar to start the next trial</p>
 
-            <div class="flex justify-center w-64 h-64 transform border-8 translate-y-80" class:border-red-500={isBoxRed} class:border-green-500={isBoxGreen} class:border-slate-500={!isBoxGreen && !isBoxRed}>
+            <div class="flex justify-center w-64 h-64 transform border-8 translate-y-72" class:border-red-500={isBoxRed} class:border-green-500={isBoxGreen} class:border-slate-500={!isBoxGreen && !isBoxRed}>
                 <p class="self-center font-thin text-center text-[280px] font-courier-new" class:text-red-500={isTarget} style="color: {textColor}">
                     {#if displayFace}
                         <img src="garik_bw.jpg" alt="Garik!!!">
@@ -329,14 +329,14 @@
                     {/if}
                 </p>
             </div>
-            <p class="self-center text-center text translate-y-96">
+            <p class="self-center text-center text translate-y-80">
                 {#if AB}
                     Your guesses:
                 {:else}
                     Your guess:
                 {/if}
             </p>
-            <p class="self-center h-24 font-thin text-center text-8xl font-courier-new translate-y-96">
+            <p class="self-center h-24 font-thin text-center text-8xl font-courier-new translate-y-80">
                 {#if AB}
                     {#each guesses as guess}
                         {guess}
@@ -346,8 +346,8 @@
                 {/if}
             </p>
 
-            <p class="self-center text-center text translate-y-96">Your reaction time:</p>
-            <p class="self-center text-2xl font-thin text-center font-courier-new translate-y-96">{reactionTime} ms</p>
+            <p class="self-center text-center text translate-y-80">Your reaction time:</p>
+            <p class="self-center h-24 text-2xl font-thin text-center font-courier-new translate-y-80">{reactionTime} ms</p>
 
             <div class="fixed bottom-0 left-0 w-full">
                 <ProgressBar current={currentTrial} total={totalTrials}/>
