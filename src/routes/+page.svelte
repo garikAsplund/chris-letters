@@ -84,6 +84,8 @@
     let correct = 0;
     let incorrect = 0;
     let targetLetters = [];
+    let buttonText = "Start";
+    let clicked = false;
 
     while (surpriseTrials.length < 6) {
         let trial = randomRange(totalTrials - 2);
@@ -101,6 +103,12 @@
 
     function randomRange(max) {
         return Math.ceil(Math.random() * max);
+    }
+
+    function onClick() {
+        buttonText = "Trial already in progress";
+        clicked = true;
+        setTimeout(begin, 400);
     }
 
     function begin() {
@@ -213,7 +221,7 @@
             } else if (showLetter) {
                 isTarget = false;
                 textColor = distractors[randomRange(6)];
-                currentLetter = letters[Math.floor(Math.random() * letters.length)];
+                currentLetter = letters[randomRange(letters.length) - 1];
             } else {
                 currentLetter = ' '; 
             }
@@ -262,18 +270,19 @@
                         guessed = true;
                         receivedLetter = event.key.toUpperCase();
                         receivedLetter === targetLetter ? correct++ : incorrect++;
+                        setTimeout(begin, 600);
                     }
                 }
             }
         }
     }
 
-    function nextTrial(event) {
-        if (guessed === false) return;
-        if (event.key == " " && event.key.length === 1) {
-            begin();
-        }
-    } 
+    // function nextTrial(event) {
+    //     if (guessed === false) return;
+    //     if (event.key == " " && event.key.length === 1) {
+    //         begin();
+    //     }
+    // } 
 
     function handleCheck(event) {
         if (event.target.checked) {
@@ -281,12 +290,15 @@
                 case "AB":
                     CC = false;
                     SiB = false;
+                    clicked = false;
                 case "CC":
                     AB = false;
                     SiB = false;
+                    clicked = false;
                 case "SiB":
                     AB = false;
                     CC = false;
+                    clicked = false;
             }
         }
     }
@@ -296,11 +308,11 @@
 
 <html lang="en" class="h-screen bg-no-repeat bg-gradient-to-b from-fuchsia-300 to-white">
     {#if currentTrial < 96}
-        <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-20 ">
+        <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-10">
             🪇 Welcome to our experiment 🧑‍🔬
         </h1>
         
-        <div class="flex justify-center mx-4 space-x-4 translate-y-32">      
+        <div class="flex justify-center mx-4 space-x-4 translate-y-24">      
             <label>
                 <input 
                     type=checkbox
@@ -332,18 +344,20 @@
 
         <div class="flex flex-col items-center">
             {#if !AB && !CC && !SiB}
-                <p class="p-2 text-4xl translate-y-40">Please select an option from above 👆</p>
-            {:else}
-                <button on:click={begin} class="p-2 text-4xl transform translate-y-40 bg-gray-100 border border-black rounded-sm hover:bg-gray-200">
-                    Start
+                <p class="p-2 text-4xl translate-y-32">Please select an option from above 👆</p>
+            {:else if !clicked}
+                <button on:click={onClick} class="p-2 text-4xl transform translate-y-32 bg-gray-100 border border-black rounded-sm hover:bg-gray-200">
+                    {buttonText}
                 </button>
+            {:else}
+                <p class="p-2 text-4xl text-transparent translate-y-32">Shhh, this is secret!!!</p>
             {/if}
-            <h3 class="w-2/5 text-xl text-center transform translate-y-48">
+            <h3 class="w-2/5 text-xl text-center transform translate-y-40">
                 Whenever you see a red letter, press that key on your keyboard
             </h3>
-            <p class="self-center text-lg text-center translate-y-56">Then hit spacebar to start the next trial</p>
+            <!-- <p class="self-center text-lg text-center translate-y-56">Then hit spacebar to start the next trial</p> -->
 
-            <div class="flex justify-center w-64 h-64 transform border-8 translate-y-72" class:border-red-500={isBoxRed} class:border-green-500={isBoxGreen} class:border-slate-500={!isBoxGreen && !isBoxRed}>
+            <div class="flex justify-center w-64 h-64 transform translate-y-48 border-8" class:border-red-500={isBoxRed} class:border-green-500={isBoxGreen} class:border-slate-500={!isBoxGreen && !isBoxRed}>
                 <p class="self-center font-thin text-center text-[280px] font-courier-new" class:text-red-500={isTarget} style="color: {textColor}">
                     {#if displayFace}
                         <img src="garik_bw.jpg" alt="Garik!!!">
@@ -352,14 +366,14 @@
                     {/if}
                 </p>
             </div>
-            <p class="self-center text-center text translate-y-80">
+            <p class="self-center text-center translate-y-56 text">
                 {#if AB}
                     Your guesses:
                 {:else}
                     Your guess:
                 {/if}
             </p>
-            <p class="self-center h-24 font-thin text-center text-8xl font-courier-new translate-y-80">
+            <p class="self-center h-24 font-thin text-center translate-y-56 text-8xl font-courier-new">
                 {#if AB}
                     {#each guesses as guess}
                         {guess}
@@ -369,12 +383,12 @@
                 {/if}
             </p>
 
-            <p class="self-center text-center text translate-y-80">Your reaction time:</p>
-            <p class="self-center h-24 text-2xl font-thin text-center font-courier-new translate-y-80">{reactionTime} ms</p>
+            <p class="self-center text-center translate-y-56 text">Your reaction time:</p>
+            <p class="self-center h-24 text-2xl font-thin text-center translate-y-56 font-courier-new">{reactionTime} ms</p>
 
             <div class="fixed bottom-0 left-0 w-full">
-                <AccuracyBar correct={correct} attempts={correct + incorrect}/>
                 <ProgressBar current={currentTrial} total={totalTrials}/>
+                <AccuracyBar correct={correct} attempts={correct + incorrect}/>
             </div>
         </div>
 
@@ -382,9 +396,23 @@
         <h1 class="flex justify-center text-4xl font-bold transform translate-y-20 ">
             😍 Thanks for playing!!! 😎
         </h1>
+        
+        {#if (correct / (correct + incorrect)) > 0.8}
+            <h1 class="flex justify-center text-2xl font-bold transform translate-y-32">
+                🫨 Wow, way to go!
+            </h1>
+        {:else if (correct / (correct + incorrect)) > 0.65}
+            <h1 class="flex justify-center text-2xl font-bold transform translate-y-32">
+                👏 You're doing alright.
+            </h1>
+        {:else}
+            <h1 class="flex justify-center text-2xl font-bold transform translate-y-32">
+                🫣 Keep trying.
+            </h1>
+        {/if}
 
         <div class="flex flex-col items-center">
-            <h3 class="w-2/5 text-xl text-center transform translate-y-40">
+            <h3 class="w-2/5 text-xl text-center transform translate-y-44">
                 See you next time.
             </h3>
         </div>
