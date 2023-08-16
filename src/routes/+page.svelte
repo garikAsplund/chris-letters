@@ -129,6 +129,7 @@
 
         currentTrial++;
         targetLetter = targets[randomRange(targets.length) - 1];
+        targetLetters = [];
         
         if (AB) {
             targetLetters.push(targetLetter);
@@ -250,14 +251,23 @@
         if (AB) {
             if (event.key && event.key.length === 1) {
                 if (letters.includes(event.key.toUpperCase()) && guesses.length < 2) {
-                    if (startTime || true) {
+                    if (startTime) {
                         reactionTime = Date.now() - startTime;
-                        startTime = null;
                         guesses = [...guesses, event.key.toUpperCase()];
                     }
                     console.log(guesses);
                     if (guesses.length === 2) {
                         guessed = true;
+                        startTime = null; 
+                        
+                        if (targetLetters.includes(guesses[0]) && targetLetters.includes(guesses[1])) {
+                            correct += 2;
+                        } else if (targetLetters.includes(guesses[0]) || targetLetters.includes(guesses[1])) {
+                            correct++;
+                            incorrect++;
+                        } else {
+                            incorrect += 2;
+                        }
                     }
                 }
             }
@@ -270,19 +280,23 @@
                         guessed = true;
                         receivedLetter = event.key.toUpperCase();
                         receivedLetter === targetLetter ? correct++ : incorrect++;
-                        setTimeout(begin, 600);
+                        setInterval(() => {
+                            if (!started) {
+                                setTimeout(begin, 600);
+                            }
+                        }, 20);
                     }
                 }
             }
         }
     }
 
-    // function nextTrial(event) {
-    //     if (guessed === false) return;
-    //     if (event.key == " " && event.key.length === 1) {
-    //         begin();
-    //     }
-    // } 
+    function nextTrial(event) {
+        if (guessed === false) return;
+        if (event.key == " " && event.key.length === 1) {
+            begin();
+        }
+    } 
 
     function handleCheck(event) {
         if (event.target.checked) {
