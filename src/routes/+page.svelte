@@ -52,7 +52,7 @@
     let isBoxGreen = false;
     let textColor;
     let plays = 0;
-    let currentTrial = 92;
+    let currentTrial = 90;
     const totalTrials = 96;
     let started = false;
     let guessed = true;
