@@ -125,7 +125,7 @@
     }
 
     function flashes(count, boxColor, boxDistance, T1Index, T2Index) {
-        if (CC === true) {
+        if (CC) {
             if (count === targetIndex * 2) {
                 currentLetter = targetLetter;
                 isTarget = true;
@@ -156,7 +156,7 @@
             }
         }
 
-        if (AB === true) {
+        if (AB) {
             if (count === T1Index * 2 || count === T2Index * 2) {
                 currentLetter = targetLetter;
                 isTarget = true;
@@ -172,8 +172,7 @@
             }
         }
 
-        if (SiB === true) {
-            console.log(targetIndex);
+        if (SiB) {
             if (surpriseTrials.includes(currentTrial) && (count === targetIndex * 2 - 6 || count === targetIndex * 2 - 5)) {
                 displayFace = true;
             } else if (count === targetIndex * 2) {
