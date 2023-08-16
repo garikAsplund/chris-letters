@@ -133,6 +133,22 @@
     }
 
     function flashes(count, boxColor, targetOffset, T1Index, T2Index) {
+        if (AB) {
+            if (count === T1Index * 2 || count === T2Index * 2) {
+                currentLetter = targetLetter;
+                isTarget = true;
+                textColor = "red";
+                startTime = Date.now();
+                targetLetter = targets[plays++ % targets.length];
+            } else if (showLetter) {
+                isTarget = false;
+                textColor = distractors[randomRange(6)];
+                currentLetter = letters[Math.floor(Math.random() * letters.length)];
+            } else {
+                currentLetter = ' '; 
+            }
+        }
+
         if (CC) {
             if (count === boxIndex + targetOffset) {
                 currentLetter = targetLetter;
@@ -160,22 +176,6 @@
                 } else {
                     isBoxRed = false;
                 } 
-            }
-        }
-
-        if (AB) {
-            if (count === T1Index * 2 || count === T2Index * 2) {
-                currentLetter = targetLetter;
-                isTarget = true;
-                textColor = "red";
-                startTime = Date.now();
-                targetLetter = targets[plays++ % targets.length];
-            } else if (showLetter) {
-                isTarget = false;
-                textColor = distractors[randomRange(6)];
-                currentLetter = letters[Math.floor(Math.random() * letters.length)];
-            } else {
-                currentLetter = ' '; 
             }
         }
 
@@ -271,7 +271,7 @@
     
 <svelte:window on:keydown={handleKeydown} on:keyup={nextTrial}/>
 
-<html lang="en" class="h-screen bg-gradient-to-b from-fuchsia-300 to-white">
+<html lang="en" class="h-screen bg-no-repeat bg-gradient-to-b from-fuchsia-300 to-white">
     {#if currentTrial < 96}
         <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-20 ">
             🪇 Welcome to our experiment 🧑‍🔬
@@ -320,8 +320,8 @@
             </h3>
             <p class="self-center text-lg text-center translate-y-56">Then hit spacebar to start the next trial</p>
 
-            <div class="flex justify-center w-32 h-32 transform border-4 translate-y-80" class:border-red-500={isBoxRed} class:border-green-500={isBoxGreen} class:border-slate-500={!isBoxGreen && !isBoxRed}>
-                <p class="self-center font-thin text-center text-8xl font-courier-new" class:text-red-500={isTarget} style="color: {textColor}">
+            <div class="flex justify-center w-64 h-64 transform border-8 translate-y-80" class:border-red-500={isBoxRed} class:border-green-500={isBoxGreen} class:border-slate-500={!isBoxGreen && !isBoxRed}>
+                <p class="self-center font-thin text-center text-[280px] font-courier-new" class:text-red-500={isTarget} style="color: {textColor}">
                     {#if displayFace}
                         <img src="garik_bw.jpg" alt="Garik!!!">
                     {:else}
