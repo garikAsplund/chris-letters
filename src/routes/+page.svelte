@@ -1,7 +1,8 @@
 <script>
+	import AccuracyBar from '$lib/components/AccuracyBar.svelte';
     import ProgressBar from '$lib/components/ProgressBar.svelte';
     import { emojisplosion } from 'emojisplosion';
-
+    
     const letters = [
         "B",
         "C",
@@ -26,10 +27,26 @@
     ];
 
     const targets = [
+        "B",
+        "C",
         "D",
         "F",
+        "G",
+        "H",
+        "J",
+        "K",
+        "L",
+        "M",
+        "N",
+        "P",
         "R",
+        "S",
+        "T",
+        "V",
+        "W",
         "X",
+        "Y",
+        "Z",
     ];
 
     const distractors = [
@@ -64,6 +81,9 @@
     let guesses = [];
     let surpriseTrials = [];
     let displayFace = false;
+    let correct = 0;
+    let incorrect = 0;
+    let targetLetters = [];
 
     while (surpriseTrials.length < 6) {
         let trial = randomRange(totalTrials - 2);
@@ -100,9 +120,10 @@
         let targetOffset = Math.random() < 0.5 ?  3 : 8;
 
         currentTrial++;
-        targetLetter = targets[plays++ % targets.length];
+        targetLetter = targets[randomRange(targets.length) - 1];
         
         if (AB) {
+            targetLetters.push(targetLetter);
             targetIndex = 4;
             T1Index = targetIndex + randomRange(3);
             T2Index = T1Index + targetOffset; 
@@ -139,11 +160,12 @@
                 isTarget = true;
                 textColor = "red";
                 startTime = Date.now();
-                targetLetter = targets[plays++ % targets.length];
+                targetLetter = targets[randomRange(targets.length) - 1];
+                targetLetters.push(targetLetter);
             } else if (showLetter) {
                 isTarget = false;
                 textColor = distractors[randomRange(6)];
-                currentLetter = letters[Math.floor(Math.random() * letters.length)];
+                currentLetter = letters[randomRange(letters.length) - 1];
             } else {
                 currentLetter = ' '; 
             }
@@ -158,7 +180,7 @@
             } else if (showLetter) {
                 isTarget = false;
                 textColor = distractors[randomRange(6)];
-                currentLetter = letters[Math.floor(Math.random() * letters.length)];
+                currentLetter = letters[randomRange(letters.length) - 1];
             } else {
                 currentLetter = ' '; 
             }
@@ -236,10 +258,11 @@
                 if (letters.includes(event.key.toUpperCase())) {
                     if (startTime) {
                         reactionTime = Date.now() - startTime;
-                        startTime = null;
+                        startTime = null; 
+                        guessed = true;
+                        receivedLetter = event.key.toUpperCase();
+                        receivedLetter === targetLetter ? correct++ : incorrect++;
                     }
-                    guessed = true;
-                    receivedLetter = event.key.toUpperCase();
                 }
             }
         }
@@ -350,6 +373,7 @@
             <p class="self-center h-24 text-2xl font-thin text-center font-courier-new translate-y-80">{reactionTime} ms</p>
 
             <div class="fixed bottom-0 left-0 w-full">
+                <AccuracyBar correct={correct} attempts={correct + incorrect}/>
                 <ProgressBar current={currentTrial} total={totalTrials}/>
             </div>
         </div>
