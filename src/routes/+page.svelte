@@ -86,6 +86,7 @@
     function begin() {
         if (started) return;
         if (!guessed) return;
+        if (!AB && !CC && !SiB) return;
 
         started = true;
         guessed = false;
@@ -93,14 +94,13 @@
         guesses = [];
 
         let count = 0;
-        currentTrial++;
-        targetLetter = targets[plays++ % targets.length];
-
         let boxColor;
-
         let T1Index;
         let T2Index;
         let targetOffset = Math.random() < 0.5 ?  3 : 8;
+
+        currentTrial++;
+        targetLetter = targets[plays++ % targets.length];
         
         if (AB) {
             targetIndex = 4;
@@ -308,14 +308,17 @@
         </div>
 
         <div class="flex flex-col items-center">
-            <h3 class="w-2/5 text-xl text-center transform translate-y-40">
+            {#if !AB && !CC && !SiB}
+                <p class="p-2 text-4xl translate-y-40">Please select an option from above 👆</p>
+            {:else}
+                <button on:click={begin} class="p-2 text-4xl transform translate-y-40 bg-gray-100 border border-black rounded-sm hover:bg-gray-200">
+                    Start
+                </button>
+            {/if}
+            <h3 class="w-2/5 text-xl text-center transform translate-y-48">
                 Whenever you see a red letter, press that key on your keyboard
             </h3>
-
-            <button on:click={begin} class="p-2 text-4xl transform bg-gray-100 border border-black rounded-sm hover:bg-gray-200 translate-y-52">
-                Start
-            </button>
-            <p class="self-center text-lg text-center translate-y-60">Then hit spacebar to start the next trial</p>
+            <p class="self-center text-lg text-center translate-y-56">Then hit spacebar to start the next trial</p>
 
             <div class="flex justify-center w-32 h-32 transform border-4 translate-y-80" class:border-red-500={isBoxRed} class:border-green-500={isBoxGreen} class:border-slate-500={!isBoxGreen && !isBoxRed}>
                 <p class="self-center font-thin text-center text-8xl font-courier-new" class:text-red-500={isTarget} style="color: {textColor}">
