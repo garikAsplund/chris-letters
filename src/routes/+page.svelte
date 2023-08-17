@@ -5,7 +5,7 @@
 
     // Import the functions you need from the SDKs you need
     // import { initializeApp } from "firebase/app";
-    import { getDatabase, ref, set } from "firebase/database";
+    import { getDatabase, ref, set, child, get } from "firebase/database";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
     import app from "$lib/firebase";
     // TODO: Add SDKs for Firebase products that you want to use
@@ -37,12 +37,32 @@
         try {
             const result = await signInWithPopup(auth, googleProvider);
             const user = result.user;
-            isAdmin = ref(db, `users/${user.uid}/admin`);
-            console.log({isAdmin});
+            
+            const dbRef = ref(getDatabase());
 
-            if (user && user.displayName) {
-                writeUserData(user.uid, user.displayName);
-            }  
+            const userAlreadyExists = await get(child(dbRef, `users/${user.uid}`)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    isAdmin = snapshot.val();
+                } else {
+                    console.log("No data available, creating user");
+                    if (user && user.displayName) {
+                        writeUserData(user.uid, user.displayName);
+                    } 
+                }
+                }).catch((error) => {
+                console.error(error);
+            });
+            
+            get(child(dbRef, `users/${user.uid}/admin`)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    console.log(snapshot.val());
+                    isAdmin = snapshot.val();
+                } else {
+                    console.log("No data available");
+                }
+                }).catch((error) => {
+                console.error(error);
+            }); 
         } catch (error) {
             console.error("Error signing in with Google:", error.message);
         }
@@ -392,8 +412,8 @@
 
 <html lang="en" class="h-screen bg-no-repeat bg-gradient-to-b from-fuchsia-300 to-white">
 <body>  
-    {#if isAdmin === true}
-        <p>Admin, nice!!!</p>
+    {#if isAdmin}
+        <p class="text-center">Admin, nice!!!</p>
     {/if}
     {#if !user}
     <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-10">
