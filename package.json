@@ -30,6 +30,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"emojisplosion": "^2.6.1"
+		"emojisplosion": "^2.6.1",
+		"firebase": "^10.1.0",
+		"firebaseui": "^6.1.0"
 	}
 }
