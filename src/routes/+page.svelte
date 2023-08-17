@@ -60,7 +60,6 @@
     }
 
     function writeUserData(userId, displayName) {
-        console.log(userId, displayName);
         set(ref(db, `users/${userId}`), {
             displayName: displayName
         });
@@ -277,7 +276,6 @@
         if (SiB) {
             if (surpriseTrials.includes(currentTrial) && (count === targetIndex * 2 - 6 || count === targetIndex * 2 - 5)) {
                 displayFace = true;
-                console.log(displayFace);
             } else if (count === targetIndex * 2) {
                 displayFace = false;
                 currentLetter = targetLetter;
@@ -320,7 +318,6 @@
                         reactionTime = Date.now() - startTime;
                         guesses = [...guesses, event.key.toUpperCase()];
                     }
-                    console.log(guesses);
                     if (guesses.length === 2) {
                         guessed = true;
                         startTime = null; 
@@ -485,7 +482,7 @@
                     {#if user}
                     <div class="flex justify-center m-4">
                         <button on:click={handleSignOut}>
-                            Sign Out
+                            Sign out
                         </button>
                     </div>
                     {/if}
