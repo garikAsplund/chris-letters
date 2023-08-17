@@ -29,6 +29,7 @@
     // const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const auth = getAuth(app);
+    let isAdmin;
 
     const googleProvider = new GoogleAuthProvider();
 
@@ -36,7 +37,9 @@
         try {
             const result = await signInWithPopup(auth, googleProvider);
             const user = result.user;
-            
+            isAdmin = ref(db, `users/${user.uid}/admin`);
+            console.log({isAdmin});
+
             if (user && user.displayName) {
                 writeUserData(user.uid, user.displayName);
             }  
@@ -61,7 +64,8 @@
 
     function writeUserData(userId, displayName) {
         set(ref(db, `users/${userId}`), {
-            displayName: displayName
+            displayName: displayName,
+            admin: false,
         });
     }
 
@@ -388,6 +392,9 @@
 
 <html lang="en" class="h-screen bg-no-repeat bg-gradient-to-b from-fuchsia-300 to-white">
 <body>  
+    {#if isAdmin === true}
+        <p>Admin, nice!!!</p>
+    {/if}
     {#if !user}
     <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-10">
         🪇 Welcome to our experiment 🧑‍🔬
@@ -478,9 +485,9 @@
                 <p class="self-center text-center translate-y-56 text">Your reaction time:</p>
                 <p class="self-center h-24 text-2xl font-thin text-center translate-y-56 font-courier-new">{reactionTime} ms</p>
 
-                <div class="fixed bottom-0 left-0 w-full">
+                <div class="fixed bottom-0 left-0 w-full backdrop-blur-3xl">
                     {#if user}
-                    <div class="flex justify-center m-4">
+                    <div class="flex justify-center m-2">
                         <button on:click={handleSignOut}>
                             Sign out
                         </button>
