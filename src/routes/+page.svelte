@@ -28,6 +28,7 @@
     // Initialize Firebase
     // const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+    const dbRef = ref(getDatabase());
     const auth = getAuth(app);
     let isAdmin;
 
@@ -38,12 +39,8 @@
             const result = await signInWithPopup(auth, googleProvider);
             const user = result.user;
             
-            const dbRef = ref(getDatabase());
-
             const userAlreadyExists = await get(child(dbRef, `users/${user.uid}`)).then((snapshot) => {
-                if (snapshot.exists()) {
-                    isAdmin = snapshot.val();
-                } else {
+                if (!snapshot.exists()) {
                     console.log("No data available, creating user");
                     if (user && user.displayName) {
                         writeUserData(user.uid, user.displayName);
@@ -55,7 +52,6 @@
             
             get(child(dbRef, `users/${user.uid}/admin`)).then((snapshot) => {
                 if (snapshot.exists()) {
-                    console.log(snapshot.val());
                     isAdmin = snapshot.val();
                 } else {
                     console.log("No data available");
@@ -72,6 +68,7 @@
     
     onAuthStateChanged(auth, (currentUser) => {
         user = currentUser;
+
     });
 
     async function handleSignOut() {
@@ -413,7 +410,9 @@
 <html lang="en" class="h-screen bg-no-repeat bg-gradient-to-b from-fuchsia-300 to-white">
 <body>  
     {#if isAdmin}
-        <p class="text-center">Admin, nice!!!</p>
+        <p class="text-center">
+            Admin, nice!!!
+        </p>
     {/if}
     {#if !user}
     <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-10">
@@ -463,7 +462,9 @@
 
             <div class="flex flex-col items-center">
                 {#if !AB && !CC && !SiB}
-                    <p class="p-2 text-4xl translate-y-32">Please select an option from above 👆</p>
+                    <p class="p-2 text-4xl translate-y-32">
+                        Please select an option from above 👆
+                    </p>
                 {:else if !clicked}
                     <button on:click={onClick} class="p-2 text-4xl transform translate-y-32 bg-gray-100 border border-black rounded-sm hover:bg-gray-200">
                         {buttonText}
@@ -502,10 +503,14 @@
                     {/if}
                 </p>
 
-                <p class="self-center text-center translate-y-56 text">Your reaction time:</p>
-                <p class="self-center h-24 text-2xl font-thin text-center translate-y-56 font-courier-new">{reactionTime} ms</p>
+                <p class="self-center text-center translate-y-56 text">
+                    Your reaction time:
+                </p>
+                <p class="self-center h-24 text-2xl font-thin text-center translate-y-56 font-courier-new">
+                    {reactionTime} ms
+                </p>
 
-                <div class="fixed bottom-0 left-0 w-full backdrop-blur-3xl">
+                <div class="fixed bottom-0 left-0 w-full backdrop-blur-3xl md:backdrop-filter-none">
                     {#if user}
                     <div class="flex justify-center m-2">
                         <button on:click={handleSignOut}>
