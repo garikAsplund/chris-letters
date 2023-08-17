@@ -392,8 +392,12 @@
 <html lang="en" class="h-screen bg-no-repeat bg-gradient-to-b from-fuchsia-300 to-white">
 <body>  
     {#if !user}
-    <div class="flex flex-col items-center justify-center h-screen space-y-10">
-        <button class="px-4 py-2 font-semibold text-gray-600 bg-transparent border border-gray-500 rounded hover:bg-gray-500 hover:text-white hover:border-transparent" on:click={signInWithGoogle}>
+    <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-10">
+        🪇 Welcome to our experiment 🧑‍🔬
+    </h1>
+    
+    <div class="flex flex-col items-center justify-center h-screen">
+        <button class="px-4 py-2 font-semibold text-gray-600 -translate-y-24 bg-transparent border border-gray-500 rounded hover:bg-gray-500 hover:text-white hover:border-transparent" on:click={signInWithGoogle}>
             Sign in with Google
         </button> 
     </div>
@@ -479,8 +483,10 @@
 
                 <div class="fixed bottom-0 left-0 w-full">
                     {#if user}
-                    <div class="flex justify-center">
-                        <button on:click={handleSignOut}>Sign Out</button>
+                    <div class="flex justify-center m-4">
+                        <button on:click={handleSignOut}>
+                            Sign Out
+                        </button>
                     </div>
                     {/if}
                     <ProgressBar current={currentTrial} total={totalTrials}/>
