@@ -4,28 +4,30 @@
     import { emojisplosion } from 'emojisplosion';
 
     // Import the functions you need from the SDKs you need
-    import { initializeApp } from "firebase/app";
-    import { getDatabase } from "firebase/database";
+    // import { initializeApp } from "firebase/app";
+    import { getDatabase, ref, set } from "firebase/database";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
-
+    import app from "$lib/firebase";
     // TODO: Add SDKs for Firebase products that you want to use
     // https://firebase.google.com/docs/web/setup#available-libraries
 
     // Your web app's Firebase configuration
     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-    const firebaseConfig = {
-        apiKey: "AIzaSyDiauRrelcJu1GuYZ5Fqz6cz2y0LLv3C3g",
-        authDomain: "chris-letters.firebaseapp.com",
-        projectId: "chris-letters",
-        storageBucket: "chris-letters.appspot.com",
-        messagingSenderId: "867592075139",
-        appId: "1:867592075139:web:bc8cfdcd4d74bd0a2668b6",
-        measurementId: "G-3SEHN30EF8"
-    };
+  
+    // const firebaseConfig = {
+    //     apiKey: "AIzaSyDiauRrelcJu1GuYZ5Fqz6cz2y0LLv3C3g",
+    //     authDomain: "chris-letters.firebaseapp.com",
+    //     databaseURL: "https://chris-letters-default-rtdb.asia-southeast1.firebasedatabase.app",
+    //     projectId: "chris-letters",
+    //     storageBucket: "chris-letters.appspot.com",
+    //     messagingSenderId: "867592075139",
+    //     appId: "1:867592075139:web:bc8cfdcd4d74bd0a2668b6",
+    //     measurementId: "G-3SEHN30EF8"
+    // };
 
     // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const database = getDatabase(app);
+    // const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
     const auth = getAuth(app);
 
     const googleProvider = new GoogleAuthProvider();
@@ -34,12 +36,17 @@
         try {
             const result = await signInWithPopup(auth, googleProvider);
             const user = result.user;
+            
+            if (user && user.displayName) {
+                writeUserData(user.uid, user.displayName);
+            }  
         } catch (error) {
             console.error("Error signing in with Google:", error.message);
         }
     }
 
     let user = null;
+    
     onAuthStateChanged(auth, (currentUser) => {
         user = currentUser;
     });
@@ -51,6 +58,14 @@
         console.error("Error signing out:", error.message);
         }
     }
+
+    function writeUserData(userId, displayName) {
+        console.log(userId, displayName);
+        set(ref(db, `users/${userId}`), {
+            displayName: displayName
+        });
+    }
+
     
     const letters = [
         "B",
@@ -366,6 +381,10 @@
             }
         }
     }
+
+    if (currentTrial > 96) {
+        
+    }
 </script>
     
 <svelte:window on:keydown={handleKeydown} on:keyup={nextTrial}/>
@@ -468,7 +487,6 @@
                     <AccuracyBar correct={correct} attempts={correct + incorrect}/>
                 </div>
             </div>
-
         {:else}
             <h1 class="flex justify-center text-4xl font-bold transform translate-y-20 ">
                 😍 Thanks for playing!!! 😎
