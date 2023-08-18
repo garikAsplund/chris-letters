@@ -1,10 +1,12 @@
 <script>
 	import AccuracyBar from '$lib/components/AccuracyBar.svelte';
     import ProgressBar from '$lib/components/ProgressBar.svelte';
+    import ExportExcel from '$lib/components/ExportExcel.svelte';
     import { emojisplosions } from 'emojisplosion';
     import { getDatabase, ref, set, child, get } from "firebase/database";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
     import app from "$lib/firebase";
+    import ShortUniqueId from 'short-unique-id';
     
     const db = getDatabase(app);
     const dbRef = ref(getDatabase());
@@ -65,7 +67,10 @@
     }
 
     function writeTrialData(trialType, everyTarget, everyGuess, everyAccuracy, everyReactionTime) {
-        set(ref(db, `blocks/test`), {
+        const uid = new ShortUniqueId();
+        const trialId = uid.seq();
+
+        set(ref(db, `blocks/${trialId}`), {
             trialType: trialType,
             targets: everyTarget,
             guesses: everyGuess,
@@ -422,6 +427,7 @@
         <p class="text-center">
             Admin, nice!!!
         </p>
+        <ExportExcel />
     {/if}
     {#if !user}
     <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-10">

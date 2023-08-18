@@ -31,7 +31,9 @@
 	"type": "module",
 	"dependencies": {
 		"emojisplosion": "^2.6.1",
+		"exceljs": "^4.3.0",
 		"firebase": "^10.1.0",
-		"firebaseui": "^6.1.0"
+		"firebaseui": "^6.1.0",
+		"short-unique-id": "^4.4.4"
 	}
 }
