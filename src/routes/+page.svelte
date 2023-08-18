@@ -145,7 +145,7 @@
     let isBoxGreen = false;
     let textColor;
     let plays = 0;
-    let currentTrial = 90;
+    let currentTrial = 80;
     const totalTrials = 96;
     let started = false;
     let guessed = true;
