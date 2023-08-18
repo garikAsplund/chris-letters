@@ -1,32 +1,11 @@
 <script>
 	import AccuracyBar from '$lib/components/AccuracyBar.svelte';
     import ProgressBar from '$lib/components/ProgressBar.svelte';
-    import { emojisplosion } from 'emojisplosion';
-
-    // Import the functions you need from the SDKs you need
-    // import { initializeApp } from "firebase/app";
+    import { emojisplosions } from 'emojisplosion';
     import { getDatabase, ref, set, child, get } from "firebase/database";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
     import app from "$lib/firebase";
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
-
-    // Your web app's Firebase configuration
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  
-    // const firebaseConfig = {
-    //     apiKey: "AIzaSyDiauRrelcJu1GuYZ5Fqz6cz2y0LLv3C3g",
-    //     authDomain: "chris-letters.firebaseapp.com",
-    //     databaseURL: "https://chris-letters-default-rtdb.asia-southeast1.firebasedatabase.app",
-    //     projectId: "chris-letters",
-    //     storageBucket: "chris-letters.appspot.com",
-    //     messagingSenderId: "867592075139",
-    //     appId: "1:867592075139:web:bc8cfdcd4d74bd0a2668b6",
-    //     measurementId: "G-3SEHN30EF8"
-    // };
-
-    // Initialize Firebase
-    // const app = initializeApp(firebaseConfig);
+    
     const db = getDatabase(app);
     const dbRef = ref(getDatabase());
     const auth = getAuth(app);
@@ -68,14 +47,13 @@
     
     onAuthStateChanged(auth, (currentUser) => {
         user = currentUser;
-
     });
 
     async function handleSignOut() {
         try {
-        await signOut(auth);
+            await signOut(auth);
         } catch (error) {
-        console.error("Error signing out:", error.message);
+            console.error("Error signing out:", error.message);
         }
     }
 
@@ -86,6 +64,15 @@
         });
     }
 
+    function writeTrialData(trialType, everyTarget, everyGuess, everyAccuracy, everyReactionTime) {
+        set(ref(db, `blocks/test`), {
+            trialType: trialType,
+            targets: everyTarget,
+            guesses: everyGuess,
+            accuracy: everyAccuracy,
+            reactionTime: everyReactionTime,
+        });
+    }
     
     const letters = [
         "B",
@@ -170,6 +157,26 @@
     let targetLetters = [];
     let buttonText = "Start";
     let clicked = false;
+    let everyTarget = [];
+    let everyGuess = [];
+    let everyAccuracy = [];
+    let everyReactionTime = [];
+    let trialType;
+
+    function gameOver() {
+        const { cancel } = emojisplosions({
+                emojis: ["🍕", "🍷", "🙌", "🎆", "🍻", "🎊","🥮", "🏆", "🍾", "🪇", "🥇", "🎇", "🎉", "🪅", "🎁", "🪩", "✨", "🌠", "💯", "🔥", ],
+                interval: 40,
+                physics: {
+                    fontSize: {
+                        max: 54,
+                        min: 24,
+                    },
+                },
+            });
+            setTimeout(cancel, 2000); 
+    } 
+
 
     while (surpriseTrials.length < 6) {
         let trial = randomRange(totalTrials - 2);
@@ -199,6 +206,11 @@
         if (started) return;
         if (!guessed) return;
         if (!AB && !CC && !SiB) return;
+        if (++currentTrial === totalTrials) {
+            gameOver();  
+            writeTrialData(trialType, everyTarget, everyGuess, everyAccuracy, everyReactionTime);
+            // return;
+        }
 
         started = true;
         guessed = false;
@@ -211,11 +223,11 @@
         let T2Index;
         let targetOffset = Math.random() < 0.5 ?  3 : 8;
 
-        currentTrial++;
         targetLetter = targets[randomRange(targets.length) - 1];
         targetLetters = [];
         
         if (AB) {
+            trialType = "AB";
             targetLetters.push(targetLetter);
             targetIndex = 4;
             T1Index = targetIndex + randomRange(3);
@@ -223,6 +235,7 @@
         }
 
         if (CC) {
+            trialType = "CC";
             boxIndex = 4;
             boxIndex += randomRange(3);
             boxIndex *= 2;
@@ -231,6 +244,7 @@
         }
 
         if (SiB) {
+            trialType = "SiB";
             targetIndex = 6;
             targetIndex += randomRange(8);
         }
@@ -249,6 +263,7 @@
     function flashes(count, boxColor, targetOffset, T1Index, T2Index) {
         if (AB) {
             if (count === T1Index * 2 || count === T2Index * 2) {
+                everyTarget.push(targetLetter);
                 currentLetter = targetLetter;
                 isTarget = true;
                 textColor = "red";
@@ -266,6 +281,7 @@
 
         if (CC) {
             if (count === boxIndex + targetOffset) {
+                everyTarget.push(targetLetter);
                 currentLetter = targetLetter;
                 isTarget = true;
                 textColor = "red";
@@ -298,6 +314,7 @@
             if (surpriseTrials.includes(currentTrial) && (count === targetIndex * 2 - 6 || count === targetIndex * 2 - 5)) {
                 displayFace = true;
             } else if (count === targetIndex * 2) {
+                everyTarget.push(targetLetter);
                 displayFace = false;
                 currentLetter = targetLetter;
                 isTarget = true;
@@ -313,22 +330,6 @@
         }
         
         showLetter = !showLetter;
-
-        if (currentTrial === 96) {
-            const { cancel } = emojisplosion({
-                emojis: ["🍕", "🍷", "🙌", "🎆", "🍻", "🎊","🥮", "🏆", "🍾", "🪇", "🥇", "🎇", "🎉", "🪅", "🎁", "🪩", "✨", "🌠", "💯", "🔥", ],
-                interval: 40,
-                physics: {
-                    fontSize: {
-                        max: 54,
-                        min: 24,
-                    },
-                },
-            });
-
-            setTimeout(cancel, 3000);  
-        }
-        
     }
 
     function handleKeydown(event) {
@@ -342,14 +343,19 @@
                     if (guesses.length === 2) {
                         guessed = true;
                         startTime = null; 
+                        everyReactionTime.push(reactionTime);
+                        everyGuess.push(...guesses);
                         
                         if (targetLetters.includes(guesses[0]) && targetLetters.includes(guesses[1])) {
                             correct += 2;
+                            everyAccuracy.push(2);
                         } else if (targetLetters.includes(guesses[0]) || targetLetters.includes(guesses[1])) {
                             correct++;
                             incorrect++;
+                            everyAccuracy.push(1);
                         } else {
                             incorrect += 2;
+                            everyAccuracy.push(0);
                         }
                     }
                 }
@@ -359,10 +365,13 @@
                 if (letters.includes(event.key.toUpperCase())) {
                     if (startTime) {
                         reactionTime = Date.now() - startTime;
+                        everyReactionTime.push(reactionTime);
                         startTime = null; 
                         guessed = true;
                         receivedLetter = event.key.toUpperCase();
                         receivedLetter === targetLetter ? correct++ : incorrect++;
+                        receivedLetter === targetLetter ? everyAccuracy.push(1) : everyAccuracy.push(0);
+                        everyGuess.push(receivedLetter);
                         setInterval(() => {
                             if (!started) {
                                 setTimeout(begin, 600);
