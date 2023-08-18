@@ -1,12 +1,13 @@
 <script>
 	import AccuracyBar from '$lib/components/AccuracyBar.svelte';
     import ProgressBar from '$lib/components/ProgressBar.svelte';
-    import ExportExcel from '$lib/components/ExportExcel.svelte';
+    import Admin from '$lib/components/Admin.svelte';
     import { emojisplosions } from 'emojisplosion';
     import { getDatabase, ref, set, child, get } from "firebase/database";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
     import app from "$lib/firebase";
     import ShortUniqueId from 'short-unique-id';
+    import { adminPlay } from '$lib/stores/AdminStore';
     
     const db = getDatabase(app);
     const dbRef = ref(getDatabase());
@@ -49,6 +50,17 @@
     
     onAuthStateChanged(auth, (currentUser) => {
         user = currentUser;
+        isAdmin = false; // Set the initial value
+
+        if (currentUser) {
+            get(child(dbRef, `users/${currentUser.uid}/admin`)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    isAdmin = snapshot.val();
+                }
+            }).catch((error) => {
+                console.error(error);
+            });
+        }
     });
 
     async function handleSignOut() {
@@ -414,8 +426,8 @@
         }
     }
 
-    if (currentTrial > 96) {
-        
+    function adminClicked() {
+        $adminPlay = false;
     }
 </script>
     
@@ -423,11 +435,8 @@
 
 <html lang="en" class="h-screen bg-no-repeat bg-gradient-to-b from-fuchsia-300 to-white">
 <body>  
-    {#if isAdmin}
-        <p class="text-center">
-            Admin, nice!!!
-        </p>
-        <ExportExcel />
+    {#if isAdmin && !$adminPlay}
+        <Admin />
     {/if}
     {#if !user}
     <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-10">
@@ -527,14 +536,21 @@
 
                 <div class="fixed bottom-0 left-0 w-full backdrop-blur-3xl md:backdrop-filter-none">
                     {#if user}
-                    <div class="flex justify-center m-2">
-                        <button on:click={handleSignOut}>
-                            Sign out
-                        </button>
-                    </div>
+                        <div class="flex flex-col justify-center m-2 space-y-5">
+                            {#if isAdmin && $adminPlay}
+                                <button class="hover:text-gray-600" on:click={adminClicked}>
+                                    Back to admin
+                                </button>
+                            {/if}
+                            <button class="m-4 hover:text-gray-600" on:click={handleSignOut}>
+                                Sign out
+                            </button>
+                        </div>
                     {/if}
-                    <ProgressBar current={currentTrial} total={totalTrials}/>
-                    <AccuracyBar correct={correct} attempts={correct + incorrect}/>
+                    {#if user && $adminPlay}
+                        <ProgressBar current={currentTrial} total={totalTrials}/>
+                        <AccuracyBar correct={correct} attempts={correct + incorrect}/>
+                    {/if}
                 </div>
             </div>
         {:else}
