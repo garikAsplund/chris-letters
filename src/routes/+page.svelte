@@ -449,7 +449,7 @@
         </button> 
     </div>
     {:else}
-        {#if currentTrial < 96}
+        {#if (currentTrial < 96 && !isAdmin) || (currentTrial < 96 && $adminPlay)}
             <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-10">
                 🪇 Welcome to our experiment 🧑‍🔬
             </h1>
@@ -547,13 +547,13 @@
                             </button>
                         </div>
                     {/if}
-                    {#if user && $adminPlay}
+                    {#if user || (isAdmin && $adminPlay)}
                         <ProgressBar current={currentTrial} total={totalTrials}/>
                         <AccuracyBar correct={correct} attempts={correct + incorrect}/>
                     {/if}
                 </div>
             </div>
-        {:else}
+        {:else if currentTrial === totalTrials}
             <h1 class="flex justify-center text-4xl font-bold transform translate-y-20 ">
                 😍 Thanks for playing!!! 😎
             </h1>
