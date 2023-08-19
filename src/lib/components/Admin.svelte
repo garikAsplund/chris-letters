@@ -14,10 +14,13 @@
     async function fetchDataFromFirebase() {
         const dataRef = ref(database, 'blocks');
         const dataSnapshot = await get(dataRef);
+        
         if (dataSnapshot.exists()) {
             data.blocks = dataSnapshot.val();
             crunchData();
         }
+        
+        window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
     }
 
     function crunchData() {
@@ -67,7 +70,7 @@
             a.download = excelFilePath;
             a.click();
             URL.revokeObjectURL(a.href);
-            });
+        });
   }
 
   function adminPlayClicked() {
