@@ -8,6 +8,8 @@
     import app from "$lib/firebase";
     import ShortUniqueId from 'short-unique-id';
     import { adminPlay } from '$lib/stores/AdminStore';
+    import { correct, incorrect } from '$lib/stores/GameStore';
+	import GameOver from '$lib/components/GameOver.svelte';
     
     const db = getDatabase(app);
     const dbRef = ref(getDatabase());
@@ -157,7 +159,7 @@
     let isBoxGreen = false;
     let textColor;
     let plays = 0;
-    let currentTrial = 80;
+    let currentTrial = 92;
     const totalTrials = 96;
     let started = false;
     let guessed = true;
@@ -169,8 +171,6 @@
     let guesses = [];
     let surpriseTrials = [];
     let displayFace = false;
-    let correct = 0;
-    let incorrect = 0;
     let targetLetters = [];
     let buttonText = "Start";
     let clicked = false;
@@ -364,14 +364,14 @@
                         everyGuess.push(...guesses);
                         
                         if (targetLetters.includes(guesses[0]) && targetLetters.includes(guesses[1])) {
-                            correct += 2;
+                            $correct += 2;
                             everyAccuracy.push(2);
                         } else if (targetLetters.includes(guesses[0]) || targetLetters.includes(guesses[1])) {
-                            correct++;
-                            incorrect++;
+                            $correct++;
+                            $incorrect++;
                             everyAccuracy.push(1);
                         } else {
-                            incorrect += 2;
+                            $incorrect += 2;
                             everyAccuracy.push(0);
                         }
                     }
@@ -386,7 +386,7 @@
                         startTime = null; 
                         guessed = true;
                         receivedLetter = event.key.toUpperCase();
-                        receivedLetter === targetLetter ? correct++ : incorrect++;
+                        receivedLetter === targetLetter ? $correct++ : $incorrect++;
                         receivedLetter === targetLetter ? everyAccuracy.push(1) : everyAccuracy.push(0);
                         everyGuess.push(receivedLetter);
                         setInterval(() => {
@@ -549,34 +549,12 @@
                     {/if}
                     {#if user || (isAdmin && $adminPlay)}
                         <ProgressBar current={currentTrial} total={totalTrials}/>
-                        <AccuracyBar correct={correct} attempts={correct + incorrect}/>
+                        <AccuracyBar correct={$correct} attempts={$correct + $incorrect}/>
                     {/if}
                 </div>
             </div>
         {:else if currentTrial === totalTrials}
-            <h1 class="flex justify-center text-4xl font-bold transform translate-y-20 ">
-                😍 Thanks for playing!!! 😎
-            </h1>
-            
-            {#if (correct / (correct + incorrect)) > 0.8}
-                <h1 class="flex justify-center text-2xl font-bold transform translate-y-32">
-                    🫨 Wow, way to go!
-                </h1>
-            {:else if (correct / (correct + incorrect)) > 0.65}
-                <h1 class="flex justify-center text-2xl font-bold transform translate-y-32">
-                    👏 You're doing alright.
-                </h1>
-            {:else}
-                <h1 class="flex justify-center text-2xl font-bold transform translate-y-32">
-                    🫣 Keep trying.
-                </h1>
-            {/if}
-
-            <div class="flex flex-col items-center">
-                <h3 class="w-2/5 text-xl text-center transform translate-y-44">
-                    See you next time.
-                </h3>
-            </div>
+            <GameOver />
         {/if}
     {/if}
 </body>

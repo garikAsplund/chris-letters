@@ -5,105 +5,6 @@
     import { getDatabase, ref, get } from 'firebase/database';
     import { adminPlay } from '$lib/stores/AdminStore';
 
-    // const data = 
-    // {
-    //     "blocks": {
-    //         "b": {
-    //         "accuracy": [
-    //             1,
-    //             1,
-    //             1,
-    //             1,
-    //             1
-    //         ],
-    //         "guesses": [
-    //             "H",
-    //             "X",
-    //             "W",
-    //             "D",
-    //             "H"
-    //         ],
-    //         "reactionTime": [
-    //             615,
-    //             1621,
-    //             1082,
-    //             792,
-    //             665
-    //         ],
-    //         "targets": [
-    //             "H",
-    //             "X",
-    //             "W",
-    //             "D",
-    //             "H"
-    //         ],
-    //         "trialType": "CC"
-    //         },
-    //         "n": {
-    //         "accuracy": [
-    //             1,
-    //             0,
-    //             1,
-    //             1,
-    //             1
-    //         ],
-    //         "guesses": [
-    //             "Y",
-    //             "W",
-    //             "W",
-    //             "M",
-    //             "F"
-    //         ],
-    //         "reactionTime": [
-    //             800,
-    //             778,
-    //             663,
-    //             661,
-    //             762
-    //         ],
-    //         "targets": [
-    //             "Y",
-    //             "K",
-    //             "W",
-    //             "M",
-    //             "F"
-    //         ],
-    //         "trialType": "CC"
-    //         },
-    //         "test": {
-    //         "accuracy": [
-    //             1,
-    //             1,
-    //             1,
-    //             1,
-    //             0
-    //         ],
-    //         "guesses": [
-    //             "L",
-    //             "S",
-    //             "D",
-    //             "L",
-    //             "T"
-    //         ],
-    //         "reactionTime": [
-    //             634,
-    //             644,
-    //             633,
-    //             581,
-    //             1328
-    //         ],
-    //         "targets": [
-    //             "L",
-    //             "S",
-    //             "D",
-    //             "L",
-    //             "D"
-    //         ],
-    //         "trialType": "CC"
-    //         }
-    //     }
-    // };
-
     const database = getDatabase(app);
 
     let data = {
@@ -123,7 +24,6 @@
         console.log("clicked!!");
         const workbook = new ExcelJS.Workbook();
 
-        // Add headers
         const headers = [
             'Trial ID',
             'Trial Type',
@@ -133,7 +33,6 @@
             'Reaction Time',
         ];
         
-        // Loop through the 'blocks' data
         for (const blockKey in data.blocks) {
             const block = data.blocks[blockKey];
             const worksheet = workbook.addWorksheet(blockKey);
@@ -162,7 +61,7 @@
 
         workbook.xlsx.writeBuffer().then(buffer => {
             const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            const excelFilePath = 'blocks_data.xlsx'; // You can adjust the filename
+            const excelFilePath = 'blocks_data.xlsx';
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
             a.download = excelFilePath;
