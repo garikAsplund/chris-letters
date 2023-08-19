@@ -179,6 +179,7 @@
     let everyAccuracy = [];
     let everyReactionTime = [];
     let trialType;
+    let isPractice = false;
 
     function gameOver() {
         const { cancel } = emojisplosions({
@@ -270,11 +271,11 @@
             flashes(count++, boxColor, targetOffset, T1Index, T2Index);
             
             if (count >= 32) clearInterval(flash);
-        }, 50);
+        }, isPractice ? 50 * 2 : 50);
 
         setTimeout(() => {
             started = false;
-        }, 50 * 32);
+        }, isPractice ? 50 * 32 * 2 : 50 * 32);
     }
 
     function flashes(count, boxColor, targetOffset, T1Index, T2Index) {
@@ -499,6 +500,15 @@
                 <h3 class="w-2/5 text-xl text-center transform translate-y-40">
                     Whenever you see a red letter, press that key on your keyboard
                 </h3>
+
+                <label class="m-4 translate-y-40">
+                    <input 
+                        type=checkbox
+                        value="isPractice"
+                        bind:checked={isPractice} 
+                    />
+                    Need some practice?
+                </label>
                 <!-- <p class="self-center text-lg text-center translate-y-56">Then hit spacebar to start the next trial</p> -->
 
                 <div class="flex justify-center w-64 h-64 transform translate-y-48 border-8" class:border-red-500={isBoxRed} class:border-green-500={isBoxGreen} class:border-slate-500={!isBoxGreen && !isBoxRed}>
@@ -534,7 +544,7 @@
                     {reactionTime} ms
                 </p>
 
-                <div class="fixed bottom-0 left-0 w-full backdrop-blur-3xl md:backdrop-filter-none">
+                <div class="fixed bottom-0 left-0 w-full backdrop-blur-3xl">
                     {#if user}
                         <div class="flex flex-col justify-center m-2 space-y-5">
                             {#if isAdmin && $adminPlay}
