@@ -82,7 +82,7 @@
 
     function writeTrialData(trialType, everyTarget, everyGuess, everyAccuracy, everyReactionTime) {
         const uid = new ShortUniqueId();
-        const trialId = uid.seq();
+        const trialId = uid();
 
         set(ref(db, `blocks/${trialId}`), {
             trialType: trialType,
