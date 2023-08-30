@@ -24,4 +24,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
+console.log("Database URL:", VITE_FIREBASE_DATABASE_URL);
+console.log("Project ID:", VITE_FIREBASE_PROJECT_ID);
+
 export default app;
