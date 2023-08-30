@@ -30,6 +30,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"dotenv": "^16.3.1",
 		"emojisplosion": "^2.6.1",
 		"exceljs": "^4.3.0",
 		"firebase": "^10.1.0",
