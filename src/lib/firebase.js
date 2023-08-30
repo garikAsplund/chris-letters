@@ -26,5 +26,7 @@ const app = initializeApp(firebaseConfig);
 
 console.log("Database URL:", VITE_FIREBASE_DATABASE_URL);
 console.log("Project ID:", VITE_FIREBASE_PROJECT_ID);
+console.log("Storage Bucket:", VITE_FIREBASE_STORAGE_BUCKET);
+console.log("Hi Mom, I got my first interview!!");
 
 export default app;
