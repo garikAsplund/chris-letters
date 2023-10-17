@@ -36,6 +36,7 @@
 		"exceljs": "^4.3.0",
 		"firebase": "^10.1.0",
 		"firebaseui": "^6.1.0",
+		"interactjs": "^1.10.19",
 		"short-unique-id": "^4.4.4"
 	}
 }

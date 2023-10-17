@@ -10,6 +10,7 @@
     import { adminPlay } from '$lib/stores/AdminStore';
     import { correct, incorrect } from '$lib/stores/GameStore';
 	import GameOver from '$lib/components/GameOver.svelte';
+    import interact from 'interactjs';
     
     const db = getDatabase(app);
     const dbRef = ref(getDatabase());
@@ -180,6 +181,9 @@
     let everyReactionTime = [];
     let trialType;
     let isPractice = false;
+    let boxDimensions = 64;
+    let boxText = 280;
+    let borderWidth = 8;
 
     function gameOver() {
         const { cancel } = emojisplosions({
@@ -430,6 +434,34 @@
     function adminClicked() {
         $adminPlay = false;
     }
+
+    const resizableDiv = document.getElementById('resizable-div');
+
+    interact('.resize-handle')
+        .resizable({
+            edges: { left: true, right: true, bottom: true, top: true },
+            modifiers: [
+                interact.modifiers.aspectRatio({
+                    ratio: 1,
+                }),
+             ],
+        })
+        .on('resizemove', (event) => {
+            const target = event.target;
+            const x = parseFloat(target.getAttribute('data-x')) || 0;
+            const y = parseFloat(target.getAttribute('data-y')) || 0;
+
+            target.style.width = event.rect.width + 'px';
+            target.style.height = event.rect.height + 'px';
+
+            target.style.transform = `translate(${x}px, ${y}px)`;
+
+            target.setAttribute('data-x', x);
+            target.setAttribute('data-y', y);
+
+            boxText = Math.floor(event.rect.width);
+            borderWidth = Math.floor(event.rect.width * 0.03);
+        });
 </script>
     
 <svelte:window on:keydown={handleKeydown} on:keyup={nextTrial}/>
@@ -511,15 +543,19 @@
                 </label>
                 <!-- <p class="self-center text-lg text-center translate-y-56">Then hit spacebar to start the next trial</p> -->
 
-                <div class="flex justify-center w-64 h-64 transform translate-y-48 border-8" class:border-red-500={isBoxRed} class:border-green-500={isBoxGreen} class:border-slate-500={!isBoxGreen && !isBoxRed}>
-                    <p class="self-center font-thin text-center text-[280px] font-courier-new" class:text-red-500={isTarget} style="color: {textColor}">
-                        {#if displayFace}
-                            <img src="garik_bw.jpg" alt="Garik!!!">
-                        {:else}
-                            {currentLetter}
-                        {/if}
-                    </p>
+                <div class="translate-y-48">
+                    <div id="resizable-div" class={`flex justify-center w-64 h-64 transform border-8 resize-handle cursor-pointer`} style="border-width: {borderWidth}px" class:border-red-500={isBoxRed} class:border-green-500={isBoxGreen} class:border-slate-500={!isBoxGreen && !isBoxRed}>
+                        <p class={`self-center font-thin text-center font-courier-new`} class:text-red-500={isTarget} style="color: {textColor}; font-size: {boxText}px">
+                            {#if displayFace}
+                                <img src="garik_bw.jpg" alt="Garik!!!">
+                            {:else}
+                                {currentLetter}
+                            {/if}
+                        </p>
+                    </div> 
                 </div>
+                              
+                
                 <p class="self-center text-center translate-y-56 text">
                     {#if AB}
                         Your guesses:
@@ -527,6 +563,7 @@
                         Your guess:
                     {/if}
                 </p>
+                
                 <p class="self-center h-24 font-thin text-center translate-y-56 text-8xl font-courier-new">
                     {#if AB}
                         {#each guesses as guess}
@@ -540,6 +577,7 @@
                 <p class="self-center text-center translate-y-56 text">
                     Your reaction time:
                 </p>
+                
                 <p class="self-center h-24 text-2xl font-thin text-center translate-y-56 font-courier-new">
                     {reactionTime} ms
                 </p>
