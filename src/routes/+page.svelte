@@ -11,6 +11,7 @@
     import { correct, incorrect } from '$lib/stores/GameStore';
 	import GameOver from '$lib/components/GameOver.svelte';
     import interact from 'interactjs';
+    import { onMount }  from 'svelte';
     
     const db = getDatabase(app);
     const dbRef = ref(getDatabase());
@@ -182,8 +183,18 @@
     let trialType;
     let isPractice = false;
     let boxDimensions = 64;
-    let boxText = 280;
-    let borderWidth = 8;
+    let boxText;
+    let borderWidth;
+
+    onMount(() => {
+        const storedBoxText = localStorage.getItem('boxText');
+        const storedBorderWidth = localStorage.getItem('borderWidth');
+            if (storedBoxText && storedBorderWidth) {
+                boxText = parseInt(storedBoxText, 10);
+                borderWidth = parseInt(storedBorderWidth, 10);
+                console.log({boxText}, {borderWidth});
+            }
+    });
 
     function gameOver() {
         const { cancel } = emojisplosions({
@@ -461,6 +472,11 @@
 
             boxText = Math.floor(event.rect.width);
             borderWidth = Math.floor(event.rect.width * 0.03);
+
+            localStorage.setItem('boxText', boxText.toString());
+            localStorage.setItem('borderWidth', borderWidth.toString());
+
+            console.log({boxText}, {borderWidth});
         });
 </script>
     
@@ -544,7 +560,7 @@
                 <!-- <p class="self-center text-lg text-center translate-y-56">Then hit spacebar to start the next trial</p> -->
 
                 <div class="translate-y-48">
-                    <div id="resizable-div" class={`flex justify-center w-64 h-64 transform border-8 resize-handle cursor-pointer`} style="border-width: {borderWidth}px" class:border-red-500={isBoxRed} class:border-green-500={isBoxGreen} class:border-slate-500={!isBoxGreen && !isBoxRed}>
+                    <div id="resizable-div" class={`flex justify-center resize-handle cursor-pointer`} style="border-width: {borderWidth}px; width: {boxText}px; height: {boxText}px" class:border-red-500={isBoxRed} class:border-green-500={isBoxGreen} class:border-slate-500={!isBoxGreen && !isBoxRed}>
                         <p class={`self-center font-thin text-center font-courier-new`} class:text-red-500={isTarget} style="color: {textColor}; font-size: {boxText}px">
                             {#if displayFace}
                                 <img src="garik_bw.jpg" alt="Garik!!!">
