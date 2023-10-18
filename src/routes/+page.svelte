@@ -183,8 +183,8 @@
     let trialType;
     let isPractice = false;
     let boxDimensions = 64;
-    let boxText;
-    let borderWidth;
+    let boxText = 280;
+    let borderWidth = 8;
 
     onMount(() => {
         const storedBoxText = localStorage.getItem('boxText');
