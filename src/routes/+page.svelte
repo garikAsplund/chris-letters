@@ -193,14 +193,6 @@
     const ABTargets = [];
     const ABTextColors = [];
 
-    const CC1Letters = [];
-    const CC1Targets = [];
-    const CC1TextColors = [];
-
-    const CC2Letters = [];
-    const CC2Targets = [];
-    const CC2TextColors = [];
-
     let value = 50;
 
     while (ABLetters.length < NUMBER_OF_TRIALS) {
@@ -240,8 +232,6 @@
     console.log({ABLetters});
     console.log({ABTargets});
     console.log({ABTextColors});
-
-    
 
     const SiB1Letters = [];
     const SiB1Targets = [];
@@ -361,11 +351,146 @@
     console.log({SiB2Targets});
     console.log({SiB2TextColors});
     console.log({SiB2Surprise});
+
+    const CC1Letters = [];
+    const CC1Targets = [];
+    const CC1TextColors = [];
+    const CC1BoxColors = [];
     
+    const CC2Letters = [];
+    const CC2Targets = [];
+    const CC2TextColors = [];
+    const CC2BoxColors = [];
     
+    while (CC1Letters.length < NUMBER_OF_TRIALS) {
+        const CC1LettersTrial = [];
+        const CC1TargetsTrial = [];
+        const CC1TextColorsTrial = [];
+        const CC1BoxColorsTrial = [];
+        
+        const CC2LettersTrial = [];
+        const CC2TargetsTrial = [];
+        const CC2TextColorsTrial = [];
+        const CC2BoxColorsTrial = [];
+
+        let targetOffset = Math.random() < 0.5 ?  3 : 8;
+        let distractorIndex;
+
+        // targetIndex = 4;
+        // let T1Index = targetIndex + randomRange(3);
+        // let T2Index = T1Index + targetOffset; 
+        targetIndex = 4;
+        distractorIndex = targetIndex + randomRange(3);
+        // console.log({distractorIndex});
+        targetIndex = distractorIndex + targetOffset;
+        // console.log({targetIndex});
+
+        while(CC1LettersTrial.length < 16) {
+            let letterToAdd = randomRange(letters.length - 1);
+            
+            if (CC1LettersTrial[CC1LettersTrial.length - 1] === letters[letterToAdd]) {
+                letterToAdd = (letterToAdd + 1) % letters.length;
+            }
+           
+            if (CC1TargetsTrial.length === targetIndex) {
+                CC1TargetsTrial.push(true);
+                CC1TextColorsTrial.push('red');
+            } else {
+                CC1TargetsTrial.push(false);
+                CC1TextColorsTrial.push(distractors[randomRange(6) - 1]);
+            }
+
+            if (CC1TargetsTrial.length === distractorIndex) {
+                CC1BoxColorsTrial.push(Math.random() < 0.5 ? 'red' : 'green');
+            } else {
+                CC1BoxColorsTrial.push('grey');
+            }
+
+            CC1LettersTrial.push(letters[letterToAdd]);
+        }
+
+        while(CC2LettersTrial.length < 16) {
+            let letterToAdd = randomRange(letters.length - 1);
+            
+            if (CC2LettersTrial[CC2LettersTrial.length - 1] === letters[letterToAdd]) {
+                letterToAdd = (letterToAdd + 1) % letters.length;
+            }
+           
+            if (CC2TargetsTrial.length === targetIndex) {
+                CC2TargetsTrial.push(true);
+                CC2TextColorsTrial.push('red');
+            } else {
+                CC2TargetsTrial.push(false);
+                CC2TextColorsTrial.push(distractors[randomRange(6) - 1]);
+            }
+
+            CC2LettersTrial.push(letters[letterToAdd]);
+        }
+ 
+        CC1Letters.push(CC1LettersTrial);
+        CC1Targets.push(CC1TargetsTrial);
+        CC1TextColors.push(CC1TextColorsTrial);
+        CC1BoxColors.push(CC1BoxColorsTrial);
+
+        CC2Letters.push(CC2LettersTrial);
+        CC2Targets.push(CC2TargetsTrial);
+        CC2TextColors.push(CC2TextColorsTrial);
+        CC2BoxColors.push(CC2BoxColorsTrial);
+    }
+    
+    console.log({CC1Letters});
+    console.log({CC1Targets});
+    console.log({CC1TextColors});
+    console.log({CC1BoxColors});
+    
+    console.log({CC2Letters});
+    console.log({CC2Targets});
+    console.log({CC2TextColors});
+    console.log({CC2BoxColors});
 
     let numberOfFlashes = 0;
     let inProgress = true;
+    let boxColor = 'grey';
+
+    function streamCC() {
+        const currentTime = performance.now();
+        const elapsed = currentTime - lastTime;
+        inProgress = true;
+
+        if (numberOfFlashes > 32) {
+            inProgress = false;
+            startTime = Date.now();
+            return;
+        }
+
+        if (elapsed >= (value)) {
+            // Toggle the state
+            isOn = !isOn;
+            numberOfFlashes++;
+            // console.log({numberOfFlashes});
+            
+            // Do something when the interval state changes (e.g., toggle a light)
+            if (isOn) {
+                console.log('ON ' + (performance.now() - lastTime));
+                currentLetter = CC1Letters[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                // console.log(currentTrial - 1);
+                // console.log(numberOfFlashes / 2 - 1);
+                // console.log({currentTrial});
+                textColor = CC1TextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                isTarget = CC1Targets[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                boxColor = CC1BoxColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
+            } else {
+                console.log('OFF ' + (performance.now() - lastTime));
+                currentLetter = ' ';
+            }
+
+            // Update the last time
+            lastTime = currentTime;
+        }
+
+        // Request the next animation frame
+        requestAnimationFrame(streamCC);
+    }
 
     function streamSiB() {
         const currentTime = performance.now();
@@ -519,6 +644,7 @@
         guesses = [];
 
         if (AB) toggleEvery50ms();
+        if (CC) streamCC();
         if (SiB) streamSiB();
 
         // let count = 0;
@@ -668,7 +794,7 @@
                     }
                 }
             }
-        } else if (SiB && !inProgress) {
+        } else if ((SiB || CC) && !inProgress) {
             if (event.key && event.key.length === 1) {
                 if (letters.includes(event.key.toUpperCase())) {
                     if (startTime) {
@@ -806,7 +932,7 @@
             </div>
             
             <div class="flex justify-center mx-4 space-x-4 translate-y-24">
-                <div id="resizable-div" class={`flex justify-center resize-handle cursor-pointer`} style="border-width: {borderWidth}px; width: {boxText}px; height: {boxText}px" class:border-red-500={isBoxRed} class:border-green-500={isBoxGreen} class:border-slate-500={!isBoxGreen && !isBoxRed}>
+                <div id="resizable-div" class={`flex justify-center resize-handle cursor-pointer`} style="border-width: {borderWidth}px; width: {boxText}px; height: {boxText}px; border-color: {boxColor}">
                     <p class={`self-center font-thin text-center font-courier-new`} class:text-red-500={isTarget} style="color: {textColor}; font-size: {boxText}px">
                         {#if displayFace}
                             <img src="garik_bw.jpg" alt="Garik!!!">
