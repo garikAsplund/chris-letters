@@ -696,77 +696,77 @@
         // }, isPractice ? 50 * 32 * 2 : 50 * 32);
     }
 
-    function flashes(count, boxColor, targetOffset, T1Index, T2Index) {
-        if (AB) {
-            if (count === T1Index * 2 || count === T2Index * 2) {
-                everyTarget.push(targetLetter);
-                currentLetter = targetLetter;
-                isTarget = true;
-                textColor = "red";
-                startTime = Date.now();
-                targetLetter = targets[randomRange(targets.length) - 1];
-                targetLetters.push(targetLetter);
-            } else if (showLetter) {
-                isTarget = false;
-                textColor = distractors[randomRange(6)];
-                currentLetter = letters[randomRange(letters.length) - 1];
-            } else {
-                currentLetter = ' '; 
-            }
-        }
+    // function flashes(count, boxColor, targetOffset, T1Index, T2Index) {
+    //     if (AB) {
+    //         if (count === T1Index * 2 || count === T2Index * 2) {
+    //             everyTarget.push(targetLetter);
+    //             currentLetter = targetLetter;
+    //             isTarget = true;
+    //             textColor = "red";
+    //             startTime = Date.now();
+    //             targetLetter = targets[randomRange(targets.length) - 1];
+    //             targetLetters.push(targetLetter);
+    //         } else if (showLetter) {
+    //             isTarget = false;
+    //             textColor = distractors[randomRange(6)];
+    //             currentLetter = letters[randomRange(letters.length) - 1];
+    //         } else {
+    //             currentLetter = ' '; 
+    //         }
+    //     }
 
-        if (CC) {
-            if (count === boxIndex + targetOffset) {
-                everyTarget.push(targetLetter);
-                currentLetter = targetLetter;
-                isTarget = true;
-                textColor = "red";
-                startTime = Date.now();
-            } else if (showLetter) {
-                isTarget = false;
-                textColor = distractors[randomRange(6)];
-                currentLetter = letters[randomRange(letters.length) - 1];
-            } else {
-                currentLetter = ' '; 
-            }
+    //     if (CC) {
+    //         if (count === boxIndex + targetOffset) {
+    //             everyTarget.push(targetLetter);
+    //             currentLetter = targetLetter;
+    //             isTarget = true;
+    //             textColor = "red";
+    //             startTime = Date.now();
+    //         } else if (showLetter) {
+    //             isTarget = false;
+    //             textColor = distractors[randomRange(6)];
+    //             currentLetter = letters[randomRange(letters.length) - 1];
+    //         } else {
+    //             currentLetter = ' '; 
+    //         }
         
-            if (boxColor === "green") {
-                if (count === boxIndex || count === boxIndex + 1) {
-                    isBoxGreen = true;
-                } else {
-                    isBoxGreen = false;
-                }
-            }
-            if (boxColor === "red") {
-                if (count === boxIndex || count === boxIndex + 1) {
-                    isBoxRed = true;
-                } else {
-                    isBoxRed = false;
-                } 
-            }
-        }
+    //         if (boxColor === "green") {
+    //             if (count === boxIndex || count === boxIndex + 1) {
+    //                 isBoxGreen = true;
+    //             } else {
+    //                 isBoxGreen = false;
+    //             }
+    //         }
+    //         if (boxColor === "red") {
+    //             if (count === boxIndex || count === boxIndex + 1) {
+    //                 isBoxRed = true;
+    //             } else {
+    //                 isBoxRed = false;
+    //             } 
+    //         }
+    //     }
 
-        if (SiB) {
-            if (surpriseTrials.includes(currentTrial) && (count === targetIndex * 2 - 6 || count === targetIndex * 2 - 5)) {
-                displayFace = true;
-            } else if (count === targetIndex * 2) {
-                everyTarget.push(targetLetter);
-                displayFace = false;
-                currentLetter = targetLetter;
-                isTarget = true;
-                textColor = "red";
-                startTime = Date.now();
-            } else if (showLetter) {
-                isTarget = false;
-                textColor = distractors[randomRange(6)];
-                currentLetter = letters[randomRange(letters.length) - 1];
-            } else {
-                currentLetter = ' '; 
-            }
-        }
+    //     if (SiB) {
+    //         if (surpriseTrials.includes(currentTrial) && (count === targetIndex * 2 - 6 || count === targetIndex * 2 - 5)) {
+    //             displayFace = true;
+    //         } else if (count === targetIndex * 2) {
+    //             everyTarget.push(targetLetter);
+    //             displayFace = false;
+    //             currentLetter = targetLetter;
+    //             isTarget = true;
+    //             textColor = "red";
+    //             startTime = Date.now();
+    //         } else if (showLetter) {
+    //             isTarget = false;
+    //             textColor = distractors[randomRange(6)];
+    //             currentLetter = letters[randomRange(letters.length) - 1];
+    //         } else {
+    //             currentLetter = ' '; 
+    //         }
+    //     }
         
-        showLetter = !showLetter;
-    }
+    //     showLetter = !showLetter;
+    // }
 
     function handleKeydown(event) {
         if (AB && !inProgress) {
@@ -847,9 +847,9 @@
         }
     }
 
-    function adminClicked() {
-        $adminPlay = false;
-    }
+    // function adminClicked() {
+    //     $adminPlay = false;
+    // }
 
     const resizableDiv = document.getElementById('resizable-div');
 
