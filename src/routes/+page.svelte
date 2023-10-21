@@ -424,6 +424,12 @@
                 CC2TextColorsTrial.push(distractors[randomRange(6) - 1]);
             }
 
+            if (CC2TargetsTrial.length === distractorIndex) {
+                CC2BoxColorsTrial.push(Math.random() < 0.5 ? 'red' : 'green');
+            } else {
+                CC2BoxColorsTrial.push('grey');
+            }
+
             CC2LettersTrial.push(letters[letterToAdd]);
         }
  
