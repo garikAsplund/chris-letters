@@ -540,7 +540,7 @@
             } else {
                 console.log('OFF ' + (performance.now() - lastTime));
                 currentLetter = ' ';
-                displayFace = SiB1Surprise[currentTrial - 1][(numberOfFlashes / 2) - 1];   
+                displayFace = SiB1Surprise[currentTrial - 1][((numberOfFlashes - 1) / 2) - 1];   
                 // console.log({displayFace});
             }
 
