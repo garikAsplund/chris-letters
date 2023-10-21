@@ -243,7 +243,6 @@
     let inProgress = false;
 
     function toggleEvery50ms() {
-        // Check if it's time to turn on or off
         const currentTime = performance.now();
         const elapsed = currentTime - lastTime;
         inProgress = true;
