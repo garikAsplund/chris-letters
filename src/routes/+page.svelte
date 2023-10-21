@@ -230,20 +230,29 @@
     console.log({ABTargets});
     console.log({ABTextColors});
 
+    let numberOfFlashes = 0;
+
     function toggleEvery50ms() {
         // Check if it's time to turn on or off
         const currentTime = performance.now();
         const elapsed = currentTime - lastTime;
 
+        if (numberOfFlashes > 32) return;
+
         if (elapsed >= (isOn ? 50 : 50)) {
             // Toggle the state
             isOn = !isOn;
+            numberOfFlashes++;
             
             // Do something when the interval state changes (e.g., toggle a light)
             if (isOn) {
-                console.log('ON');
+                console.log('ON ' + (performance.now() - lastTime));
+                currentLetter = ABLetters[0][(numberOfFlashes / 2) - 1];
+                textColor = ABTextColors[0][(numberOfFlashes / 2) - 1];
+                isTarget = ABTargets[0][(numberOfFlashes / 2) - 1];
             } else {
-                console.log('OFF');
+                console.log('OFF ' + (performance.now() - lastTime));
+                currentLetter = ' ';
             }
 
             // Update the last time
@@ -298,7 +307,7 @@
         surpriseTrials.push(trial);
     }
 
-    console.log(surpriseTrials);
+    console.log({surpriseTrials});
 
     function randomRange(max) {
         return Math.ceil(Math.random() * max);
@@ -324,47 +333,49 @@
         receivedLetter = ' ';
         guesses = [];
 
-        let count = 0;
-        let boxColor;
-        let T1Index;
-        let T2Index;
-        let targetOffset = Math.random() < 0.5 ?  3 : 8;
+        toggleEvery50ms();
 
-        targetLetter = targets[randomRange(targets.length) - 1];
-        targetLetters = [];
+        // let count = 0;
+        // let boxColor;
+        // let T1Index;
+        // let T2Index;
+        // let targetOffset = Math.random() < 0.5 ?  3 : 8;
+
+        // targetLetter = targets[randomRange(targets.length) - 1];
+        // targetLetters = [];
         
-        if (AB) {
-            trialType = "AB";
-            targetLetters.push(targetLetter);
-            targetIndex = 4;
-            T1Index = targetIndex + randomRange(3);
-            T2Index = T1Index + targetOffset; 
-        }
+        // if (AB) {
+        //     trialType = "AB";
+        //     targetLetters.push(targetLetter);
+        //     targetIndex = 4;
+        //     T1Index = targetIndex + randomRange(3);
+        //     T2Index = T1Index + targetOffset; 
+        // }
 
-        if (CC) {
-            trialType = "CC";
-            boxIndex = 4;
-            boxIndex += randomRange(3);
-            boxIndex *= 2;
-            targetOffset *= 2;
-            boxColor = Math.random() < 0.5 ?  "red" : "green";
-        }
+        // if (CC) {
+        //     trialType = "CC";
+        //     boxIndex = 4;
+        //     boxIndex += randomRange(3);
+        //     boxIndex *= 2;
+        //     targetOffset *= 2;
+        //     boxColor = Math.random() < 0.5 ?  "red" : "green";
+        // }
 
-        if (SiB) {
-            trialType = "SiB";
-            targetIndex = 6;
-            targetIndex += randomRange(8);
-        }
+        // if (SiB) {
+        //     trialType = "SiB";
+        //     targetIndex = 6;
+        //     targetIndex += randomRange(8);
+        // }
 
-        const flash = setInterval(() => {                
-            flashes(count++, boxColor, targetOffset, T1Index, T2Index);
+        // const flash = setInterval(() => {                
+        //     flashes(count++, boxColor, targetOffset, T1Index, T2Index);
             
-            if (count >= 32) clearInterval(flash);
-        }, isPractice ? 50 * 2 : 50);
+        //     if (count >= 32) clearInterval(flash);
+        // }, isPractice ? 50 * 2 : 50);
 
-        setTimeout(() => {
-            started = false;
-        }, isPractice ? 50 * 32 * 2 : 50 * 32);
+        // setTimeout(() => {
+        //     started = false;
+        // }, isPractice ? 50 * 32 * 2 : 50 * 32);
     }
 
     function flashes(count, boxColor, targetOffset, T1Index, T2Index) {
