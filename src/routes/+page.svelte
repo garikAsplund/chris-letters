@@ -279,21 +279,22 @@
         const SiB2TextColorsTrial = [];
         const SiB2SurpriseTrial = [];
 
-        let targetOffset = Math.random() < 0.5 ?  3 : 8;
+        let targetOffset = 3;;
 
         // targetIndex = 4;
         // let T1Index = targetIndex + randomRange(3);
         // let T2Index = T1Index + targetOffset; 
         targetIndex = 6;
         targetIndex += randomRange(8);
+        let surpriseIndex = targetIndex - targetOffset;
 
         if (surpriseTrials2.includes(SiB2Surprise.length)) {
             SiB2SurpriseTrial.push(true)
         } else SiB2SurpriseTrial.push(false);
 
-        if (surpriseTrials.includes(SiB1Surprise.length)) {
-            SiB1SurpriseTrial.push(true)
-        } else SiB1SurpriseTrial.push(false);
+        // if (surpriseTrials.includes(SiB1Surprise.length)) {
+        //     SiB1SurpriseTrial.push(true)
+        // } else SiB1SurpriseTrial.push(false);
 
         while(SiB1LettersTrial.length < 16) {
             let letterToAdd = randomRange(letters.length - 1);
@@ -308,6 +309,12 @@
             } else {
                 SiB1TargetsTrial.push(false);
                 SiB1TextColorsTrial.push(distractors[randomRange(6) - 1]);
+            }
+
+            if (surpriseTrials.includes(SiB1Surprise.length) && SiB1SurpriseTrial.length === surpriseIndex) {
+                SiB1SurpriseTrial.push(true);
+            } else {
+                SiB1SurpriseTrial.push(false);
             }
 
             SiB1LettersTrial.push(letters[letterToAdd]);
@@ -525,7 +532,7 @@
                 // console.log({currentTrial});
                 textColor = SiB1TextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 isTarget = SiB1Targets[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                displayFace = SiB1Surprise[currentTrial - 1][0] && SiB1Targets[currentTrial - 1][((numberOfFlashes - 6) / 2) - 1];   
+                displayFace = SiB1Surprise[currentTrial - 1][(numberOfFlashes / 2) - 1];   
                 
                 console.log({textColor});
                 console.log({displayFace});
@@ -533,7 +540,7 @@
             } else {
                 console.log('OFF ' + (performance.now() - lastTime));
                 currentLetter = ' ';
-                displayFace = SiB1Surprise[currentTrial - 1][0] && SiB1Targets[currentTrial - 1][((numberOfFlashes - 7) / 2) - 1];   
+                displayFace = SiB1Surprise[currentTrial - 1][(numberOfFlashes / 2) - 1];   
                 console.log({displayFace});
             }
 
