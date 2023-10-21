@@ -588,11 +588,11 @@
     
 <svelte:window on:keydown={handleKeydown} on:keyup={nextTrial}/>
 
-<html lang="en" class="h-screen bg-no-repeat bg-gradient-to-b from-fuchsia-300 to-white">
+<html lang="en" class="h-screen bg-white bg-no-repeat">
 <body>  
-    {#if isAdmin && !$adminPlay}
+    <!-- {#if isAdmin && !$adminPlay}
         <Admin />
-    {/if}
+    {/if} -->
     {#if !user}
     <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-10">
         🪇 Welcome to our experiment 🧑‍🔬
@@ -647,18 +647,18 @@
                             {currentLetter}
                         {/if}
                         {#if !AB && !CC && !SiB}
-                            <p class="p-2 text-4xl">
+                            <p class="p-2 text-4xl text-gray-800">
                                 Please select an option from above 👆
                             </p>
                         {:else if !clicked}
-                            <button on:click={onClick} class="flex items-center p-12 text-4xl bg-gray-100 border border-black rounded-sm hover:bg-gray-200">
+                            <button on:click={onClick} class="flex items-center p-12 text-4xl text-gray-800 bg-gray-100 border border-black rounded-sm hover:bg-gray-200">
                                 {buttonText}
                             </button>
                         {/if}
-                        {#if !inProgress}
-                        <p class="p-2 text-4xl text-gray-800">
-                            Please enter your guesses
-                        </p>
+                        {#if (AB || CC ||SiB) && !inProgress}
+                            <p class="p-2 text-4xl text-gray-800">
+                                Please enter your guesses
+                            </p>
                         {/if}
                     </p>
                 </div> 
@@ -717,22 +717,18 @@
                 </p> -->
 
                 <div class="fixed bottom-0 left-0 w-full backdrop-blur-3xl">
-                    {#if user}
+                    {#if user || isAdmin}
                         <div class="flex flex-col justify-center m-2 space-y-5">
-                            {#if isAdmin && $adminPlay}
-                                <button class="hover:text-gray-600" on:click={adminClicked}>
-                                    Back to admin
-                                </button>
+                            {#if isAdmin}
+                                <Admin />
                             {/if}
                             <button class="m-4 hover:text-gray-600" on:click={handleSignOut}>
                                 Sign out
                             </button>
                         </div>
                     {/if}
-                    {#if user || (isAdmin && $adminPlay)}
                         <ProgressBar current={currentTrial} total={totalTrials}/>
                         <!-- <AccuracyBar correct={$correct} attempts={$correct + $incorrect}/> -->
-                    {/if}
                 </div>
             </div>
         {:else if currentTrial === totalTrials}

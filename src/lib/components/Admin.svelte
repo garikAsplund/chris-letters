@@ -78,14 +78,8 @@
   }
 </script>
 
-<div class="flex flex-col items-center justify-center h-screen space-y-5">
-    <h1 class="text-4xl font-bold text-center -translate-y-48 h1">
-        🛡️ Admin, nice!!! 🛠
-    </h1>
-    <button class="px-4 py-2 font-semibold text-gray-600 -translate-y-24 bg-transparent border border-gray-500 rounded hover:bg-gray-500 hover:text-white hover:border-transparent" on:click={fetchDataFromFirebase}>
+<div class="flex flex-col items-center justify-center">
+    <button class="m-4 hover:text-gray-600" on:click={fetchDataFromFirebase}>
         Export data
-    </button> 
-    <button class="px-4 py-2 font-semibold text-gray-600 -translate-y-24 bg-transparent border border-gray-500 rounded hover:bg-gray-500 hover:text-white hover:border-transparent" on:click={adminPlayClicked}>
-        Play
-    </button> 
+    </button>  
 </div>
