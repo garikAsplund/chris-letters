@@ -375,6 +375,7 @@
         if (numberOfFlashes > 32) {
             inProgress = false;
             startTime = Date.now();
+            displayFace = false;
             return;
         }
 
@@ -393,7 +394,7 @@
                 // console.log({currentTrial});
                 textColor = SiB1TextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 isTarget = SiB1Targets[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                displayFace = SiB1Surprise[currentTrial - 1][0];   
+                displayFace = SiB1Surprise[currentTrial - 1][0] && SiB1Targets[currentTrial - 1][((numberOfFlashes - 6) / 2) - 1];   
                 
                 console.log({textColor});
                 console.log({displayFace});
@@ -401,6 +402,8 @@
             } else {
                 console.log('OFF ' + (performance.now() - lastTime));
                 currentLetter = ' ';
+                displayFace = SiB1Surprise[currentTrial - 1][0] && SiB1Targets[currentTrial - 1][((numberOfFlashes - 7) / 2) - 1];   
+                console.log({displayFace});
             }
 
             // Update the last time
@@ -661,9 +664,7 @@
                         }
                         numberOfFlashes = 1;
                         started = false;
-                        setInterval(() => {
-                                setTimeout(begin, 600);
-                        }, 20);
+                        setTimeout(begin, 600);
                     }
                 }
             }
@@ -681,9 +682,7 @@
                         receivedLetter === targetLetter ? $correct++ : $incorrect++;
                         receivedLetter === targetLetter ? everyAccuracy.push(1) : everyAccuracy.push(0);
                         everyGuess.push(receivedLetter);
-                        setInterval(() => {
-                            setTimeout(begin, 600);
-                        }, 20);
+                        setTimeout(begin, 600);
                     }
                 }
             }
@@ -823,11 +822,16 @@
                                 {buttonText}
                             </button>
                         {/if}
-                        {#if (AB || CC ||SiB) && !inProgress}
+                        {#if AB && !inProgress}
                             <p class="p-2 text-4xl text-gray-800">
                                 Please enter your guesses
                             </p>
+                        {:else if (CC ||SiB) && !inProgress}
+                            <p class="p-2 text-4xl text-gray-800">
+                                Please enter your guess
+                            </p>
                         {/if}
+                        
                     </p>
                 </div> 
             </div>
