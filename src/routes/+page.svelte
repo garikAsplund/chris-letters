@@ -241,8 +241,174 @@
     console.log({ABTargets});
     console.log({ABTextColors});
 
+    
+
+    const SiB1Letters = [];
+    const SiB1Targets = [];
+    const SiB1TextColors = [];
+    const SiB1Surprise = [];
+    
+    const SiB2Letters = [];
+    const SiB2Targets = [];
+    const SiB2TextColors = [];
+    const SiB2Surprise = [];
+    const surpriseTrials2 = [];
+    
+    while (surpriseTrials.length < 6) {
+        let trial = randomRange(totalTrials - 2);
+
+        if (surpriseTrials.includes(trial)
+            || surpriseTrials.includes(trial - 1)
+            || surpriseTrials.includes(trial + 1)) {
+            continue;
+        }
+        
+        surpriseTrials.push(trial);
+    }
+
+    while (surpriseTrials2.length < 6) {
+        let trial = randomRange(totalTrials - 2);
+
+        if (surpriseTrials2.includes(trial)
+            || surpriseTrials2.includes(trial - 1)
+            || surpriseTrials2.includes(trial + 1)) {
+            continue;
+        }
+        
+        surpriseTrials2.push(trial);
+    }
+            
+    while (SiB1Letters.length < NUMBER_OF_TRIALS) {
+        const SiB1LettersTrial = [];
+        const SiB1TargetsTrial = [];
+        const SiB1TextColorsTrial = [];
+        const SiB1SurpriseTrial = [];
+        
+        const SiB2LettersTrial = [];
+        const SiB2TargetsTrial = [];
+        const SiB2TextColorsTrial = [];
+        const SiB2SurpriseTrial = [];
+
+        let targetOffset = Math.random() < 0.5 ?  3 : 8;
+
+        // targetIndex = 4;
+        // let T1Index = targetIndex + randomRange(3);
+        // let T2Index = T1Index + targetOffset; 
+        targetIndex = 6;
+        targetIndex += randomRange(8);
+
+        if (surpriseTrials2.includes(SiB2Surprise.length)) {
+            SiB2SurpriseTrial.push(true)
+        } else SiB2SurpriseTrial.push(false);
+
+        if (surpriseTrials.includes(SiB1Surprise.length)) {
+            SiB1SurpriseTrial.push(true)
+        } else SiB1SurpriseTrial.push(false);
+
+        while(SiB1LettersTrial.length < 16) {
+            let letterToAdd = randomRange(letters.length - 1);
+            
+            if (SiB1LettersTrial[SiB1LettersTrial.length - 1] === letters[letterToAdd]) {
+                letterToAdd = (letterToAdd + 1) % letters.length;
+            }
+           
+            if (SiB1TargetsTrial.length === targetIndex) {
+                SiB1TargetsTrial.push(true);
+                SiB1TextColorsTrial.push('red');
+            } else {
+                SiB1TargetsTrial.push(false);
+                SiB1TextColorsTrial.push(distractors[randomRange(6) - 1]);
+            }
+
+            SiB1LettersTrial.push(letters[letterToAdd]);
+        }
+
+        while(SiB2LettersTrial.length < 16) {
+            let letterToAdd = randomRange(letters.length - 1);
+            
+            if (SiB2LettersTrial[SiB2LettersTrial.length - 1] === letters[letterToAdd]) {
+                letterToAdd = (letterToAdd + 1) % letters.length;
+            }
+           
+            if (SiB2TargetsTrial.length === targetIndex) {
+                SiB2TargetsTrial.push(true);
+                SiB2TextColorsTrial.push('red');
+            } else {
+                SiB2TargetsTrial.push(false);
+                SiB2TextColorsTrial.push(distractors[randomRange(6) - 1]);
+            }
+
+            SiB2LettersTrial.push(letters[letterToAdd]);
+        }
+ 
+        SiB1Letters.push(SiB1LettersTrial);
+        SiB1Targets.push(SiB1TargetsTrial);
+        SiB1TextColors.push(SiB1TextColorsTrial);
+        SiB1Surprise.push(SiB1SurpriseTrial);
+
+        SiB2Letters.push(SiB2LettersTrial);
+        SiB2Targets.push(SiB2TargetsTrial);
+        SiB2TextColors.push(SiB2TextColorsTrial);
+        SiB2Surprise.push(SiB2SurpriseTrial);
+    }
+
+    console.log({SiB1Letters});
+    console.log({SiB1Targets});
+    console.log({SiB1TextColors});
+    console.log({SiB1Surprise});
+    
+    console.log({SiB2Letters});
+    console.log({SiB2Targets});
+    console.log({SiB2TextColors});
+    console.log({SiB2Surprise});
+    
+    
+
     let numberOfFlashes = 0;
     let inProgress = true;
+
+    function streamSiB() {
+        const currentTime = performance.now();
+        const elapsed = currentTime - lastTime;
+        inProgress = true;
+
+        if (numberOfFlashes > 32) {
+            inProgress = false;
+            return;
+        }
+
+        if (elapsed >= (value)) {
+            // Toggle the state
+            isOn = !isOn;
+            numberOfFlashes++;
+            // console.log({numberOfFlashes});
+            
+            // Do something when the interval state changes (e.g., toggle a light)
+            if (isOn) {
+                console.log('ON ' + (performance.now() - lastTime));
+                currentLetter = SiB1Letters[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                // console.log(currentTrial - 1);
+                // console.log(numberOfFlashes / 2 - 1);
+                // console.log({currentTrial});
+                textColor = SiB1TextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                 isTarget = SiB1Targets[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                displayFace = SiB1Surprise[currentTrial - 1][0];   
+                
+                console.log({textColor});
+                console.log({displayFace});
+
+            } else {
+                console.log('OFF ' + (performance.now() - lastTime));
+                currentLetter = ' ';
+            }
+
+            // Update the last time
+            lastTime = currentTime;
+        }
+
+        // Request the next animation frame
+        requestAnimationFrame(streamSiB);
+    }
 
     function toggleEvery50ms() {
         const currentTime = performance.now();
@@ -310,17 +476,17 @@
     } 
 
 
-    while (surpriseTrials.length < 6) {
-        let trial = randomRange(totalTrials - 2);
+    // while (surpriseTrials.length < 6) {
+    //     let trial = randomRange(totalTrials - 2);
 
-        if (surpriseTrials.includes(trial)
-            || surpriseTrials.includes(trial - 1)
-            || surpriseTrials.includes(trial + 1)) {
-            continue;
-        }
+    //     if (surpriseTrials.includes(trial)
+    //         || surpriseTrials.includes(trial - 1)
+    //         || surpriseTrials.includes(trial + 1)) {
+    //         continue;
+    //     }
         
-        surpriseTrials.push(trial);
-    }
+    //     surpriseTrials.push(trial);
+    // }
 
     console.log({surpriseTrials});
 
@@ -348,7 +514,8 @@
         receivedLetter = ' ';
         guesses = [];
 
-        toggleEvery50ms();
+        if (AB) toggleEvery50ms();
+        if (SiB) streamSiB();
 
         // let count = 0;
         // let boxColor;
@@ -506,15 +673,14 @@
                         reactionTime = Date.now() - startTime;
                         everyReactionTime.push(reactionTime);
                         startTime = null; 
+                        started = false;
                         guessed = true;
                         receivedLetter = event.key.toUpperCase();
                         receivedLetter === targetLetter ? $correct++ : $incorrect++;
                         receivedLetter === targetLetter ? everyAccuracy.push(1) : everyAccuracy.push(0);
                         everyGuess.push(receivedLetter);
                         setInterval(() => {
-                            if (!started) {
-                                setTimeout(begin, 600);
-                            }
+                            setTimeout(begin, 600);
                         }, 20);
                     }
                 }
