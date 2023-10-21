@@ -54,7 +54,7 @@
     
     onAuthStateChanged(auth, (currentUser) => {
         user = currentUser;
-        isAdmin = false; // Set the initial value
+        isAdmin = false;
 
         if (currentUser) {
             get(child(dbRef, `users/${currentUser.uid}/admin`)).then((snapshot) => {
@@ -161,7 +161,7 @@
     let isBoxGreen = false;
     let textColor;
     let plays = 0;
-    let currentTrial = 92;
+    let currentTrial = 0;
     const totalTrials = 96;
     let started = false;
     let guessed = true;
@@ -185,6 +185,81 @@
     let boxDimensions = 64;
     let boxText = 280;
     let borderWidth = 8;
+    const ABLetters = [];
+    const CCLetters = [];
+    const SiBLetters = [];
+    const NUMBER_OF_TRIALS = 96;
+    const ABTargets = [];
+    const ABTextColors = [];
+
+    while (ABLetters.length < NUMBER_OF_TRIALS) {
+        const ABLettersTrial = [];
+        const ABTargetsTrial = [];
+        const ABTextColorsTrial = [];
+
+        let targetOffset = Math.random() < 0.5 ?  3 : 8;
+
+        targetIndex = 4;
+        let T1Index = targetIndex + randomRange(3);
+        let T2Index = T1Index + targetOffset; 
+
+        while(ABLettersTrial.length < 16) {
+            let letterToAdd = randomRange(letters.length - 1);
+            
+            if (ABLettersTrial[ABLettersTrial.length - 1] === letters[letterToAdd]) {
+                letterToAdd = (letterToAdd + 1) % letters.length;
+            }
+           
+            if (ABTargetsTrial.length === T1Index || ABTargetsTrial.length === T2Index) {
+                ABTargetsTrial.push(true);
+                ABTextColorsTrial.push('red');
+            } else {
+                ABTargetsTrial.push(false);
+                ABTextColorsTrial.push(distractors[randomRange(6) - 1]);
+            }
+
+            ABLettersTrial.push(letters[letterToAdd]);
+        }
+ 
+        ABLetters.push(ABLettersTrial);
+        ABTargets.push(ABTargetsTrial);
+        ABTextColors.push(ABTextColorsTrial);
+    }
+
+    console.log({ABLetters});
+    console.log({ABTargets});
+    console.log({ABTextColors});
+
+    function toggleEvery50ms() {
+        // Check if it's time to turn on or off
+        const currentTime = performance.now();
+        const elapsed = currentTime - lastTime;
+
+        if (elapsed >= (isOn ? 50 : 50)) {
+            // Toggle the state
+            isOn = !isOn;
+            
+            // Do something when the interval state changes (e.g., toggle a light)
+            if (isOn) {
+                console.log('ON');
+            } else {
+                console.log('OFF');
+            }
+
+            // Update the last time
+            lastTime = currentTime;
+        }
+
+        // Request the next animation frame
+        requestAnimationFrame(toggleEvery50ms);
+    }
+
+    let lastTime = performance.now();
+    let isOn = true;
+
+    // Start the interval
+    // toggleEvery50ms();
+
 
     onMount(() => {
         const storedBoxText = localStorage.getItem('boxText');
@@ -242,7 +317,6 @@
         if (++currentTrial === totalTrials) {
             gameOver();  
             writeTrialData(trialType, everyTarget, everyGuess, everyAccuracy, everyReactionTime);
-            // return;
         }
 
         started = true;
