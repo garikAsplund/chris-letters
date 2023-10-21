@@ -185,12 +185,21 @@
     let boxDimensions = 64;
     let boxText = 280;
     let borderWidth = 8;
-    const ABLetters = [];
     const CCLetters = [];
     const SiBLetters = [];
     const NUMBER_OF_TRIALS = 96;
+    
+    const ABLetters = [];
     const ABTargets = [];
     const ABTextColors = [];
+
+    const CC1Letters = [];
+    const CC1Targets = [];
+    const CC1TextColors = [];
+
+    const CC2Letters = [];
+    const CC2Targets = [];
+    const CC2TextColors = [];
 
     while (ABLetters.length < NUMBER_OF_TRIALS) {
         const ABLettersTrial = [];
@@ -231,25 +240,34 @@
     console.log({ABTextColors});
 
     let numberOfFlashes = 0;
+    let inProgress = false;
 
     function toggleEvery50ms() {
         // Check if it's time to turn on or off
         const currentTime = performance.now();
         const elapsed = currentTime - lastTime;
+        inProgress = true;
 
-        if (numberOfFlashes > 32) return;
+        if (numberOfFlashes > 32) {
+            inProgress = false;
+            return;
+        }
 
-        if (elapsed >= (isOn ? 50 : 50)) {
+        if (elapsed >= (50)) {
             // Toggle the state
             isOn = !isOn;
             numberOfFlashes++;
+            // console.log({numberOfFlashes});
             
             // Do something when the interval state changes (e.g., toggle a light)
             if (isOn) {
                 console.log('ON ' + (performance.now() - lastTime));
-                currentLetter = ABLetters[0][(numberOfFlashes / 2) - 1];
-                textColor = ABTextColors[0][(numberOfFlashes / 2) - 1];
-                isTarget = ABTargets[0][(numberOfFlashes / 2) - 1];
+                currentLetter = ABLetters[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                // console.log(currentTrial - 1);
+                // console.log(numberOfFlashes / 2 - 1);
+                // console.log({currentTrial});
+                textColor = ABTextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                isTarget = ABTargets[currentTrial - 1][(numberOfFlashes / 2) - 1];
             } else {
                 console.log('OFF ' + (performance.now() - lastTime));
                 currentLetter = ' ';
@@ -451,9 +469,10 @@
     }
 
     function handleKeydown(event) {
-        if (AB) {
+        if (AB && !inProgress) {
             if (event.key && event.key.length === 1) {
                 if (letters.includes(event.key.toUpperCase()) && guesses.length < 2) {
+                    startTime = Date.now();
                     if (startTime) {
                         reactionTime = Date.now() - startTime;
                         guesses = [...guesses, event.key.toUpperCase()];
@@ -475,6 +494,11 @@
                             $incorrect += 2;
                             everyAccuracy.push(0);
                         }
+                        numberOfFlashes = 1;
+                        started = false;
+                        setInterval(() => {
+                                setTimeout(begin, 600);
+                        }, 20);
                     }
                 }
             }
@@ -698,7 +722,7 @@
                     {/if}
                     {#if user || (isAdmin && $adminPlay)}
                         <ProgressBar current={currentTrial} total={totalTrials}/>
-                        <AccuracyBar correct={$correct} attempts={$correct + $incorrect}/>
+                        <!-- <AccuracyBar correct={$correct} attempts={$correct + $incorrect}/> -->
                     {/if}
                 </div>
             </div>
