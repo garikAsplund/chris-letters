@@ -201,6 +201,8 @@
     const CC2Targets = [];
     const CC2TextColors = [];
 
+    let value = 50;
+
     while (ABLetters.length < NUMBER_OF_TRIALS) {
         const ABLettersTrial = [];
         const ABTargetsTrial = [];
@@ -240,7 +242,7 @@
     console.log({ABTextColors});
 
     let numberOfFlashes = 0;
-    let inProgress = false;
+    let inProgress = true;
 
     function toggleEvery50ms() {
         const currentTime = performance.now();
@@ -252,7 +254,7 @@
             return;
         }
 
-        if (elapsed >= (50)) {
+        if (elapsed >= (value)) {
             // Toggle the state
             isOn = !isOn;
             numberOfFlashes++;
@@ -282,10 +284,6 @@
 
     let lastTime = performance.now();
     let isOn = true;
-
-    // Start the interval
-    // toggleEvery50ms();
-
 
     onMount(() => {
         const storedBoxText = localStorage.getItem('boxText');
@@ -607,11 +605,10 @@
     </div>
     {:else}
         {#if (currentTrial < 96 && !isAdmin) || (currentTrial < 96 && $adminPlay)}
-            <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-10">
+            <!-- <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-10">
                 🪇 Welcome to our experiment 🧑‍🔬
-            </h1>
-            
-            <div class="flex justify-center mx-4 space-x-4 translate-y-24">      
+            </h1> -->
+            <div class="flex justify-center mx-4 space-x-4 translate-y-12">      
                 <label>
                     <input 
                         type=checkbox
@@ -640,9 +637,37 @@
                     Surprise-induced blindness
                 </label>
             </div>
+            
+            <div class="flex justify-center mx-4 space-x-4 translate-y-24">
+                <div id="resizable-div" class={`flex justify-center resize-handle cursor-pointer`} style="border-width: {borderWidth}px; width: {boxText}px; height: {boxText}px" class:border-red-500={isBoxRed} class:border-green-500={isBoxGreen} class:border-slate-500={!isBoxGreen && !isBoxRed}>
+                    <p class={`self-center font-thin text-center font-courier-new`} class:text-red-500={isTarget} style="color: {textColor}; font-size: {boxText}px">
+                        {#if displayFace}
+                            <img src="garik_bw.jpg" alt="Garik!!!">
+                        {:else}
+                            {currentLetter}
+                        {/if}
+                        {#if !AB && !CC && !SiB}
+                            <p class="p-2 text-4xl">
+                                Please select an option from above 👆
+                            </p>
+                        {:else if !clicked}
+                            <button on:click={onClick} class="flex items-center p-12 text-4xl bg-gray-100 border border-black rounded-sm hover:bg-gray-200">
+                                {buttonText}
+                            </button>
+                        {/if}
+                        {#if !inProgress}
+                        <p class="p-2 text-4xl text-gray-800">
+                            Please enter your guesses
+                        </p>
+                        {/if}
+                    </p>
+                </div> 
+            </div>
+                
+            
 
             <div class="flex flex-col items-center">
-                {#if !AB && !CC && !SiB}
+                <!-- {#if !AB && !CC && !SiB}
                     <p class="p-2 text-4xl translate-y-32">
                         Please select an option from above 👆
                     </p>
@@ -652,43 +677,28 @@
                     </button>
                 {:else}
                     <p class="p-2 text-4xl text-transparent translate-y-32">Shhh, this is secret!!!</p>
-                {/if}
-                <h3 class="w-2/5 text-xl text-center transform translate-y-40">
+                {/if} -->
+                <!-- <h3 class="w-2/5 text-xl text-center transform translate-y-40">
                     Whenever you see a red letter, press that key on your keyboard
-                </h3>
+                </h3> -->
 
-                <label class="m-4 translate-y-40">
-                    <input 
-                        type=checkbox
-                        value="isPractice"
-                        bind:checked={isPractice} 
-                    />
-                    Need some practice?
+                <label class="flex flex-col m-4 text-xl text-center translate-y-32">
+                    <input type="range" bind:value min="40" max="400"/>
+                    <br>
+                    {value} ms
                 </label>
                 <!-- <p class="self-center text-lg text-center translate-y-56">Then hit spacebar to start the next trial</p> -->
-
-                <div class="translate-y-48">
-                    <div id="resizable-div" class={`flex justify-center resize-handle cursor-pointer`} style="border-width: {borderWidth}px; width: {boxText}px; height: {boxText}px" class:border-red-500={isBoxRed} class:border-green-500={isBoxGreen} class:border-slate-500={!isBoxGreen && !isBoxRed}>
-                        <p class={`self-center font-thin text-center font-courier-new`} class:text-red-500={isTarget} style="color: {textColor}; font-size: {boxText}px">
-                            {#if displayFace}
-                                <img src="garik_bw.jpg" alt="Garik!!!">
-                            {:else}
-                                {currentLetter}
-                            {/if}
-                        </p>
-                    </div> 
-                </div>
-                              
+         
                 
-                <p class="self-center text-center translate-y-56 text">
+                <!-- <p class="self-center text-center translate-y-56 text">
                     {#if AB}
                         Your guesses:
                     {:else}
                         Your guess:
                     {/if}
-                </p>
+                </p> -->
                 
-                <p class="self-center h-24 font-thin text-center translate-y-56 text-8xl font-courier-new">
+                <!-- <p class="self-center h-24 font-thin text-center translate-y-56 text-8xl font-courier-new">
                     {#if AB}
                         {#each guesses as guess}
                             {guess}
@@ -704,7 +714,7 @@
                 
                 <p class="self-center h-24 text-2xl font-thin text-center translate-y-56 font-courier-new">
                     {reactionTime} ms
-                </p>
+                </p> -->
 
                 <div class="fixed bottom-0 left-0 w-full backdrop-blur-3xl">
                     {#if user}
