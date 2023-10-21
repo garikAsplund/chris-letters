@@ -534,14 +534,14 @@
                 isTarget = SiB1Targets[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 displayFace = SiB1Surprise[currentTrial - 1][(numberOfFlashes / 2) - 1];   
                 
-                console.log({textColor});
-                console.log({displayFace});
+                // console.log({textColor});
+                // console.log({displayFace});
 
             } else {
                 console.log('OFF ' + (performance.now() - lastTime));
                 currentLetter = ' ';
                 displayFace = SiB1Surprise[currentTrial - 1][(numberOfFlashes / 2) - 1];   
-                console.log({displayFace});
+                // console.log({displayFace});
             }
 
             // Update the last time
