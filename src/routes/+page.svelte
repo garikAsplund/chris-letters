@@ -604,7 +604,7 @@
         </button> 
     </div>
     {:else}
-        {#if (currentTrial < 96 && !isAdmin) || (currentTrial < 96 && $adminPlay)}
+        {#if currentTrial < 96}
             <!-- <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-10">
                 🪇 Welcome to our experiment 🧑‍🔬
             </h1> -->
@@ -718,11 +718,11 @@
 
                 <div class="fixed bottom-0 left-0 w-full backdrop-blur-3xl">
                     {#if user || isAdmin}
-                        <div class="flex flex-col justify-center m-2 space-y-5">
+                        <div class="flex flex-col justify-center m-2 space-y-2">
                             {#if isAdmin}
                                 <Admin />
                             {/if}
-                            <button class="m-4 hover:text-gray-600" on:click={handleSignOut}>
+                            <button class="hover:text-gray-600" on:click={handleSignOut}>
                                 Sign out
                             </button>
                         </div>

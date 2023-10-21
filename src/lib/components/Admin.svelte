@@ -78,8 +78,6 @@
   }
 </script>
 
-<div class="flex flex-col items-center justify-center">
-    <button class="m-4 hover:text-gray-600" on:click={fetchDataFromFirebase}>
-        Export data
-    </button>  
-</div>
+<button class=" hover:text-gray-600" on:click={fetchDataFromFirebase}>
+    Export data
+</button>  
