@@ -374,6 +374,7 @@
 
         if (numberOfFlashes > 32) {
             inProgress = false;
+            startTime = Date.now();
             return;
         }
 
@@ -391,7 +392,7 @@
                 // console.log(numberOfFlashes / 2 - 1);
                 // console.log({currentTrial});
                 textColor = SiB1TextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                 isTarget = SiB1Targets[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                isTarget = SiB1Targets[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 displayFace = SiB1Surprise[currentTrial - 1][0];   
                 
                 console.log({textColor});
@@ -666,7 +667,7 @@
                     }
                 }
             }
-        } else {
+        } else if (SiB && !inProgress) {
             if (event.key && event.key.length === 1) {
                 if (letters.includes(event.key.toUpperCase())) {
                     if (startTime) {
@@ -674,6 +675,7 @@
                         everyReactionTime.push(reactionTime);
                         startTime = null; 
                         started = false;
+                        numberOfFlashes = 1;
                         guessed = true;
                         receivedLetter = event.key.toUpperCase();
                         receivedLetter === targetLetter ? $correct++ : $incorrect++;
