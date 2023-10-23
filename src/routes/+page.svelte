@@ -1,5 +1,4 @@
 <script>
-	import AccuracyBar from '$lib/components/AccuracyBar.svelte';
     import ProgressBar from '$lib/components/ProgressBar.svelte';
     import Admin from '$lib/components/Admin.svelte';
     import { emojisplosions } from 'emojisplosion';
@@ -7,7 +6,6 @@
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
     import app from "$lib/firebase";
     import ShortUniqueId from 'short-unique-id';
-    import { adminPlay } from '$lib/stores/AdminStore';
     import { correct, incorrect } from '$lib/stores/GameStore';
 	import GameOver from '$lib/components/GameOver.svelte';
     import interact from 'interactjs';
@@ -95,7 +93,7 @@
         });
     }
     
-    const letters = [
+    const LETTERS = [
         "B",
         "C",
         "D",
@@ -118,30 +116,7 @@
         "Z",
     ];
 
-    const targets = [
-        "B",
-        "C",
-        "D",
-        "F",
-        "G",
-        "H",
-        "J",
-        "K",
-        "L",
-        "M",
-        "N",
-        "P",
-        "R",
-        "S",
-        "T",
-        "V",
-        "W",
-        "X",
-        "Y",
-        "Z",
-    ];
-
-    const distractors = [
+    const DISTRACTORS = [
         "rgb(0,0,255)",      // blue
         "rgb(200,200,0)",    // yellow
         "rgb(200,0,200)",    // magenta
@@ -152,17 +127,11 @@
 
     let currentLetter = ' ';
     let receivedLetter = ' ';
-    let showLetter = true;
     let targetLetter = "X";
     let targetIndex = 14;
     let isTarget = false;
-    let boxIndex;
-    let isBoxRed = false;
-    let isBoxGreen = false;
     let textColor;
-    let plays = 0;
     let currentTrial = 0;
-    const totalTrials = 96;
     let started = false;
     let guessed = true;
     let reactionTime = 0;
@@ -181,12 +150,8 @@
     let everyAccuracy = [];
     let everyReactionTime = [];
     let trialType;
-    let isPractice = false;
-    let boxDimensions = 64;
     let boxText = 280;
     let borderWidth = 8;
-    const CCLetters = [];
-    const SiBLetters = [];
     const NUMBER_OF_TRIALS = 96;
     
     const ABLetters = [];
@@ -207,10 +172,10 @@
         let T2Index = T1Index + targetOffset; 
 
         while(ABLettersTrial.length < 16) {
-            let letterToAdd = randomRange(letters.length - 1);
+            let letterToAdd = randomRange(LETTERS.length - 1);
             
-            if (ABLettersTrial[ABLettersTrial.length - 1] === letters[letterToAdd]) {
-                letterToAdd = (letterToAdd + 1) % letters.length;
+            if (ABLettersTrial[ABLettersTrial.length - 1] === LETTERS[letterToAdd]) {
+                letterToAdd = (letterToAdd + 1) % LETTERS.length;
             }
            
             if (ABTargetsTrial.length === T1Index || ABTargetsTrial.length === T2Index) {
@@ -218,10 +183,10 @@
                 ABTextColorsTrial.push('red');
             } else {
                 ABTargetsTrial.push(false);
-                ABTextColorsTrial.push(distractors[randomRange(6) - 1]);
+                ABTextColorsTrial.push(DISTRACTORS[randomRange(6) - 1]);
             }
 
-            ABLettersTrial.push(letters[letterToAdd]);
+            ABLettersTrial.push(LETTERS[letterToAdd]);
         }
  
         ABLetters.push(ABLettersTrial);
@@ -245,7 +210,7 @@
     const surpriseTrials2 = [];
     
     while (surpriseTrials.length < 6) {
-        let trial = randomRange(totalTrials - 2);
+        let trial = randomRange(NUMBER_OF_TRIALS - 2);
 
         if (surpriseTrials.includes(trial)
             || surpriseTrials.includes(trial - 1)
@@ -257,7 +222,7 @@
     }
 
     while (surpriseTrials2.length < 6) {
-        let trial = randomRange(totalTrials - 2);
+        let trial = randomRange(NUMBER_OF_TRIALS - 2);
 
         if (surpriseTrials2.includes(trial)
             || surpriseTrials2.includes(trial - 1)
@@ -281,9 +246,6 @@
 
         let targetOffset = 3;;
 
-        // targetIndex = 4;
-        // let T1Index = targetIndex + randomRange(3);
-        // let T2Index = T1Index + targetOffset; 
         targetIndex = 6;
         targetIndex += randomRange(8);
         let surpriseIndex = targetIndex - targetOffset;
@@ -292,15 +254,15 @@
             SiB2SurpriseTrial.push(true)
         } else SiB2SurpriseTrial.push(false);
 
-        // if (surpriseTrials.includes(SiB1Surprise.length)) {
-        //     SiB1SurpriseTrial.push(true)
-        // } else SiB1SurpriseTrial.push(false);
+        if (surpriseTrials.includes(SiB1Surprise.length)) {
+            SiB1SurpriseTrial.push(true)
+        } else SiB1SurpriseTrial.push(false);
 
         while(SiB1LettersTrial.length < 16) {
-            let letterToAdd = randomRange(letters.length - 1);
+            let letterToAdd = randomRange(LETTERS.length - 1);
             
-            if (SiB1LettersTrial[SiB1LettersTrial.length - 1] === letters[letterToAdd]) {
-                letterToAdd = (letterToAdd + 1) % letters.length;
+            if (SiB1LettersTrial[SiB1LettersTrial.length - 1] === LETTERS[letterToAdd]) {
+                letterToAdd = (letterToAdd + 1) % LETTERS.length;
             }
            
             if (SiB1TargetsTrial.length === targetIndex) {
@@ -308,7 +270,7 @@
                 SiB1TextColorsTrial.push('red');
             } else {
                 SiB1TargetsTrial.push(false);
-                SiB1TextColorsTrial.push(distractors[randomRange(6) - 1]);
+                SiB1TextColorsTrial.push(DISTRACTORS[randomRange(6) - 1]);
             }
 
             if (surpriseTrials.includes(SiB1Surprise.length) && SiB1SurpriseTrial.length === surpriseIndex) {
@@ -317,14 +279,14 @@
                 SiB1SurpriseTrial.push(false);
             }
 
-            SiB1LettersTrial.push(letters[letterToAdd]);
+            SiB1LettersTrial.push(LETTERS[letterToAdd]);
         }
 
         while(SiB2LettersTrial.length < 16) {
-            let letterToAdd = randomRange(letters.length - 1);
+            let letterToAdd = randomRange(LETTERS.length - 1);
             
-            if (SiB2LettersTrial[SiB2LettersTrial.length - 1] === letters[letterToAdd]) {
-                letterToAdd = (letterToAdd + 1) % letters.length;
+            if (SiB2LettersTrial[SiB2LettersTrial.length - 1] === LETTERS[letterToAdd]) {
+                letterToAdd = (letterToAdd + 1) % LETTERS.length;
             }
            
             if (SiB2TargetsTrial.length === targetIndex) {
@@ -332,10 +294,10 @@
                 SiB2TextColorsTrial.push('red');
             } else {
                 SiB2TargetsTrial.push(false);
-                SiB2TextColorsTrial.push(distractors[randomRange(6) - 1]);
+                SiB2TextColorsTrial.push(DISTRACTORS[randomRange(6) - 1]);
             }
 
-            SiB2LettersTrial.push(letters[letterToAdd]);
+            SiB2LettersTrial.push(LETTERS[letterToAdd]);
         }
  
         SiB1Letters.push(SiB1LettersTrial);
@@ -383,20 +345,15 @@
         let targetOffset = Math.random() < 0.5 ?  3 : 8;
         let distractorIndex;
 
-        // targetIndex = 4;
-        // let T1Index = targetIndex + randomRange(3);
-        // let T2Index = T1Index + targetOffset; 
         targetIndex = 4;
         distractorIndex = targetIndex + randomRange(3);
-        // console.log({distractorIndex});
         targetIndex = distractorIndex + targetOffset;
-        // console.log({targetIndex});
 
         while(CC1LettersTrial.length < 16) {
-            let letterToAdd = randomRange(letters.length - 1);
+            let letterToAdd = randomRange(LETTERS.length - 1);
             
-            if (CC1LettersTrial[CC1LettersTrial.length - 1] === letters[letterToAdd]) {
-                letterToAdd = (letterToAdd + 1) % letters.length;
+            if (CC1LettersTrial[CC1LettersTrial.length - 1] === LETTERS[letterToAdd]) {
+                letterToAdd = (letterToAdd + 1) % LETTERS.length;
             }
            
             if (CC1TargetsTrial.length === targetIndex) {
@@ -404,7 +361,7 @@
                 CC1TextColorsTrial.push('red');
             } else {
                 CC1TargetsTrial.push(false);
-                CC1TextColorsTrial.push(distractors[randomRange(6) - 1]);
+                CC1TextColorsTrial.push(DISTRACTORS[randomRange(6) - 1]);
             }
 
             if (CC1TargetsTrial.length === distractorIndex) {
@@ -413,14 +370,14 @@
                 CC1BoxColorsTrial.push('grey');
             }
 
-            CC1LettersTrial.push(letters[letterToAdd]);
+            CC1LettersTrial.push(LETTERS[letterToAdd]);
         }
 
         while(CC2LettersTrial.length < 16) {
-            let letterToAdd = randomRange(letters.length - 1);
+            let letterToAdd = randomRange(LETTERS.length - 1);
             
-            if (CC2LettersTrial[CC2LettersTrial.length - 1] === letters[letterToAdd]) {
-                letterToAdd = (letterToAdd + 1) % letters.length;
+            if (CC2LettersTrial[CC2LettersTrial.length - 1] === LETTERS[letterToAdd]) {
+                letterToAdd = (letterToAdd + 1) % LETTERS.length;
             }
            
             if (CC2TargetsTrial.length === targetIndex) {
@@ -428,7 +385,7 @@
                 CC2TextColorsTrial.push('red');
             } else {
                 CC2TargetsTrial.push(false);
-                CC2TextColorsTrial.push(distractors[randomRange(6) - 1]);
+                CC2TextColorsTrial.push(DISTRACTORS[randomRange(6) - 1]);
             }
 
             if (CC2TargetsTrial.length === distractorIndex) {
@@ -437,7 +394,7 @@
                 CC2BoxColorsTrial.push('grey');
             }
 
-            CC2LettersTrial.push(letters[letterToAdd]);
+            CC2LettersTrial.push(LETTERS[letterToAdd]);
         }
  
         CC1Letters.push(CC1LettersTrial);
@@ -477,18 +434,12 @@
         }
 
         if (elapsed >= (value)) {
-            // Toggle the state
             isOn = !isOn;
             numberOfFlashes++;
-            // console.log({numberOfFlashes});
             
-            // Do something when the interval state changes (e.g., toggle a light)
             if (isOn) {
                 console.log('ON ' + (performance.now() - lastTime));
                 currentLetter = CC1Letters[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                // console.log(currentTrial - 1);
-                // console.log(numberOfFlashes / 2 - 1);
-                // console.log({currentTrial});
                 textColor = CC1TextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 isTarget = CC1Targets[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 boxColor = CC1BoxColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
@@ -497,11 +448,9 @@
                 currentLetter = ' ';
             }
 
-            // Update the last time
             lastTime = currentTime;
         }
 
-        // Request the next animation frame
         requestAnimationFrame(streamCC);
     }
 
@@ -518,63 +467,45 @@
         }
 
         if (elapsed >= (value)) {
-            // Toggle the state
             isOn = !isOn;
             numberOfFlashes++;
-            // console.log({numberOfFlashes});
             
-            // Do something when the interval state changes (e.g., toggle a light)
             if (isOn) {
                 console.log('ON ' + (performance.now() - lastTime));
                 currentLetter = SiB1Letters[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                // console.log(currentTrial - 1);
-                // console.log(numberOfFlashes / 2 - 1);
-                // console.log({currentTrial});
                 textColor = SiB1TextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 isTarget = SiB1Targets[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 displayFace = SiB1Surprise[currentTrial - 1][(numberOfFlashes / 2) - 1];   
-                
-                // console.log({textColor});
-                // console.log({displayFace});
-
             } else {
                 console.log('OFF ' + (performance.now() - lastTime));
                 currentLetter = ' ';
                 displayFace = SiB1Surprise[currentTrial - 1][((numberOfFlashes - 1) / 2) - 1];   
-                // console.log({displayFace});
             }
 
-            // Update the last time
             lastTime = currentTime;
         }
 
-        // Request the next animation frame
         requestAnimationFrame(streamSiB);
     }
 
-    function toggleEvery50ms() {
+    function streamAB() {
         const currentTime = performance.now();
         const elapsed = currentTime - lastTime;
         inProgress = true;
 
         if (numberOfFlashes > 32) {
             inProgress = false;
+            startTime = Date.now();
             return;
         }
 
         if (elapsed >= (value)) {
-            // Toggle the state
             isOn = !isOn;
             numberOfFlashes++;
-            // console.log({numberOfFlashes});
             
-            // Do something when the interval state changes (e.g., toggle a light)
             if (isOn) {
                 console.log('ON ' + (performance.now() - lastTime));
                 currentLetter = ABLetters[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                // console.log(currentTrial - 1);
-                // console.log(numberOfFlashes / 2 - 1);
-                // console.log({currentTrial});
                 textColor = ABTextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 isTarget = ABTargets[currentTrial - 1][(numberOfFlashes / 2) - 1];
             } else {
@@ -582,12 +513,10 @@
                 currentLetter = ' ';
             }
 
-            // Update the last time
             lastTime = currentTime;
         }
 
-        // Request the next animation frame
-        requestAnimationFrame(toggleEvery50ms);
+        requestAnimationFrame(streamAB);
     }
 
     let lastTime = performance.now();
@@ -599,7 +528,7 @@
             if (storedBoxText && storedBorderWidth) {
                 boxText = parseInt(storedBoxText, 10);
                 borderWidth = parseInt(storedBorderWidth, 10);
-                console.log({boxText}, {borderWidth});
+                // console.log({boxText}, {borderWidth});
             }
     });
 
@@ -617,20 +546,8 @@
             setTimeout(cancel, 2000); 
     } 
 
-
-    // while (surpriseTrials.length < 6) {
-    //     let trial = randomRange(totalTrials - 2);
-
-    //     if (surpriseTrials.includes(trial)
-    //         || surpriseTrials.includes(trial - 1)
-    //         || surpriseTrials.includes(trial + 1)) {
-    //         continue;
-    //     }
-        
-    //     surpriseTrials.push(trial);
-    // }
-
     console.log({surpriseTrials});
+    console.log({surpriseTrials2});
 
     function randomRange(max) {
         return Math.ceil(Math.random() * max);
@@ -646,7 +563,7 @@
         if (started) return;
         if (!guessed) return;
         if (!AB && !CC && !SiB) return;
-        if (++currentTrial === totalTrials) {
+        if (++currentTrial === NUMBER_OF_TRIALS) {
             gameOver();  
             writeTrialData(trialType, everyTarget, everyGuess, everyAccuracy, everyReactionTime);
         }
@@ -656,133 +573,21 @@
         receivedLetter = ' ';
         guesses = [];
 
-        if (AB) toggleEvery50ms();
+        if (AB) streamAB();
         if (CC) streamCC();
         if (SiB) streamSiB();
-
-        // let count = 0;
-        // let boxColor;
-        // let T1Index;
-        // let T2Index;
-        // let targetOffset = Math.random() < 0.5 ?  3 : 8;
-
-        // targetLetter = targets[randomRange(targets.length) - 1];
-        // targetLetters = [];
-        
-        // if (AB) {
-        //     trialType = "AB";
-        //     targetLetters.push(targetLetter);
-        //     targetIndex = 4;
-        //     T1Index = targetIndex + randomRange(3);
-        //     T2Index = T1Index + targetOffset; 
-        // }
-
-        // if (CC) {
-        //     trialType = "CC";
-        //     boxIndex = 4;
-        //     boxIndex += randomRange(3);
-        //     boxIndex *= 2;
-        //     targetOffset *= 2;
-        //     boxColor = Math.random() < 0.5 ?  "red" : "green";
-        // }
-
-        // if (SiB) {
-        //     trialType = "SiB";
-        //     targetIndex = 6;
-        //     targetIndex += randomRange(8);
-        // }
-
-        // const flash = setInterval(() => {                
-        //     flashes(count++, boxColor, targetOffset, T1Index, T2Index);
-            
-        //     if (count >= 32) clearInterval(flash);
-        // }, isPractice ? 50 * 2 : 50);
-
-        // setTimeout(() => {
-        //     started = false;
-        // }, isPractice ? 50 * 32 * 2 : 50 * 32);
     }
-
-    // function flashes(count, boxColor, targetOffset, T1Index, T2Index) {
-    //     if (AB) {
-    //         if (count === T1Index * 2 || count === T2Index * 2) {
-    //             everyTarget.push(targetLetter);
-    //             currentLetter = targetLetter;
-    //             isTarget = true;
-    //             textColor = "red";
-    //             startTime = Date.now();
-    //             targetLetter = targets[randomRange(targets.length) - 1];
-    //             targetLetters.push(targetLetter);
-    //         } else if (showLetter) {
-    //             isTarget = false;
-    //             textColor = distractors[randomRange(6)];
-    //             currentLetter = letters[randomRange(letters.length) - 1];
-    //         } else {
-    //             currentLetter = ' '; 
-    //         }
-    //     }
-
-    //     if (CC) {
-    //         if (count === boxIndex + targetOffset) {
-    //             everyTarget.push(targetLetter);
-    //             currentLetter = targetLetter;
-    //             isTarget = true;
-    //             textColor = "red";
-    //             startTime = Date.now();
-    //         } else if (showLetter) {
-    //             isTarget = false;
-    //             textColor = distractors[randomRange(6)];
-    //             currentLetter = letters[randomRange(letters.length) - 1];
-    //         } else {
-    //             currentLetter = ' '; 
-    //         }
-        
-    //         if (boxColor === "green") {
-    //             if (count === boxIndex || count === boxIndex + 1) {
-    //                 isBoxGreen = true;
-    //             } else {
-    //                 isBoxGreen = false;
-    //             }
-    //         }
-    //         if (boxColor === "red") {
-    //             if (count === boxIndex || count === boxIndex + 1) {
-    //                 isBoxRed = true;
-    //             } else {
-    //                 isBoxRed = false;
-    //             } 
-    //         }
-    //     }
-
-    //     if (SiB) {
-    //         if (surpriseTrials.includes(currentTrial) && (count === targetIndex * 2 - 6 || count === targetIndex * 2 - 5)) {
-    //             displayFace = true;
-    //         } else if (count === targetIndex * 2) {
-    //             everyTarget.push(targetLetter);
-    //             displayFace = false;
-    //             currentLetter = targetLetter;
-    //             isTarget = true;
-    //             textColor = "red";
-    //             startTime = Date.now();
-    //         } else if (showLetter) {
-    //             isTarget = false;
-    //             textColor = distractors[randomRange(6)];
-    //             currentLetter = letters[randomRange(letters.length) - 1];
-    //         } else {
-    //             currentLetter = ' '; 
-    //         }
-    //     }
-        
-    //     showLetter = !showLetter;
-    // }
 
     function handleKeydown(event) {
         if (AB && !inProgress) {
             if (event.key && event.key.length === 1) {
-                if (letters.includes(event.key.toUpperCase()) && guesses.length < 2) {
-                    startTime = Date.now();
+                if (LETTERS.includes(event.key.toUpperCase()) && guesses.length < 2) {
+                    // startTime = Date.now();
                     if (startTime) {
                         reactionTime = Date.now() - startTime;
+                        console.log({reactionTime});
                         guesses = [...guesses, event.key.toUpperCase()];
+                        console.log({guesses});
                     }
                     if (guesses.length === 2) {
                         guessed = true;
@@ -809,7 +614,7 @@
             }
         } else if ((SiB || CC) && !inProgress) {
             if (event.key && event.key.length === 1) {
-                if (letters.includes(event.key.toUpperCase())) {
+                if (LETTERS.includes(event.key.toUpperCase())) {
                     if (startTime) {
                         reactionTime = Date.now() - startTime;
                         everyReactionTime.push(reactionTime);
@@ -854,10 +659,6 @@
         }
     }
 
-    // function adminClicked() {
-    //     $adminPlay = false;
-    // }
-
     const resizableDiv = document.getElementById('resizable-div');
 
     interact('.resize-handle')
@@ -896,9 +697,6 @@
 
 <html lang="en" class="h-screen bg-white bg-no-repeat">
 <body>  
-    <!-- {#if isAdmin && !$adminPlay}
-        <Admin />
-    {/if} -->
     {#if !user}
     <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-10">
         🪇 Welcome to our experiment 🧑‍🔬
@@ -911,9 +709,6 @@
     </div>
     {:else}
         {#if currentTrial < 96}
-            <!-- <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-10">
-                🪇 Welcome to our experiment 🧑‍🔬
-            </h1> -->
             <div class="flex justify-center mx-4 space-x-4 translate-y-12">      
                 <label>
                     <input 
@@ -970,7 +765,6 @@
                                 Please enter your guess
                             </p>
                         {/if}
-                        
                     </p>
                 </div> 
             </div>
@@ -978,28 +772,12 @@
             
 
             <div class="flex flex-col items-center">
-                <!-- {#if !AB && !CC && !SiB}
-                    <p class="p-2 text-4xl translate-y-32">
-                        Please select an option from above 👆
-                    </p>
-                {:else if !clicked}
-                    <button on:click={onClick} class="p-2 text-4xl transform translate-y-32 bg-gray-100 border border-black rounded-sm hover:bg-gray-200">
-                        {buttonText}
-                    </button>
-                {:else}
-                    <p class="p-2 text-4xl text-transparent translate-y-32">Shhh, this is secret!!!</p>
-                {/if} -->
-                <!-- <h3 class="w-2/5 text-xl text-center transform translate-y-40">
-                    Whenever you see a red letter, press that key on your keyboard
-                </h3> -->
 
                 <label class="flex flex-col m-4 text-xl text-center translate-y-32">
-                    <input type="range" bind:value min="40" max="400"/>
+                    <input type="range" bind:value min="20" max="400"/>
                     <br>
                     {value} ms
-                </label>
-                <!-- <p class="self-center text-lg text-center translate-y-56">Then hit spacebar to start the next trial</p> -->
-         
+                </label>         
                 
                 <!-- <p class="self-center text-center translate-y-56 text">
                     {#if AB}
@@ -1038,11 +816,11 @@
                             </button>
                         </div>
                     {/if}
-                        <ProgressBar current={currentTrial} total={totalTrials}/>
+                        <ProgressBar current={currentTrial} total={NUMBER_OF_TRIALS}/>
                         <!-- <AccuracyBar correct={$correct} attempts={$correct + $incorrect}/> -->
                 </div>
             </div>
-        {:else if currentTrial === totalTrials}
+        {:else if currentTrial === NUMBER_OF_TRIALS}
             <GameOver />
         {/if}
     {/if}
