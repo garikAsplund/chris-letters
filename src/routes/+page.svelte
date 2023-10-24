@@ -606,8 +606,9 @@
                         startTime = null; 
                         everyReactionTime.push(reactionTime);
                         everyGuess.push(...guesses);
+                        everyTarget.push(targetLetter.split(''));
                         
-                        if (targetLetter.includes(guesses[0]) && targetLetter.includes(guesses[1])) {
+                        if ((targetLetter[0] == guesses[0] && targetLetter[1] == guesses[1]) || (targetLetter[0] == guesses[1] && targetLetter[1] == guesses[0])) {
                             everyAccuracy.push(2);
                         } else if (targetLetter.includes(guesses[0]) || targetLetter.includes(guesses[1])) {
                             everyAccuracy.push(1);
@@ -615,7 +616,7 @@
                             everyAccuracy.push(0);
                         }                        
                         
-                        console.log({everyAccuracy}, {everyGuess}, {everyReactionTime});
+                        console.log({everyAccuracy}, {everyGuess}, {everyReactionTime}, {everyTarget});
 
                         numberOfFlashes = 1;
                         started = false;
@@ -635,11 +636,12 @@
                         numberOfFlashes = 1;
                         guessed = true;
                         receivedLetter = event.key.toUpperCase();
+                        everyTarget.push(targetLetter);
                         receivedLetter === targetLetter ? everyAccuracy.push(1) : everyAccuracy.push(0);
                         targetLetter = '';
                         everyGuess.push(receivedLetter);
 
-                        console.log({everyAccuracy}, {everyGuess}, {everyReactionTime});
+                        console.log({everyAccuracy}, {everyGuess}, {everyReactionTime}, {everyTarget});
 
                         setTimeout(begin, 600);
                     }
@@ -711,6 +713,11 @@
 <svelte:window on:keydown={handleKeydown} on:keyup={nextTrial}/>
 
 <html lang="en" class="h-screen bg-white bg-no-repeat">
+    <head>
+        <title>
+            Streaming letters
+        </title>
+    </head>
 <body>  
     {#if !user}
         <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-10">
