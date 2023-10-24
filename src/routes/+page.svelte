@@ -243,25 +243,12 @@
         const SiB1TargetsTrial = [];
         const SiB1TextColorsTrial = [];
         const SiB1SurpriseTrial = [];
-        
-        const SiB2LettersTrial = [];
-        const SiB2TargetsTrial = [];
-        const SiB2TextColorsTrial = [];
-        const SiB2SurpriseTrial = [];
 
         let targetOffset = 3;;
 
         targetIndex = 6;
         targetIndex += randomRange(8);
         let surpriseIndex = targetIndex - targetOffset;
-
-        if (surpriseTrials2.includes(SiB2Surprise.length)) {
-            SiB2SurpriseTrial.push(true)
-        } else SiB2SurpriseTrial.push(false);
-
-        if (surpriseTrials.includes(SiB1Surprise.length)) {
-            SiB1SurpriseTrial.push(true)
-        } else SiB1SurpriseTrial.push(false);
 
         while(SiB1LettersTrial.length < 16) {
             let letterToAdd = randomRange(LETTERS.length - 1);
@@ -287,6 +274,24 @@
             SiB1LettersTrial.push(LETTERS[letterToAdd]);
         }
 
+        SiB1Letters.push(SiB1LettersTrial);
+        SiB1Targets.push(SiB1TargetsTrial);
+        SiB1TextColors.push(SiB1TextColorsTrial);
+        SiB1Surprise.push(SiB1SurpriseTrial);
+    }
+
+    while (SiB2Letters.length < NUMBER_OF_TRIALS) {
+        const SiB2LettersTrial = [];
+        const SiB2TargetsTrial = [];
+        const SiB2TextColorsTrial = [];
+        const SiB2SurpriseTrial = [];
+
+        let targetOffset = 3;;
+
+        targetIndex = 6;
+        targetIndex += randomRange(8);
+        let surpriseIndex = targetIndex - targetOffset;
+
         while(SiB2LettersTrial.length < 16) {
             let letterToAdd = randomRange(LETTERS.length - 1);
             
@@ -302,14 +307,15 @@
                 SiB2TextColorsTrial.push(DISTRACTORS[randomRange(6) - 1]);
             }
 
-            SiB2LettersTrial.push(LETTERS[letterToAdd]);
-        }
- 
-        SiB1Letters.push(SiB1LettersTrial);
-        SiB1Targets.push(SiB1TargetsTrial);
-        SiB1TextColors.push(SiB1TextColorsTrial);
-        SiB1Surprise.push(SiB1SurpriseTrial);
+            if (surpriseTrials2.includes(SiB2Surprise.length) && SiB2SurpriseTrial.length === surpriseIndex) {
+                SiB2SurpriseTrial.push(true);
+            } else {
+                SiB2SurpriseTrial.push(false);
+            }
 
+            SiB2LettersTrial.push(LETTERS[letterToAdd]);
+        } 
+        
         SiB2Letters.push(SiB2LettersTrial);
         SiB2Targets.push(SiB2TargetsTrial);
         SiB2TextColors.push(SiB2TextColorsTrial);
@@ -666,14 +672,17 @@
                     CC = false;
                     SiB = false;
                     clicked = false;
+                    currentTrial = 0;
                 case "CC":
                     AB = false;
                     SiB = false;
                     clicked = false;
+                    currentTrial = 0;
                 case "SiB":
                     AB = false;
                     CC = false;
                     clicked = false;
+                    currentTrial = 0;
             }
         }
     }
