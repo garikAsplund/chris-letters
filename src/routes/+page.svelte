@@ -127,7 +127,7 @@
 
     let currentLetter = ' ';
     let receivedLetter = ' ';
-    let targetLetter = "X";
+    let targetLetter = '';
     let targetIndex = 14;
     let isTarget = false;
     let textColor;
@@ -142,7 +142,6 @@
     let guesses = [];
     let surpriseTrials = [];
     let displayFace = false;
-    let targetLetters = [];
     let buttonText = "Start";
     let clicked = false;
     let everyTarget = [];
@@ -508,6 +507,9 @@
                 currentLetter = ABLetters[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 textColor = ABTextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 isTarget = ABTargets[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                if (isTarget) {
+                    targetLetter += currentLetter;
+                }
             } else {
                 console.log('OFF ' + (performance.now() - lastTime));
                 currentLetter = ' ';
@@ -595,19 +597,19 @@
                         everyReactionTime.push(reactionTime);
                         everyGuess.push(...guesses);
                         
-                        if (targetLetters.includes(guesses[0]) && targetLetters.includes(guesses[1])) {
-                            $correct += 2;
+                        if (targetLetter.includes(guesses[0]) && targetLetter.includes(guesses[1])) {
                             everyAccuracy.push(2);
-                        } else if (targetLetters.includes(guesses[0]) || targetLetters.includes(guesses[1])) {
-                            $correct++;
-                            $incorrect++;
+                        } else if (targetLetter.includes(guesses[0]) || targetLetter.includes(guesses[1])) {
                             everyAccuracy.push(1);
                         } else {
-                            $incorrect += 2;
                             everyAccuracy.push(0);
-                        }
+                        }                        
+                        
+                        console.log({everyAccuracy}, {everyGuess}, {everyReactionTime});
+
                         numberOfFlashes = 1;
                         started = false;
+                        targetLetter = '';
                         setTimeout(begin, 600);
                     }
                 }
@@ -698,15 +700,15 @@
 <html lang="en" class="h-screen bg-white bg-no-repeat">
 <body>  
     {#if !user}
-    <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-10">
-        🪇 Welcome to our experiment 🧑‍🔬
-    </h1>
-    
-    <div class="flex flex-col items-center justify-center h-screen">
-        <button class="px-4 py-2 font-semibold text-gray-600 -translate-y-24 bg-transparent border border-gray-500 rounded hover:bg-gray-500 hover:text-white hover:border-transparent" on:click={signInWithGoogle}>
-            Sign in with Google
-        </button> 
-    </div>
+        <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-10">
+            🪇 Welcome to our experiment 🧑‍🔬
+        </h1>
+        
+        <div class="flex flex-col items-center justify-center h-screen">
+            <button class="px-4 py-2 font-semibold text-gray-600 -translate-y-24 bg-transparent border border-gray-500 rounded hover:bg-gray-500 hover:text-white hover:border-transparent" on:click={signInWithGoogle}>
+                Sign in with Google
+            </button> 
+        </div>
     {:else}
         {#if currentTrial < 96}
             <div class="flex justify-center mx-4 space-x-4 translate-y-12">      
@@ -768,8 +770,6 @@
                     </p>
                 </div> 
             </div>
-                
-            
 
             <div class="flex flex-col items-center">
 
@@ -777,33 +777,7 @@
                     <input type="range" bind:value min="20" max="400"/>
                     <br>
                     {value} ms
-                </label>         
-                
-                <!-- <p class="self-center text-center translate-y-56 text">
-                    {#if AB}
-                        Your guesses:
-                    {:else}
-                        Your guess:
-                    {/if}
-                </p> -->
-                
-                <!-- <p class="self-center h-24 font-thin text-center translate-y-56 text-8xl font-courier-new">
-                    {#if AB}
-                        {#each guesses as guess}
-                            {guess}
-                        {/each}
-                    {:else}
-                        {receivedLetter}
-                    {/if}
-                </p>
-
-                <p class="self-center text-center translate-y-56 text">
-                    Your reaction time:
-                </p>
-                
-                <p class="self-center h-24 text-2xl font-thin text-center translate-y-56 font-courier-new">
-                    {reactionTime} ms
-                </p> -->
+                </label>       
 
                 <div class="fixed bottom-0 left-0 w-full backdrop-blur-3xl">
                     {#if user || isAdmin}
@@ -817,7 +791,6 @@
                         </div>
                     {/if}
                         <ProgressBar current={currentTrial} total={NUMBER_OF_TRIALS}/>
-                        <!-- <AccuracyBar correct={$correct} attempts={$correct + $incorrect}/> -->
                 </div>
             </div>
         {:else if currentTrial === NUMBER_OF_TRIALS}
