@@ -347,11 +347,6 @@
         const CC1TargetsTrial = [];
         const CC1TextColorsTrial = [];
         const CC1BoxColorsTrial = [];
-        
-        const CC2LettersTrial = [];
-        const CC2TargetsTrial = [];
-        const CC2TextColorsTrial = [];
-        const CC2BoxColorsTrial = [];
 
         let targetOffset = Math.random() < 0.5 ?  3 : 8;
         let distractorIndex;
@@ -384,6 +379,25 @@
             CC1LettersTrial.push(LETTERS[letterToAdd]);
         }
 
+        CC1Letters.push(CC1LettersTrial);
+        CC1Targets.push(CC1TargetsTrial);
+        CC1TextColors.push(CC1TextColorsTrial);
+        CC1BoxColors.push(CC1BoxColorsTrial);
+    }
+
+    while (CC2Letters.length < NUMBER_OF_TRIALS) {
+        const CC2LettersTrial = [];
+        const CC2TargetsTrial = [];
+        const CC2TextColorsTrial = [];
+        const CC2BoxColorsTrial = [];
+
+        let targetOffset = Math.random() < 0.5 ?  3 : 8;
+        let distractorIndex;
+
+        targetIndex = 4;
+        distractorIndex = targetIndex + randomRange(3);
+        targetIndex = distractorIndex + targetOffset;
+
         while(CC2LettersTrial.length < 16) {
             let letterToAdd = randomRange(LETTERS.length - 1);
             
@@ -407,12 +421,7 @@
 
             CC2LettersTrial.push(LETTERS[letterToAdd]);
         }
- 
-        CC1Letters.push(CC1LettersTrial);
-        CC1Targets.push(CC1TargetsTrial);
-        CC1TextColors.push(CC1TextColorsTrial);
-        CC1BoxColors.push(CC1BoxColorsTrial);
-
+        
         CC2Letters.push(CC2LettersTrial);
         CC2Targets.push(CC2TargetsTrial);
         CC2TextColors.push(CC2TextColorsTrial);
@@ -723,7 +732,7 @@
     
 <svelte:window on:keydown={handleKeydown} on:keyup={nextTrial}/>
 
-<html lang="en" class="h-screen bg-no-repeat bg-slate-400">
+<html lang="en" class="h-screen bg-gray-400 bg-no-repeat">
     <head>
         <title>
             Streaming letters
