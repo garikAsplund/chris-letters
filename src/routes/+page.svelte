@@ -6,7 +6,6 @@
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
     import app from "$lib/firebase";
     import ShortUniqueId from 'short-unique-id';
-    import { correct, incorrect } from '$lib/stores/GameStore';
 	import GameOver from '$lib/components/GameOver.svelte';
     import interact from 'interactjs';
     import { onMount }  from 'svelte';
@@ -152,12 +151,19 @@
     let boxText = 280;
     let borderWidth = 8;
     const NUMBER_OF_TRIALS = 96;
-    
+    let value = 50;
+    let numberOfFlashes = 0;
+    let inProgress = true;
+    let boxColor = 'white';
+
+    // start out 8 trials of practice before EACH task
+    // then AB 96
+    // then CC 2 x 96
+    // then SiB 2 x 96--first 60 and final 60 for SiB
+
     const ABLetters = [];
     const ABTargets = [];
     const ABTextColors = [];
-
-    let value = 50;
 
     while (ABLetters.length < NUMBER_OF_TRIALS) {
         const ABLettersTrial = [];
@@ -366,7 +372,7 @@
             if (CC1TargetsTrial.length === distractorIndex) {
                 CC1BoxColorsTrial.push(Math.random() < 0.5 ? 'red' : 'green');
             } else {
-                CC1BoxColorsTrial.push('grey');
+                CC1BoxColorsTrial.push('white');
             }
 
             CC1LettersTrial.push(LETTERS[letterToAdd]);
@@ -416,10 +422,6 @@
     console.log({CC2Targets});
     console.log({CC2TextColors});
     console.log({CC2BoxColors});
-
-    let numberOfFlashes = 0;
-    let inProgress = true;
-    let boxColor = 'grey';
 
     function streamCC() {
         const currentTime = performance.now();
@@ -712,7 +714,7 @@
     
 <svelte:window on:keydown={handleKeydown} on:keyup={nextTrial}/>
 
-<html lang="en" class="h-screen bg-white bg-no-repeat">
+<html lang="en" class="h-screen bg-no-repeat bg-slate-400">
     <head>
         <title>
             Streaming letters
