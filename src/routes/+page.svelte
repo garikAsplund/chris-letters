@@ -438,10 +438,15 @@
             
             if (isOn) {
                 console.log('ON ' + (performance.now() - lastTime));
+                
                 currentLetter = CC1Letters[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 textColor = CC1TextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 isTarget = CC1Targets[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 boxColor = CC1BoxColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                
+                if (isTarget) {
+                    targetLetter += currentLetter;
+                }
             } else {
                 console.log('OFF ' + (performance.now() - lastTime));
                 currentLetter = ' ';
@@ -471,10 +476,15 @@
             
             if (isOn) {
                 console.log('ON ' + (performance.now() - lastTime));
+                
                 currentLetter = SiB1Letters[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 textColor = SiB1TextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 isTarget = SiB1Targets[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                displayFace = SiB1Surprise[currentTrial - 1][(numberOfFlashes / 2) - 1];   
+                displayFace = SiB1Surprise[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                 
+                if (isTarget) {
+                    targetLetter += currentLetter;
+                }  
             } else {
                 console.log('OFF ' + (performance.now() - lastTime));
                 currentLetter = ' ';
@@ -625,9 +635,12 @@
                         numberOfFlashes = 1;
                         guessed = true;
                         receivedLetter = event.key.toUpperCase();
-                        receivedLetter === targetLetter ? $correct++ : $incorrect++;
                         receivedLetter === targetLetter ? everyAccuracy.push(1) : everyAccuracy.push(0);
+                        targetLetter = '';
                         everyGuess.push(receivedLetter);
+
+                        console.log({everyAccuracy}, {everyGuess}, {everyReactionTime});
+
                         setTimeout(begin, 600);
                     }
                 }
