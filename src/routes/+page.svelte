@@ -444,7 +444,7 @@
     function streamAB() {
         const currentTime = performance.now();
         const elapsed = currentTime - lastTime;
-        inProgress = true;
+        // inProgress = true;
 
         if (numberOfFlashes > 32) {
             inProgress = false;
@@ -457,7 +457,7 @@
             numberOfFlashes++;
             
             if (isOn) {
-                console.log('ON ' + (performance.now() - lastTime));
+                // console.log('ON ' + (performance.now() - lastTime));
                 currentLetter = ABLetters[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 textColor = ABTextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 isTarget = ABTargets[currentTrial - 1][(numberOfFlashes / 2) - 1];
@@ -465,7 +465,7 @@
                     targetLetter += currentLetter;
                 }
             } else {
-                console.log('OFF ' + (performance.now() - lastTime));
+                // console.log('OFF ' + (performance.now() - lastTime));
                 currentLetter = ' ';
             }
 
@@ -475,10 +475,13 @@
         requestAnimationFrame(streamAB);
     }
 
+    // let count = 0;
+
     function streamCC() {
         const currentTime = performance.now();
         const elapsed = currentTime - lastTime;
-        inProgress = true;
+        // inProgress = true;
+        // console.log(++count);
 
         if (numberOfFlashes > 32) {
             inProgress = false;
@@ -491,7 +494,7 @@
             numberOfFlashes++;
             
             if (isOn) {
-                console.log('ON ' + (performance.now() - lastTime));
+                // console.log('ON ' + (performance.now() - lastTime));
                 
                 currentLetter = CC1Letters[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 textColor = CC1TextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
@@ -502,7 +505,7 @@
                     targetLetter += currentLetter;
                 }
             } else {
-                console.log('OFF ' + (performance.now() - lastTime));
+                // console.log('OFF ' + (performance.now() - lastTime));
                 currentLetter = ' ';
             }
 
@@ -515,7 +518,7 @@
     function streamSiB() {
         const currentTime = performance.now();
         const elapsed = currentTime - lastTime;
-        inProgress = true;
+        // inProgress = true;
 
         if (numberOfFlashes > 32) {
             inProgress = false;
@@ -529,7 +532,7 @@
             numberOfFlashes++;
             
             if (isOn) {
-                console.log('ON ' + (performance.now() - lastTime));
+                // console.log('ON ' + (performance.now() - lastTime));
                 
                 currentLetter = SiB1Letters[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 textColor = SiB1TextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
@@ -540,7 +543,7 @@
                     targetLetter += currentLetter;
                 }  
             } else {
-                console.log('OFF ' + (performance.now() - lastTime));
+                // console.log('OFF ' + (performance.now() - lastTime));
                 currentLetter = ' ';
                 displayFace = SiB1Surprise[currentTrial - 1][((numberOfFlashes - 1) / 2) - 1];   
             }
@@ -597,6 +600,7 @@
             writeTrialData(trialType, everyTarget, everyGuess, everyAccuracy, everyReactionTime);
         }
 
+        inProgress = true;
         started = true;
         guessed = false;
         receivedLetter = ' ';
