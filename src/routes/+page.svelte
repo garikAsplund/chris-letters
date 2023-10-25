@@ -203,135 +203,6 @@
     console.log({ABTargets});
     console.log({ABTextColors});
 
-    const SiB1Letters = [];
-    const SiB1Targets = [];
-    const SiB1TextColors = [];
-    const SiB1Surprise = [];
-    
-    const SiB2Letters = [];
-    const SiB2Targets = [];
-    const SiB2TextColors = [];
-    const SiB2Surprise = [];
-    const surpriseTrials2 = [];
-    
-    while (surpriseTrials.length < 6) {
-        let trial = randomRange(NUMBER_OF_TRIALS - 2);
-
-        if (surpriseTrials.includes(trial)
-            || surpriseTrials.includes(trial - 1)
-            || surpriseTrials.includes(trial + 1)) {
-            continue;
-        }
-        
-        surpriseTrials.push(trial);
-    }
-
-    while (surpriseTrials2.length < 6) {
-        let trial = randomRange(NUMBER_OF_TRIALS - 2);
-
-        if (surpriseTrials2.includes(trial)
-            || surpriseTrials2.includes(trial - 1)
-            || surpriseTrials2.includes(trial + 1)) {
-            continue;
-        }
-        
-        surpriseTrials2.push(trial);
-    }
-            
-    while (SiB1Letters.length < NUMBER_OF_TRIALS) {
-        const SiB1LettersTrial = [];
-        const SiB1TargetsTrial = [];
-        const SiB1TextColorsTrial = [];
-        const SiB1SurpriseTrial = [];
-
-        let targetOffset = 3;;
-
-        targetIndex = 6;
-        targetIndex += randomRange(8);
-        let surpriseIndex = targetIndex - targetOffset;
-
-        while(SiB1LettersTrial.length < 16) {
-            let letterToAdd = randomRange(LETTERS.length - 1);
-            
-            if (SiB1LettersTrial[SiB1LettersTrial.length - 1] === LETTERS[letterToAdd]) {
-                letterToAdd = (letterToAdd + 1) % LETTERS.length;
-            }
-           
-            if (SiB1TargetsTrial.length === targetIndex) {
-                SiB1TargetsTrial.push(true);
-                SiB1TextColorsTrial.push('red');
-            } else {
-                SiB1TargetsTrial.push(false);
-                SiB1TextColorsTrial.push(DISTRACTORS[randomRange(6) - 1]);
-            }
-
-            if (surpriseTrials.includes(SiB1Surprise.length) && SiB1SurpriseTrial.length === surpriseIndex) {
-                SiB1SurpriseTrial.push(true);
-            } else {
-                SiB1SurpriseTrial.push(false);
-            }
-
-            SiB1LettersTrial.push(LETTERS[letterToAdd]);
-        }
-
-        SiB1Letters.push(SiB1LettersTrial);
-        SiB1Targets.push(SiB1TargetsTrial);
-        SiB1TextColors.push(SiB1TextColorsTrial);
-        SiB1Surprise.push(SiB1SurpriseTrial);
-    }
-
-    while (SiB2Letters.length < NUMBER_OF_TRIALS) {
-        const SiB2LettersTrial = [];
-        const SiB2TargetsTrial = [];
-        const SiB2TextColorsTrial = [];
-        const SiB2SurpriseTrial = [];
-
-        let targetOffset = 3;;
-
-        targetIndex = 6;
-        targetIndex += randomRange(8);
-        let surpriseIndex = targetIndex - targetOffset;
-
-        while(SiB2LettersTrial.length < 16) {
-            let letterToAdd = randomRange(LETTERS.length - 1);
-            
-            if (SiB2LettersTrial[SiB2LettersTrial.length - 1] === LETTERS[letterToAdd]) {
-                letterToAdd = (letterToAdd + 1) % LETTERS.length;
-            }
-           
-            if (SiB2TargetsTrial.length === targetIndex) {
-                SiB2TargetsTrial.push(true);
-                SiB2TextColorsTrial.push('red');
-            } else {
-                SiB2TargetsTrial.push(false);
-                SiB2TextColorsTrial.push(DISTRACTORS[randomRange(6) - 1]);
-            }
-
-            if (surpriseTrials2.includes(SiB2Surprise.length) && SiB2SurpriseTrial.length === surpriseIndex) {
-                SiB2SurpriseTrial.push(true);
-            } else {
-                SiB2SurpriseTrial.push(false);
-            }
-
-            SiB2LettersTrial.push(LETTERS[letterToAdd]);
-        } 
-        
-        SiB2Letters.push(SiB2LettersTrial);
-        SiB2Targets.push(SiB2TargetsTrial);
-        SiB2TextColors.push(SiB2TextColorsTrial);
-        SiB2Surprise.push(SiB2SurpriseTrial);
-    }
-
-    console.log({SiB1Letters});
-    console.log({SiB1Targets});
-    console.log({SiB1TextColors});
-    console.log({SiB1Surprise});
-    
-    console.log({SiB2Letters});
-    console.log({SiB2Targets});
-    console.log({SiB2TextColors});
-    console.log({SiB2Surprise});
-
     const CC1Letters = [];
     const CC1Targets = [];
     const CC1TextColors = [];
@@ -438,6 +309,172 @@
     console.log({CC2TextColors});
     console.log({CC2BoxColors});
 
+    const SiB1Letters = [];
+    const SiB1Targets = [];
+    const SiB1TextColors = [];
+    const SiB1Surprise = [];
+    
+    const SiB2Letters = [];
+    const SiB2Targets = [];
+    const SiB2TextColors = [];
+    const SiB2Surprise = [];
+    const surpriseTrials2 = [];
+    
+    while (surpriseTrials.length < 6) {
+        let trial = randomRange(60 - 1);
+
+        if (surpriseTrials.includes(trial)
+            || surpriseTrials.includes(trial - 1)
+            || surpriseTrials.includes(trial + 1)) {
+            continue;
+        }
+        
+        surpriseTrials.push(trial);
+    }
+
+    while (surpriseTrials2.length < 6) {
+        let trial = randomRange(60 - 1) + 36;
+
+        if (surpriseTrials2.includes(trial)
+            || surpriseTrials2.includes(trial - 1)
+            || surpriseTrials2.includes(trial + 1)) {
+            continue;
+        }
+        
+        surpriseTrials2.push(trial);
+    }
+    
+    console.log({surpriseTrials});
+    console.log({surpriseTrials2});
+            
+    while (SiB1Letters.length < NUMBER_OF_TRIALS) {
+        const SiB1LettersTrial = [];
+        const SiB1TargetsTrial = [];
+        const SiB1TextColorsTrial = [];
+        const SiB1SurpriseTrial = [];
+
+        let targetOffset = 3;;
+
+        targetIndex = 6;
+        targetIndex += randomRange(8);
+        let surpriseIndex = targetIndex - targetOffset;
+
+        while(SiB1LettersTrial.length < 16) {
+            let letterToAdd = randomRange(LETTERS.length - 1);
+            
+            if (SiB1LettersTrial[SiB1LettersTrial.length - 1] === LETTERS[letterToAdd]) {
+                letterToAdd = (letterToAdd + 1) % LETTERS.length;
+            }
+           
+            if (SiB1TargetsTrial.length === targetIndex) {
+                SiB1TargetsTrial.push(true);
+                SiB1TextColorsTrial.push('red');
+            } else {
+                SiB1TargetsTrial.push(false);
+                SiB1TextColorsTrial.push(DISTRACTORS[randomRange(6) - 1]);
+            }
+
+            if (surpriseTrials.includes(SiB1Surprise.length) && SiB1SurpriseTrial.length === surpriseIndex) {
+                SiB1SurpriseTrial.push(true);
+            } else {
+                SiB1SurpriseTrial.push(false);
+            }
+
+            SiB1LettersTrial.push(LETTERS[letterToAdd]);
+        }
+
+        SiB1Letters.push(SiB1LettersTrial);
+        SiB1Targets.push(SiB1TargetsTrial);
+        SiB1TextColors.push(SiB1TextColorsTrial);
+        SiB1Surprise.push(SiB1SurpriseTrial);
+    }
+
+    while (SiB2Letters.length < NUMBER_OF_TRIALS) {
+        const SiB2LettersTrial = [];
+        const SiB2TargetsTrial = [];
+        const SiB2TextColorsTrial = [];
+        const SiB2SurpriseTrial = [];
+
+        let targetOffset = 3;;
+
+        targetIndex = 6;
+        targetIndex += randomRange(8);
+        let surpriseIndex = targetIndex - targetOffset;
+
+        while(SiB2LettersTrial.length < 16) {
+            let letterToAdd = randomRange(LETTERS.length - 1);
+            
+            if (SiB2LettersTrial[SiB2LettersTrial.length - 1] === LETTERS[letterToAdd]) {
+                letterToAdd = (letterToAdd + 1) % LETTERS.length;
+            }
+           
+            if (SiB2TargetsTrial.length === targetIndex) {
+                SiB2TargetsTrial.push(true);
+                SiB2TextColorsTrial.push('red');
+            } else {
+                SiB2TargetsTrial.push(false);
+                SiB2TextColorsTrial.push(DISTRACTORS[randomRange(6) - 1]);
+            }
+
+            if (surpriseTrials2.includes(SiB2Surprise.length) && SiB2SurpriseTrial.length === surpriseIndex) {
+                SiB2SurpriseTrial.push(true);
+            } else {
+                SiB2SurpriseTrial.push(false);
+            }
+
+            SiB2LettersTrial.push(LETTERS[letterToAdd]);
+        } 
+        
+        SiB2Letters.push(SiB2LettersTrial);
+        SiB2Targets.push(SiB2TargetsTrial);
+        SiB2TextColors.push(SiB2TextColorsTrial);
+        SiB2Surprise.push(SiB2SurpriseTrial);
+    }
+
+    console.log({SiB1Letters});
+    console.log({SiB1Targets});
+    console.log({SiB1TextColors});
+    console.log({SiB1Surprise});
+    
+    console.log({SiB2Letters});
+    console.log({SiB2Targets});
+    console.log({SiB2TextColors});
+    console.log({SiB2Surprise});
+
+    function streamAB() {
+        const currentTime = performance.now();
+        const elapsed = currentTime - lastTime;
+        inProgress = true;
+
+        if (numberOfFlashes > 32) {
+            inProgress = false;
+            startTime = Date.now();
+            return;
+        }
+
+        if (elapsed >= (value)) {
+            isOn = !isOn;
+            numberOfFlashes++;
+            
+            if (isOn) {
+                console.log('ON ' + (performance.now() - lastTime));
+                currentLetter = ABLetters[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                textColor = ABTextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                isTarget = ABTargets[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                if (isTarget) {
+                    targetLetter += currentLetter;
+                }
+            } else {
+                console.log('OFF ' + (performance.now() - lastTime));
+                currentLetter = ' ';
+            }
+
+            lastTime = currentTime;
+        }
+
+        requestAnimationFrame(streamAB);
+    }
+
     function streamCC() {
         const currentTime = performance.now();
         const elapsed = currentTime - lastTime;
@@ -514,40 +551,6 @@
         requestAnimationFrame(streamSiB);
     }
 
-    function streamAB() {
-        const currentTime = performance.now();
-        const elapsed = currentTime - lastTime;
-        inProgress = true;
-
-        if (numberOfFlashes > 32) {
-            inProgress = false;
-            startTime = Date.now();
-            return;
-        }
-
-        if (elapsed >= (value)) {
-            isOn = !isOn;
-            numberOfFlashes++;
-            
-            if (isOn) {
-                console.log('ON ' + (performance.now() - lastTime));
-                currentLetter = ABLetters[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                textColor = ABTextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                isTarget = ABTargets[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                if (isTarget) {
-                    targetLetter += currentLetter;
-                }
-            } else {
-                console.log('OFF ' + (performance.now() - lastTime));
-                currentLetter = ' ';
-            }
-
-            lastTime = currentTime;
-        }
-
-        requestAnimationFrame(streamAB);
-    }
-
     let lastTime = performance.now();
     let isOn = true;
 
@@ -574,9 +577,6 @@
             });
             setTimeout(cancel, 2000); 
     } 
-
-    console.log({surpriseTrials});
-    console.log({surpriseTrials2});
 
     function randomRange(max) {
         return Math.ceil(Math.random() * max);
