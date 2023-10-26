@@ -8,7 +8,7 @@
     import ShortUniqueId from 'short-unique-id';
 	import GameOver from '$lib/components/GameOver.svelte';
     import interact from 'interactjs';
-    import { onMount }  from 'svelte';
+    import { afterUpdate, onMount }  from 'svelte';
     
     const db = getDatabase(app);
     const dbRef = ref(getDatabase());
@@ -566,6 +566,12 @@
                 // console.log({boxText}, {borderWidth});
             }
     });
+
+    // let update = 0;
+    
+    // afterUpdate(() => {
+    //     console.log(`Update ${++update}`);
+    // } );
 
     function gameOver() {
         const { cancel } = emojisplosions({
