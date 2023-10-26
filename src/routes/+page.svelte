@@ -147,7 +147,7 @@
         // else if (FPS > 140 && FPS < 150) refreshRate = 144;
         // else if (FPS > 235 && FPS < 245) refreshRate = 240;
 
-        refreshRate = FPS;
+        refreshRate = Math.round(FPS / 5) * 5;
 
         console.log(`${FPS} FPS`);
         console.log(refreshRate);
