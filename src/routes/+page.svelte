@@ -441,23 +441,27 @@
     console.log({SiB2TextColors});
     console.log({SiB2Surprise});
 
+    let count = 0;
+
     function streamAB() {
         const currentTime = performance.now();
         const elapsed = currentTime - lastTime;
         // inProgress = true;
+        console.log(++count);
 
         if (numberOfFlashes > 32) {
             inProgress = false;
             startTime = Date.now();
             return;
         }
-
-        if (elapsed >= (value)) {
+        
+        if (count % (Math.floor(value / 16)) === 0) {
+        // if (elapsed >= (value)) {
             isOn = !isOn;
             numberOfFlashes++;
             
             if (isOn) {
-                // console.log('ON ' + (performance.now() - lastTime));
+                console.log('ON ' + (performance.now() - lastTime));
                 currentLetter = ABLetters[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 textColor = ABTextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 isTarget = ABTargets[currentTrial - 1][(numberOfFlashes / 2) - 1];
@@ -465,7 +469,7 @@
                     targetLetter += currentLetter;
                 }
             } else {
-                // console.log('OFF ' + (performance.now() - lastTime));
+                console.log('OFF ' + (performance.now() - lastTime));
                 currentLetter = ' ';
             }
 
@@ -475,26 +479,24 @@
         requestAnimationFrame(streamAB);
     }
 
-    // let count = 0;
-
     function streamCC() {
         const currentTime = performance.now();
         const elapsed = currentTime - lastTime;
         // inProgress = true;
-        // console.log(++count);
+        console.log(++count);
 
         if (numberOfFlashes > 32) {
             inProgress = false;
             startTime = Date.now();
             return;
         }
-
-        if (elapsed >= (value)) {
+        if (count % 3 === 0) {
+        // if (elapsed >= (value)) {
             isOn = !isOn;
             numberOfFlashes++;
             
             if (isOn) {
-                // console.log('ON ' + (performance.now() - lastTime));
+                console.log('ON ' + (performance.now() - lastTime));
                 
                 currentLetter = CC1Letters[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 textColor = CC1TextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
@@ -505,7 +507,7 @@
                     targetLetter += currentLetter;
                 }
             } else {
-                // console.log('OFF ' + (performance.now() - lastTime));
+                console.log('OFF ' + (performance.now() - lastTime));
                 currentLetter = ' ';
             }
 
@@ -527,7 +529,8 @@
             return;
         }
 
-        if (elapsed >= (value)) {
+        if (count % 3 === 0) {
+        // if (elapsed >= (value)) {
             isOn = !isOn;
             numberOfFlashes++;
             
@@ -611,6 +614,7 @@
         guessed = false;
         receivedLetter = ' ';
         guesses = [];
+        count = 0;
 
         if (AB) streamAB();
         if (CC) streamCC();
@@ -738,6 +742,53 @@
 
             console.log({boxText}, {borderWidth});
         });
+
+        function getScreenRefreshRate(callback, runIndefinitely){
+    let requestId = null;
+    let callbackTriggered = false;
+    runIndefinitely = runIndefinitely || false;
+
+    if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+    }
+    
+    let DOMHighResTimeStampCollection = [];
+
+    let triggerAnimation = function(DOMHighResTimeStamp){
+        DOMHighResTimeStampCollection.unshift(DOMHighResTimeStamp);
+        
+        if (DOMHighResTimeStampCollection.length > 10) {
+            let t0 = DOMHighResTimeStampCollection.pop();
+            let fps = Math.floor(1000 * 10 / (DOMHighResTimeStamp - t0));
+
+            if(!callbackTriggered){
+                callback.call(undefined, fps, DOMHighResTimeStampCollection);
+            }
+
+            if(runIndefinitely){
+                callbackTriggered = false;
+            }else{
+                callbackTriggered = true;
+            }
+        }
+    
+        requestId = window.requestAnimationFrame(triggerAnimation);
+    };
+    
+    window.requestAnimationFrame(triggerAnimation);
+
+    // Stop after half second if it shouldn't run indefinitely
+    if(!runIndefinitely){
+        window.setTimeout(function(){
+            window.cancelAnimationFrame(requestId);
+            requestId = null;
+        }, 500);
+    }
+}
+
+getScreenRefreshRate(function(FPS){
+    console.log(`${FPS} FPS`);
+});
 </script>
     
 <svelte:window on:keydown={handleKeydown} on:keyup={nextTrial}/>
