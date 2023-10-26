@@ -91,6 +91,65 @@
             reactionTime: everyReactionTime,
         });
     }
+
+    function getScreenRefreshRate(callback, runIndefinitely){
+        let requestId = null;
+        let callbackTriggered = false;
+        runIndefinitely = runIndefinitely || false;
+
+        if (!window.requestAnimationFrame) {
+            window.requestAnimationFrame = window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+        }
+        
+        let DOMHighResTimeStampCollection = [];
+
+        let triggerAnimation = function(DOMHighResTimeStamp){
+            DOMHighResTimeStampCollection.unshift(DOMHighResTimeStamp);
+            
+            if (DOMHighResTimeStampCollection.length > 10) {
+                let t0 = DOMHighResTimeStampCollection.pop();
+                let fps = Math.floor(1000 * 10 / (DOMHighResTimeStamp - t0));
+
+                if(!callbackTriggered){
+                    callback.call(undefined, fps, DOMHighResTimeStampCollection);
+                }
+
+                if(runIndefinitely){
+                    callbackTriggered = false;
+                }else{
+                    callbackTriggered = true;
+                }
+            }
+        
+            requestId = window.requestAnimationFrame(triggerAnimation);
+        };
+        
+        window.requestAnimationFrame(triggerAnimation);
+
+        // Stop after half second if it shouldn't run indefinitely
+        if(!runIndefinitely){
+            window.setTimeout(function(){
+                window.cancelAnimationFrame(requestId);
+                requestId = null;
+            }, 500);
+        }
+    }
+
+    let refreshRate = 60;
+
+    getScreenRefreshRate(function(FPS){
+        console.log(`${FPS} FPS`);
+
+        if (FPS > 55 && FPS < 65) refreshRate = 60;
+        else if (FPS > 70 && FPS < 80) refreshRate = 75;
+        else if (FPS > 85 && FPS < 95) refreshRate = 90;
+        else if (FPS > 115 && FPS < 125) refreshRate = 120;
+        else if (FPS > 140 && FPS < 150) refreshRate = 144;
+        else if (FPS > 235 && FPS < 245) refreshRate = 240;
+
+        console.log(`${FPS} FPS`);
+        console.log(refreshRate);
+    });
     
     const LETTERS = [
         "B",
@@ -454,7 +513,7 @@
             return;
         }
         
-        if (++count % (Math.floor(value / 16)) === 0) {
+        if (++count % (Math.floor(value / Math.floor(1000 / refreshRate))) === 0) {
         // if (elapsed >= (value)) {
             isOn = !isOn;
             numberOfFlashes++;
@@ -489,7 +548,7 @@
             return;
         }
  
-        if (++count % (Math.floor(value / 16)) === 0) {
+        if (++count % (Math.floor(value / Math.floor(1000 / refreshRate))) === 0) {
         // if (elapsed >= (value)) {
             isOn = !isOn;
             numberOfFlashes++;
@@ -528,7 +587,8 @@
             return;
         }
 
-        if (++count % (Math.floor(value / 16)) === 0) {        // if (elapsed >= (value)) {
+        if (++count % (Math.floor(value / Math.floor(1000 / refreshRate))) === 0) {
+        // if (elapsed >= (value)) {
             isOn = !isOn;
             numberOfFlashes++;
             
@@ -740,53 +800,6 @@
 
             console.log({boxText}, {borderWidth});
         });
-
-        function getScreenRefreshRate(callback, runIndefinitely){
-    let requestId = null;
-    let callbackTriggered = false;
-    runIndefinitely = runIndefinitely || false;
-
-    if (!window.requestAnimationFrame) {
-        window.requestAnimationFrame = window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
-    }
-    
-    let DOMHighResTimeStampCollection = [];
-
-    let triggerAnimation = function(DOMHighResTimeStamp){
-        DOMHighResTimeStampCollection.unshift(DOMHighResTimeStamp);
-        
-        if (DOMHighResTimeStampCollection.length > 10) {
-            let t0 = DOMHighResTimeStampCollection.pop();
-            let fps = Math.floor(1000 * 10 / (DOMHighResTimeStamp - t0));
-
-            if(!callbackTriggered){
-                callback.call(undefined, fps, DOMHighResTimeStampCollection);
-            }
-
-            if(runIndefinitely){
-                callbackTriggered = false;
-            }else{
-                callbackTriggered = true;
-            }
-        }
-    
-        requestId = window.requestAnimationFrame(triggerAnimation);
-    };
-    
-    window.requestAnimationFrame(triggerAnimation);
-
-    // Stop after half second if it shouldn't run indefinitely
-    if(!runIndefinitely){
-        window.setTimeout(function(){
-            window.cancelAnimationFrame(requestId);
-            requestId = null;
-        }, 500);
-    }
-}
-
-getScreenRefreshRate(function(FPS){
-    console.log(`${FPS} FPS`);
-});
 </script>
     
 <svelte:window on:keydown={handleKeydown} on:keyup={nextTrial}/>
