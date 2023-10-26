@@ -140,12 +140,14 @@
     getScreenRefreshRate(function(FPS){
         console.log(`${FPS} FPS`);
 
-        if (FPS > 55 && FPS < 65) refreshRate = 60;
-        else if (FPS > 70 && FPS < 80) refreshRate = 75;
-        else if (FPS > 85 && FPS < 95) refreshRate = 90;
-        else if (FPS > 115 && FPS < 125) refreshRate = 120;
-        else if (FPS > 140 && FPS < 150) refreshRate = 144;
-        else if (FPS > 235 && FPS < 245) refreshRate = 240;
+        // if (FPS > 55 && FPS < 65) refreshRate = 60;
+        // else if (FPS > 70 && FPS < 80) refreshRate = 75;
+        // else if (FPS > 85 && FPS < 95) refreshRate = 90;
+        // else if (FPS > 115 && FPS < 125) refreshRate = 120;
+        // else if (FPS > 140 && FPS < 150) refreshRate = 144;
+        // else if (FPS > 235 && FPS < 245) refreshRate = 240;
+
+        refreshRate = FPS;
 
         console.log(`${FPS} FPS`);
         console.log(refreshRate);
@@ -798,7 +800,7 @@
             localStorage.setItem('boxText', boxText.toString());
             localStorage.setItem('borderWidth', borderWidth.toString());
 
-            console.log({boxText}, {borderWidth});
+            // console.log({boxText}, {borderWidth});
         });
 </script>
     
