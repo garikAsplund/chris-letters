@@ -447,7 +447,6 @@
         const currentTime = performance.now();
         const elapsed = currentTime - lastTime;
         // inProgress = true;
-        console.log(++count);
 
         if (numberOfFlashes > 32) {
             inProgress = false;
@@ -455,7 +454,7 @@
             return;
         }
         
-        if (count % (Math.floor(value / 16)) === 0) {
+        if (++count % (Math.floor(value / 16)) === 0) {
         // if (elapsed >= (value)) {
             isOn = !isOn;
             numberOfFlashes++;
@@ -483,20 +482,20 @@
         const currentTime = performance.now();
         const elapsed = currentTime - lastTime;
         // inProgress = true;
-        console.log(++count);
 
         if (numberOfFlashes > 32) {
             inProgress = false;
             startTime = Date.now();
             return;
         }
-        if (count % 3 === 0) {
+ 
+        if (++count % (Math.floor(value / 16)) === 0) {
         // if (elapsed >= (value)) {
             isOn = !isOn;
             numberOfFlashes++;
             
             if (isOn) {
-                console.log('ON ' + (performance.now() - lastTime));
+                // console.log('ON ' + (performance.now() - lastTime));
                 
                 currentLetter = CC1Letters[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 textColor = CC1TextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
@@ -507,7 +506,7 @@
                     targetLetter += currentLetter;
                 }
             } else {
-                console.log('OFF ' + (performance.now() - lastTime));
+                // console.log('OFF ' + (performance.now() - lastTime));
                 currentLetter = ' ';
             }
 
@@ -529,8 +528,7 @@
             return;
         }
 
-        if (count % 3 === 0) {
-        // if (elapsed >= (value)) {
+        if (++count % (Math.floor(value / 16)) === 0) {        // if (elapsed >= (value)) {
             isOn = !isOn;
             numberOfFlashes++;
             
