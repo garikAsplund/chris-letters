@@ -38,8 +38,6 @@ export function createABTrials() {
         ABLetters.push(ABLettersTrial);
         ABTargets.push(ABTargetsTrial);
         ABTextColors.push(ABTextColorsTrial);
-
-        
     }
     
     return {

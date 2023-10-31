@@ -11,6 +11,7 @@
     import { afterUpdate, onMount }  from 'svelte';
 	import { createABTrials } from '$lib/logic/AB';
     import { randomRange, DISTRACTORS, LETTERS, NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
+	import { createCCTrials } from '$lib/logic/CC';
 
     const db = getDatabase(app);
     const dbRef = ref(getDatabase());
@@ -226,111 +227,17 @@
     // then SiB 2 x 96--first 60 and final 60 for SiB
 
     const { ABLetters, ABTargets, ABTextColors } = createABTrials();
+    const { CCLetters, CCTargets, CCTextColors, CCBoxColors } = createCCTrials();
+    const {  CCLetters: CC2Letters, CCTargets: CC2Targets, CCTextColors: CC2TextColors, CCBoxColors: CC2BoxColors } = createCCTrials();
 
     console.log({ABLetters});
     console.log({ABTargets});
     console.log({ABTextColors});
 
-    const CC1Letters = [];
-    const CC1Targets = [];
-    const CC1TextColors = [];
-    const CC1BoxColors = [];
-    
-    const CC2Letters = [];
-    const CC2Targets = [];
-    const CC2TextColors = [];
-    const CC2BoxColors = [];
-    
-    while (CC1Letters.length < NUMBER_OF_TRIALS) {
-        const CC1LettersTrial = [];
-        const CC1TargetsTrial = [];
-        const CC1TextColorsTrial = [];
-        const CC1BoxColorsTrial = [];
-
-        let targetOffset = Math.random() < 0.5 ?  3 : 8;
-        let distractorIndex;
-
-        targetIndex = 4;
-        distractorIndex = targetIndex + randomRange(3);
-        targetIndex = distractorIndex + targetOffset;
-
-        while(CC1LettersTrial.length < 16) {
-            let letterToAdd = randomRange(LETTERS.length - 1);
-            
-            if (CC1LettersTrial[CC1LettersTrial.length - 1] === LETTERS[letterToAdd]) {
-                letterToAdd = (letterToAdd + 1) % LETTERS.length;
-            }
-           
-            if (CC1TargetsTrial.length === targetIndex) {
-                CC1TargetsTrial.push(true);
-                CC1TextColorsTrial.push('red');
-            } else {
-                CC1TargetsTrial.push(false);
-                CC1TextColorsTrial.push(DISTRACTORS[randomRange(6) - 1]);
-            }
-
-            if (CC1TargetsTrial.length === distractorIndex) {
-                CC1BoxColorsTrial.push(Math.random() < 0.5 ? 'red' : 'green');
-            } else {
-                CC1BoxColorsTrial.push('white');
-            }
-
-            CC1LettersTrial.push(LETTERS[letterToAdd]);
-        }
-
-        CC1Letters.push(CC1LettersTrial);
-        CC1Targets.push(CC1TargetsTrial);
-        CC1TextColors.push(CC1TextColorsTrial);
-        CC1BoxColors.push(CC1BoxColorsTrial);
-    }
-
-    while (CC2Letters.length < NUMBER_OF_TRIALS) {
-        const CC2LettersTrial = [];
-        const CC2TargetsTrial = [];
-        const CC2TextColorsTrial = [];
-        const CC2BoxColorsTrial = [];
-
-        let targetOffset = Math.random() < 0.5 ?  3 : 8;
-        let distractorIndex;
-
-        targetIndex = 4;
-        distractorIndex = targetIndex + randomRange(3);
-        targetIndex = distractorIndex + targetOffset;
-
-        while(CC2LettersTrial.length < 16) {
-            let letterToAdd = randomRange(LETTERS.length - 1);
-            
-            if (CC2LettersTrial[CC2LettersTrial.length - 1] === LETTERS[letterToAdd]) {
-                letterToAdd = (letterToAdd + 1) % LETTERS.length;
-            }
-           
-            if (CC2TargetsTrial.length === targetIndex) {
-                CC2TargetsTrial.push(true);
-                CC2TextColorsTrial.push('red');
-            } else {
-                CC2TargetsTrial.push(false);
-                CC2TextColorsTrial.push(DISTRACTORS[randomRange(6) - 1]);
-            }
-
-            if (CC2TargetsTrial.length === distractorIndex) {
-                CC2BoxColorsTrial.push(Math.random() < 0.5 ? 'red' : 'green');
-            } else {
-                CC2BoxColorsTrial.push('grey');
-            }
-
-            CC2LettersTrial.push(LETTERS[letterToAdd]);
-        }
-        
-        CC2Letters.push(CC2LettersTrial);
-        CC2Targets.push(CC2TargetsTrial);
-        CC2TextColors.push(CC2TextColorsTrial);
-        CC2BoxColors.push(CC2BoxColorsTrial);
-    }
-    
-    console.log({CC1Letters});
-    console.log({CC1Targets});
-    console.log({CC1TextColors});
-    console.log({CC1BoxColors});
+    console.log({CCLetters});
+    console.log({CCTargets});
+    console.log({CCTextColors});
+    console.log({CCBoxColors});
     
     console.log({CC2Letters});
     console.log({CC2Targets});
