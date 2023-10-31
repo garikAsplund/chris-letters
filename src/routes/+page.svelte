@@ -9,9 +9,10 @@
 	import GameOver from '$lib/components/GameOver.svelte';
     import interact from 'interactjs';
     import { afterUpdate, onMount }  from 'svelte';
-	import { createABTrials } from '$lib/logic/AB';
     import { randomRange, DISTRACTORS, LETTERS, NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
-	import { createCCTrials } from '$lib/logic/CC';
+    import { createABTrials } from '$lib/logic/AB';
+    import { createCCTrials } from '$lib/logic/CC';
+    import { createSiBTrials } from '$lib/logic/SiB';
 
     const db = getDatabase(app);
     const dbRef = ref(getDatabase());
@@ -229,7 +230,9 @@
     const { ABLetters, ABTargets, ABTextColors } = createABTrials();
     const { CCLetters, CCTargets, CCTextColors, CCBoxColors } = createCCTrials();
     const {  CCLetters: CC2Letters, CCTargets: CC2Targets, CCTextColors: CC2TextColors, CCBoxColors: CC2BoxColors } = createCCTrials();
-
+    const { SiBLetters, SiBTargets, SiBTextColors, SiBSurprise } = createSiBTrials();
+    const { SiBLetters: SiB2Letters, SiBTargets: SiB2Targets, SiBTextColors: SiB2TextColors, SiBSurprise: SiB2Surprise} = createSiBTrials();
+    
     console.log({ABLetters});
     console.log({ABTargets});
     console.log({ABTextColors});
@@ -244,132 +247,10 @@
     console.log({CC2TextColors});
     console.log({CC2BoxColors});
 
-    const SiB1Letters = [];
-    const SiB1Targets = [];
-    const SiB1TextColors = [];
-    const SiB1Surprise = [];
-    
-    const SiB2Letters = [];
-    const SiB2Targets = [];
-    const SiB2TextColors = [];
-    const SiB2Surprise = [];
-    const surpriseTrials2 = [];
-    
-    while (surpriseTrials.length < 6) {
-        let trial = randomRange(60 - 1);
-
-        if (surpriseTrials.includes(trial)
-            || surpriseTrials.includes(trial - 1)
-            || surpriseTrials.includes(trial + 1)) {
-            continue;
-        }
-        
-        surpriseTrials.push(trial);
-    }
-
-    while (surpriseTrials2.length < 6) {
-        let trial = randomRange(60 - 1) + 36;
-
-        if (surpriseTrials2.includes(trial)
-            || surpriseTrials2.includes(trial - 1)
-            || surpriseTrials2.includes(trial + 1)) {
-            continue;
-        }
-        
-        surpriseTrials2.push(trial);
-    }
-    
-    console.log({surpriseTrials});
-    console.log({surpriseTrials2});
-            
-    while (SiB1Letters.length < NUMBER_OF_TRIALS) {
-        const SiB1LettersTrial = [];
-        const SiB1TargetsTrial = [];
-        const SiB1TextColorsTrial = [];
-        const SiB1SurpriseTrial = [];
-
-        let targetOffset = 3;;
-
-        targetIndex = 6;
-        targetIndex += randomRange(8);
-        let surpriseIndex = targetIndex - targetOffset;
-
-        while(SiB1LettersTrial.length < 16) {
-            let letterToAdd = randomRange(LETTERS.length - 1);
-            
-            if (SiB1LettersTrial[SiB1LettersTrial.length - 1] === LETTERS[letterToAdd]) {
-                letterToAdd = (letterToAdd + 1) % LETTERS.length;
-            }
-           
-            if (SiB1TargetsTrial.length === targetIndex) {
-                SiB1TargetsTrial.push(true);
-                SiB1TextColorsTrial.push('red');
-            } else {
-                SiB1TargetsTrial.push(false);
-                SiB1TextColorsTrial.push(DISTRACTORS[randomRange(6) - 1]);
-            }
-
-            if (surpriseTrials.includes(SiB1Surprise.length) && SiB1SurpriseTrial.length === surpriseIndex) {
-                SiB1SurpriseTrial.push(true);
-            } else {
-                SiB1SurpriseTrial.push(false);
-            }
-
-            SiB1LettersTrial.push(LETTERS[letterToAdd]);
-        }
-
-        SiB1Letters.push(SiB1LettersTrial);
-        SiB1Targets.push(SiB1TargetsTrial);
-        SiB1TextColors.push(SiB1TextColorsTrial);
-        SiB1Surprise.push(SiB1SurpriseTrial);
-    }
-
-    while (SiB2Letters.length < NUMBER_OF_TRIALS) {
-        const SiB2LettersTrial = [];
-        const SiB2TargetsTrial = [];
-        const SiB2TextColorsTrial = [];
-        const SiB2SurpriseTrial = [];
-
-        let targetOffset = 3;;
-
-        targetIndex = 6;
-        targetIndex += randomRange(8);
-        let surpriseIndex = targetIndex - targetOffset;
-
-        while(SiB2LettersTrial.length < 16) {
-            let letterToAdd = randomRange(LETTERS.length - 1);
-            
-            if (SiB2LettersTrial[SiB2LettersTrial.length - 1] === LETTERS[letterToAdd]) {
-                letterToAdd = (letterToAdd + 1) % LETTERS.length;
-            }
-           
-            if (SiB2TargetsTrial.length === targetIndex) {
-                SiB2TargetsTrial.push(true);
-                SiB2TextColorsTrial.push('red');
-            } else {
-                SiB2TargetsTrial.push(false);
-                SiB2TextColorsTrial.push(DISTRACTORS[randomRange(6) - 1]);
-            }
-
-            if (surpriseTrials2.includes(SiB2Surprise.length) && SiB2SurpriseTrial.length === surpriseIndex) {
-                SiB2SurpriseTrial.push(true);
-            } else {
-                SiB2SurpriseTrial.push(false);
-            }
-
-            SiB2LettersTrial.push(LETTERS[letterToAdd]);
-        } 
-        
-        SiB2Letters.push(SiB2LettersTrial);
-        SiB2Targets.push(SiB2TargetsTrial);
-        SiB2TextColors.push(SiB2TextColorsTrial);
-        SiB2Surprise.push(SiB2SurpriseTrial);
-    }
-
-    console.log({SiB1Letters});
-    console.log({SiB1Targets});
-    console.log({SiB1TextColors});
-    console.log({SiB1Surprise});
+    console.log({SiBLetters});
+    console.log({SiBTargets});
+    console.log({SiBTextColors});
+    console.log({SiBSurprise});
     
     console.log({SiB2Letters});
     console.log({SiB2Targets});
