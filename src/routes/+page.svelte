@@ -9,7 +9,9 @@
 	import GameOver from '$lib/components/GameOver.svelte';
     import interact from 'interactjs';
     import { afterUpdate, onMount }  from 'svelte';
-    
+	import { createABTrials } from '$lib/logic/AB';
+    import { randomRange, DISTRACTORS, LETTERS, NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
+
     const db = getDatabase(app);
     const dbRef = ref(getDatabase());
     const auth = getAuth(app);
@@ -153,37 +155,37 @@
         console.log(refreshRate);
     });
     
-    const LETTERS = [
-        "B",
-        "C",
-        "D",
-        "F",
-        "G",
-        "H",
-        "J",
-        "K",
-        "L",
-        "M",
-        "N",
-        "P",
-        "R",
-        "S",
-        "T",
-        "V",
-        "W",
-        "X",
-        "Y",
-        "Z",
-    ];
+    // export const LETTERS = [
+    //     "B",
+    //     "C",
+    //     "D",
+    //     "F",
+    //     "G",
+    //     "H",
+    //     "J",
+    //     "K",
+    //     "L",
+    //     "M",
+    //     "N",
+    //     "P",
+    //     "R",
+    //     "S",
+    //     "T",
+    //     "V",
+    //     "W",
+    //     "X",
+    //     "Y",
+    //     "Z",
+    // ];
 
-    const DISTRACTORS = [
-        "rgb(0,0,255)",      // blue
-        "rgb(200,200,0)",    // yellow
-        "rgb(200,0,200)",    // magenta
-        "rgb(0,200,200)",    // cyan
-        "rgb(200,200,200)",  // light grey
-        "rgb(50,50,50)",     // dark grey
-    ];
+    // export const DISTRACTORS = [
+    //     "rgb(0,0,255)",      // blue
+    //     "rgb(200,200,0)",    // yellow
+    //     "rgb(200,0,200)",    // magenta
+    //     "rgb(0,200,200)",    // cyan
+    //     "rgb(200,200,200)",  // light grey
+    //     "rgb(50,50,50)",     // dark grey
+    // ];
 
     let currentLetter = ' ';
     let receivedLetter = ' ';
@@ -211,7 +213,8 @@
     let trialType;
     let boxText = 280;
     let borderWidth = 8;
-    const NUMBER_OF_TRIALS = 96;
+    // export const NUMBER_OF_TRIALS = 96;
+    // import { NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
     let value = 50;
     let numberOfFlashes = 0;
     let inProgress = true;
@@ -222,43 +225,7 @@
     // then CC 2 x 96
     // then SiB 2 x 96--first 60 and final 60 for SiB
 
-    const ABLetters = [];
-    const ABTargets = [];
-    const ABTextColors = [];
-
-    while (ABLetters.length < NUMBER_OF_TRIALS) {
-        const ABLettersTrial = [];
-        const ABTargetsTrial = [];
-        const ABTextColorsTrial = [];
-
-        let targetOffset = Math.random() < 0.5 ?  3 : 8;
-
-        targetIndex = 4;
-        let T1Index = targetIndex + randomRange(3);
-        let T2Index = T1Index + targetOffset; 
-
-        while(ABLettersTrial.length < 16) {
-            let letterToAdd = randomRange(LETTERS.length - 1);
-            
-            if (ABLettersTrial[ABLettersTrial.length - 1] === LETTERS[letterToAdd]) {
-                letterToAdd = (letterToAdd + 1) % LETTERS.length;
-            }
-           
-            if (ABTargetsTrial.length === T1Index || ABTargetsTrial.length === T2Index) {
-                ABTargetsTrial.push(true);
-                ABTextColorsTrial.push('red');
-            } else {
-                ABTargetsTrial.push(false);
-                ABTextColorsTrial.push(DISTRACTORS[randomRange(6) - 1]);
-            }
-
-            ABLettersTrial.push(LETTERS[letterToAdd]);
-        }
- 
-        ABLetters.push(ABLettersTrial);
-        ABTargets.push(ABTargetsTrial);
-        ABTextColors.push(ABTextColorsTrial);
-    }
+    const { ABLetters, ABTargets, ABTextColors } = createABTrials();
 
     console.log({ABLetters});
     console.log({ABTargets});
@@ -650,9 +617,9 @@
             setTimeout(cancel, 2000); 
     } 
 
-    function randomRange(max) {
-        return Math.ceil(Math.random() * max);
-    }
+    // export function randomRange(max) {
+    //     return Math.ceil(Math.random() * max);
+    // }
 
     function onClick() {
         buttonText = "Trial already in progress";
