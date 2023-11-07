@@ -13,6 +13,7 @@
     import { createABTrials } from '$lib/logic/AB';
     import { createCCTrials } from '$lib/logic/CC';
     import { createSiBTrials } from '$lib/logic/SiB';
+    import { getScreenRefreshRate } from '$lib/logic/refreshRate';
 
     const db = getDatabase(app);
     const dbRef = ref(getDatabase());
@@ -96,98 +97,13 @@
         });
     }
 
-    function getScreenRefreshRate(callback, runIndefinitely){
-        let requestId = null;
-        let callbackTriggered = false;
-        runIndefinitely = runIndefinitely || false;
-
-        if (!window.requestAnimationFrame) {
-            window.requestAnimationFrame = window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
-        }
-        
-        let DOMHighResTimeStampCollection = [];
-
-        let triggerAnimation = function(DOMHighResTimeStamp){
-            DOMHighResTimeStampCollection.unshift(DOMHighResTimeStamp);
-            
-            if (DOMHighResTimeStampCollection.length > 10) {
-                let t0 = DOMHighResTimeStampCollection.pop();
-                let fps = Math.floor(1000 * 10 / (DOMHighResTimeStamp - t0));
-
-                if(!callbackTriggered){
-                    callback.call(undefined, fps, DOMHighResTimeStampCollection);
-                }
-
-                if(runIndefinitely){
-                    callbackTriggered = false;
-                }else{
-                    callbackTriggered = true;
-                }
-            }
-        
-            requestId = window.requestAnimationFrame(triggerAnimation);
-        };
-        
-        window.requestAnimationFrame(triggerAnimation);
-
-        // Stop after half second if it shouldn't run indefinitely
-        if(!runIndefinitely){
-            window.setTimeout(function(){
-                window.cancelAnimationFrame(requestId);
-                requestId = null;
-            }, 500);
-        }
-    }
-
     let refreshRate = 60;
 
     getScreenRefreshRate(function(FPS){
-        console.log(`${FPS} FPS`);
-
-        // if (FPS > 55 && FPS < 65) refreshRate = 60;
-        // else if (FPS > 70 && FPS < 80) refreshRate = 75;
-        // else if (FPS > 85 && FPS < 95) refreshRate = 90;
-        // else if (FPS > 115 && FPS < 125) refreshRate = 120;
-        // else if (FPS > 140 && FPS < 150) refreshRate = 144;
-        // else if (FPS > 235 && FPS < 245) refreshRate = 240;
-
         refreshRate = Math.round(FPS / 5) * 5;
-
         console.log(`${FPS} FPS`);
         console.log(refreshRate);
     });
-    
-    // export const LETTERS = [
-    //     "B",
-    //     "C",
-    //     "D",
-    //     "F",
-    //     "G",
-    //     "H",
-    //     "J",
-    //     "K",
-    //     "L",
-    //     "M",
-    //     "N",
-    //     "P",
-    //     "R",
-    //     "S",
-    //     "T",
-    //     "V",
-    //     "W",
-    //     "X",
-    //     "Y",
-    //     "Z",
-    // ];
-
-    // export const DISTRACTORS = [
-    //     "rgb(0,0,255)",      // blue
-    //     "rgb(200,200,0)",    // yellow
-    //     "rgb(200,0,200)",    // magenta
-    //     "rgb(0,200,200)",    // cyan
-    //     "rgb(200,200,200)",  // light grey
-    //     "rgb(50,50,50)",     // dark grey
-    // ];
 
     let currentLetter = ' ';
     let receivedLetter = ' ';
@@ -215,8 +131,6 @@
     let trialType;
     let boxText = 280;
     let borderWidth = 8;
-    // export const NUMBER_OF_TRIALS = 96;
-    // import { NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
     let value = 50;
     let numberOfFlashes = 0;
     let inProgress = true;
@@ -229,7 +143,7 @@
 
     const { ABLetters, ABTargets, ABTextColors } = createABTrials();
     const { CCLetters, CCTargets, CCTextColors, CCBoxColors } = createCCTrials();
-    const {  CCLetters: CC2Letters, CCTargets: CC2Targets, CCTextColors: CC2TextColors, CCBoxColors: CC2BoxColors } = createCCTrials();
+    const { CCLetters: CC2Letters, CCTargets: CC2Targets, CCTextColors: CC2TextColors, CCBoxColors: CC2BoxColors } = createCCTrials();
     const { SiBLetters, SiBTargets, SiBTextColors, SiBSurprise } = createSiBTrials();
     const { SiBLetters: SiB2Letters, SiBTargets: SiB2Targets, SiBTextColors: SiB2TextColors, SiBSurprise: SiB2Surprise} = createSiBTrials();
     
@@ -258,7 +172,7 @@
     console.log({SiB2Surprise});
 
     let count = 0;
-
+    
     function streamAB() {
         const currentTime = performance.now();
         const elapsed = currentTime - lastTime;
@@ -385,12 +299,6 @@
             }
     });
 
-    // let update = 0;
-    
-    // afterUpdate(() => {
-    //     console.log(`Update ${++update}`);
-    // } );
-
     function gameOver() {
         const { cancel } = emojisplosions({
                 emojis: ["🍕", "🍷", "🙌", "🎆", "🍻", "🎊","🥮", "🏆", "🍾", "🪇", "🥇", "🎇", "🎉", "🪅", "🎁", "🪩", "✨", "🌠", "💯", "🔥", ],
@@ -404,10 +312,6 @@
             });
             setTimeout(cancel, 2000); 
     } 
-
-    // export function randomRange(max) {
-    //     return Math.ceil(Math.random() * max);
-    // }
 
     function onClick() {
         buttonText = "Trial already in progress";
