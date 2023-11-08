@@ -53,29 +53,29 @@
     const { SiBLetters, SiBTargets, SiBTextColors, SiBSurprise } = createSiBTrials();
     const { SiBLetters: SiB2Letters, SiBTargets: SiB2Targets, SiBTextColors: SiB2TextColors, SiBSurprise: SiB2Surprise} = createSiBTrials();
     
-    console.log({ABLetters});
-    console.log({ABTargets});
-    console.log({ABTextColors});
+    // console.log({ABLetters});
+    // console.log({ABTargets});
+    // console.log({ABTextColors});
 
-    console.log({CCLetters});
-    console.log({CCTargets});
-    console.log({CCTextColors});
-    console.log({CCBoxColors});
+    // console.log({CCLetters});
+    // console.log({CCTargets});
+    // console.log({CCTextColors});
+    // console.log({CCBoxColors});
     
-    console.log({CC2Letters});
-    console.log({CC2Targets});
-    console.log({CC2TextColors});
-    console.log({CC2BoxColors});
+    // console.log({CC2Letters});
+    // console.log({CC2Targets});
+    // console.log({CC2TextColors});
+    // console.log({CC2BoxColors});
 
-    console.log({SiBLetters});
-    console.log({SiBTargets});
-    console.log({SiBTextColors});
-    console.log({SiBSurprise});
+    // console.log({SiBLetters});
+    // console.log({SiBTargets});
+    // console.log({SiBTextColors});
+    // console.log({SiBSurprise});
     
-    console.log({SiB2Letters});
-    console.log({SiB2Targets});
-    console.log({SiB2TextColors});
-    console.log({SiB2Surprise});
+    // console.log({SiB2Letters});
+    // console.log({SiB2Targets});
+    // console.log({SiB2TextColors});
+    // console.log({SiB2Surprise});
 
     let count = 0;
     
@@ -196,10 +196,8 @@
         if (started) return;
         if (!guessed) return;
         if (!AB && !CC && !SiB) return;
-        if (++currentTrial === NUMBER_OF_TRIALS) {
-            writeTrialData(trialType, everyTarget, everyGuess, everyAccuracy, everyReactionTime);
-        }
-
+        
+        currentTrial++;
         inProgress = true;
         started = true;
         guessed = false;
@@ -351,7 +349,7 @@
             Streaming letters
         </title>
     </head>
-<body>  
+<body class="bg-gray-400">  
     <AuthCheck>
         {#if currentTrial < NUMBER_OF_TRIALS}
             <div class="flex justify-center mx-4 space-x-4 translate-y-12">      
