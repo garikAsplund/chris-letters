@@ -8,7 +8,7 @@
     function gameOver() {
         const { cancel } = emojisplosions({
                 emojis: ["🍕", "🍷", "🙌", "🎆", "🍻", "🎊","🥮", "🏆", "🍾", "🪇", "🥇", "🎇", "🎉", "🪅", "🎁", "🪩", "✨", "🌠", "💯", "🔥", ],
-                interval: 40,
+                interval: 100,
                 physics: {
                     fontSize: {
                         max: 54,
@@ -32,7 +32,6 @@
         });
     }
 
-    
     writeTrialData(); // Add params from $tore
     gameOver();
 </script>

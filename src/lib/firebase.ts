@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
-import { doc, getFirestore, onSnapshot } from "firebase/firestore";
+import { getFirestore, onSnapshot } from "firebase/firestore";
 import { getAuth, onAuthStateChanged, type User } from "firebase/auth";
-import { writable, type Readable, derived } from "svelte/store";
+import { writable } from "svelte/store";
 
 const {
     VITE_FIREBASE_API_KEY,
