@@ -1,12 +1,17 @@
 <script>
     import { Stepper, Step, SlideToggle } from '@skeletonlabs/skeleton';
+    import { fade } from 'svelte/transition';
+    let locked = false;
+    $: unlocked = !locked;
 
-    let locked = true;
+    function onCompleteHandler(e) { 
+        console.log('event:complete', e); 
+    }
 </script>
 
 <div class="flex justify-center translate-y-36">
     <div class="w-1/2 p-4 mb-36 card text-token">
-        <Stepper>
+        <Stepper buttonCompleteLabel="Sign in with Google" on:complete={onCompleteHandler}>
             <Step>
                 <svelte:fragment slot="header">Instructions</svelte:fragment>
 
@@ -20,7 +25,7 @@
                 
                 If you meet these requirements, press space bar to proceed.</p>
             </Step>
-            <Step {locked}>
+            <Step locked={unlocked}>
                 <svelte:fragment slot="header">Instructions</svelte:fragment>
                 <p>Thank you for your interest in our study!
     
@@ -97,7 +102,7 @@
                     Note: By selecting Yes you will be taken to the study.</p>
                     <aside class="alert variant-ghost-warning">
                         <div class="alert-message">
-                            <p>This step is <u>{locked ? 'Locked' : 'Unlocked'}</u></p>
+                            <p>Yes <u>{locked ? 'Locked' : 'Unlocked'}</u></p>
                         </div>
                         <div class="alert-actions">
                             <SlideToggle name="locked-state" bind:checked={locked} active="bg-warning-500" />

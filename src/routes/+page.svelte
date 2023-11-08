@@ -10,11 +10,12 @@
 	import GameOver from '$lib/components/GameOver.svelte';
     
     let refreshRate = 60;
-    getScreenRefreshRate(function(FPS){
+    setTimeout(() => {
+        getScreenRefreshRate(function(FPS){
         refreshRate = Math.round(FPS / 5) * 5;
         console.log(`${FPS} FPS`);
         console.log(refreshRate);
-    });
+    })}, 400);
     
     let currentLetter = ' ';
     let receivedLetter = ' ';
@@ -342,17 +343,17 @@
     
 <svelte:window on:keydown={handleKeydown} on:keyup={nextTrial}/>
 
-<html lang="en" class="h-screen bg-gray-400 bg-no-repeat">
+<html lang="en" class="h-screen ">
     <head>
         <meta charset="UTF-8" />
         <title>
             Streaming letters
         </title>
     </head>
-<body class="bg-gray-400">  
+<body>  
     <AuthCheck>
         {#if currentTrial < NUMBER_OF_TRIALS}
-            <div class="flex justify-center mx-4 space-x-4 translate-y-12">      
+            <div class="flex justify-center mx-4 space-x-4 translate-y-12 ">      
                 <label>
                     <input 
                         type=checkbox
@@ -390,7 +391,7 @@
                             {currentLetter}
                         {/if}
                         {#if !AB && !CC && !SiB}
-                            <p class="p-2 text-4xl text-gray-800">
+                            <p class="p-2 text-4xl text-gray-200">
                                 Please select an option from above 👆
                             </p>
                         {:else if !clicked}
@@ -399,11 +400,11 @@
                             </button>
                         {/if}
                         {#if AB && !inProgress}
-                            <p class="p-2 text-4xl text-gray-800">
+                            <p class="p-2 text-4xl text-gray-200">
                                 Please enter your guesses
                             </p>
                         {:else if (CC ||SiB) && !inProgress}
-                            <p class="p-2 text-4xl text-gray-800">
+                            <p class="p-2 text-4xl text-gray-200">
                                 Please enter your guess
                             </p>
                         {/if}

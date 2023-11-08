@@ -4,6 +4,7 @@
     import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
     import ProgressBar from "./ProgressBar.svelte";
     import Admin from "./Admin.svelte";
+    import Instructions from "./Instructions.svelte";
 
     const dbRef = ref(getDatabase());
     let isAdmin;
@@ -75,11 +76,13 @@
         🪇 Welcome to our experiment 🧑‍🔬
     </h1>
 
-    <div class="flex flex-col items-center justify-center h-screen">
+    <Instructions />
+
+    <!-- <div class="flex flex-col items-center justify-center h-screen">
         <button class="px-4 py-2 font-semibold text-gray-600 -translate-y-24 bg-transparent border border-gray-500 rounded hover:bg-gray-500 hover:text-white hover:border-transparent" on:click={signInWithGoogle}>
             Sign in with Google
         </button> 
-    </div>
+    </div> -->
 {:else}
     <slot />
     <div class="fixed bottom-0 left-0 w-full backdrop-blur-3xl">
