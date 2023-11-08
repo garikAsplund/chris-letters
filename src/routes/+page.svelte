@@ -4,7 +4,7 @@
     import { emojisplosions } from 'emojisplosion';
     import { getDatabase, ref, set, child, get } from "firebase/database";
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
-    import app from "$lib/firebase";
+    import { app } from "$lib/firebase";
     import ShortUniqueId from 'short-unique-id';
 	import GameOver from '$lib/components/GameOver.svelte';
     import interact from 'interactjs';
@@ -14,75 +14,76 @@
     import { createCCTrials } from '$lib/logic/CC';
     import { createSiBTrials } from '$lib/logic/SiB';
     import { getScreenRefreshRate } from '$lib/logic/refreshRate';
+	import AuthCheck from '$lib/components/AuthCheck.svelte';
 
-    const db = getDatabase(app);
-    const dbRef = ref(getDatabase());
-    const auth = getAuth(app);
-    let isAdmin;
+    // const db = getDatabase(app);
+    // const dbRef = ref(getDatabase());
+    // const auth = getAuth(app);
+    // let isAdmin;
 
-    const googleProvider = new GoogleAuthProvider();
+    // const googleProvider = new GoogleAuthProvider();
 
-    async function signInWithGoogle() {
-        try {
-            const result = await signInWithPopup(auth, googleProvider);
-            const user = result.user;
+    // async function signInWithGoogle() {
+    //     try {
+    //         const result = await signInWithPopup(auth, googleProvider);
+    //         const user = result.user;
             
-            const userAlreadyExists = await get(child(dbRef, `users/${user.uid}`)).then((snapshot) => {
-                if (!snapshot.exists()) {
-                    console.log("No data available, creating user");
-                    if (user && user.displayName) {
-                        writeUserData(user.uid, user.displayName);
-                    } 
-                }
-                }).catch((error) => {
-                console.error(error);
-            });
+    //         const userAlreadyExists = await get(child(dbRef, `users/${user.uid}`)).then((snapshot) => {
+    //             if (!snapshot.exists()) {
+    //                 console.log("No data available, creating user");
+    //                 if (user && user.displayName) {
+    //                     writeUserData(user.uid, user.displayName);
+    //                 } 
+    //             }
+    //             }).catch((error) => {
+    //             console.error(error);
+    //         });
             
-            get(child(dbRef, `users/${user.uid}/admin`)).then((snapshot) => {
-                if (snapshot.exists()) {
-                    isAdmin = snapshot.val();
-                } else {
-                    console.log("No data available");
-                }
-                }).catch((error) => {
-                console.error(error);
-            }); 
-        } catch (error) {
-            console.error("Error signing in with Google:", error.message);
-        }
-    }
+    //         get(child(dbRef, `users/${user.uid}/admin`)).then((snapshot) => {
+    //             if (snapshot.exists()) {
+    //                 isAdmin = snapshot.val();
+    //             } else {
+    //                 console.log("No data available");
+    //             }
+    //             }).catch((error) => {
+    //             console.error(error);
+    //         }); 
+    //     } catch (error) {
+    //         console.error("Error signing in with Google:", error.message);
+    //     }
+    // }
 
-    let user = null;
+    // let user = null;
     
-    onAuthStateChanged(auth, (currentUser) => {
-        user = currentUser;
-        isAdmin = false;
+    // onAuthStateChanged(auth, (currentUser) => {
+    //     user = currentUser;
+    //     isAdmin = false;
 
-        if (currentUser) {
-            get(child(dbRef, `users/${currentUser.uid}/admin`)).then((snapshot) => {
-                if (snapshot.exists()) {
-                    isAdmin = snapshot.val();
-                }
-            }).catch((error) => {
-                console.error(error);
-            });
-        }
-    });
+    //     if (currentUser) {
+    //         get(child(dbRef, `users/${currentUser.uid}/admin`)).then((snapshot) => {
+    //             if (snapshot.exists()) {
+    //                 isAdmin = snapshot.val();
+    //             }
+    //         }).catch((error) => {
+    //             console.error(error);
+    //         });
+    //     }
+    // });
 
-    async function handleSignOut() {
-        try {
-            await signOut(auth);
-        } catch (error) {
-            console.error("Error signing out:", error.message);
-        }
-    }
+    // async function handleSignOut() {
+    //     try {
+    //         await signOut(auth);
+    //     } catch (error) {
+    //         console.error("Error signing out:", error.message);
+    //     }
+    // }
 
-    function writeUserData(userId, displayName) {
-        set(ref(db, `users/${userId}`), {
-            displayName: displayName,
-            admin: false,
-        });
-    }
+    // function writeUserData(userId, displayName) {
+    //     set(ref(db, `users/${userId}`), {
+    //         displayName: displayName,
+    //         admin: false,
+    //     });
+    // }
 
     function writeTrialData(trialType, everyTarget, everyGuess, everyAccuracy, everyReactionTime) {
         const uid = new ShortUniqueId();
@@ -467,23 +468,14 @@
 
 <html lang="en" class="h-screen bg-gray-400 bg-no-repeat">
     <head>
+        <meta charset="UTF-8" />
         <title>
             Streaming letters
         </title>
     </head>
 <body>  
-    {#if !user}
-        <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-10">
-            🪇 Welcome to our experiment 🧑‍🔬
-        </h1>
-        
-        <div class="flex flex-col items-center justify-center h-screen">
-            <button class="px-4 py-2 font-semibold text-gray-600 -translate-y-24 bg-transparent border border-gray-500 rounded hover:bg-gray-500 hover:text-white hover:border-transparent" on:click={signInWithGoogle}>
-                Sign in with Google
-            </button> 
-        </div>
-    {:else}
-        {#if currentTrial < 96}
+    <AuthCheck>
+        {#if currentTrial < NUMBER_OF_TRIALS}
             <div class="flex justify-center mx-4 space-x-4 translate-y-12">      
                 <label>
                     <input 
@@ -551,24 +543,10 @@
                     <br>
                     {value} ms
                 </label>       
-
-                <div class="fixed bottom-0 left-0 w-full backdrop-blur-3xl">
-                    {#if user || isAdmin}
-                        <div class="flex flex-col justify-center m-2 space-y-2">
-                            {#if isAdmin}
-                                <Admin />
-                            {/if}
-                            <button class="hover:text-gray-600" on:click={handleSignOut}>
-                                Sign out
-                            </button>
-                        </div>
-                    {/if}
-                        <ProgressBar current={currentTrial} total={NUMBER_OF_TRIALS}/>
-                </div>
             </div>
         {:else if currentTrial === NUMBER_OF_TRIALS}
             <GameOver />
         {/if}
-    {/if}
+    </AuthCheck>
 </body>
 </html>

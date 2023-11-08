@@ -1,7 +1,7 @@
 <script>
     import * as ExcelJS from 'exceljs';
     import fs from 'fs';
-    import app from '$lib/firebase';
+    import { app } from '$lib/firebase';
     import { getDatabase, ref, get } from 'firebase/database';
     import { adminPlay } from '$lib/stores/AdminStore';
 
