@@ -1,10 +1,10 @@
 <script>
-    import { app, db, auth, user } from "$lib/firebase";
+    import { db, auth, user } from "$lib/firebase";
     import { getDatabase, ref, set, child, get } from "firebase/database";
-    import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
+    import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
     import ProgressBar from "./ProgressBar.svelte";
     import Admin from "./Admin.svelte";
-    console.log($user);
+
     const dbRef = ref(getDatabase());
     let isAdmin;
 

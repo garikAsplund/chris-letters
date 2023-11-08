@@ -1,9 +1,7 @@
 <script>
     import * as ExcelJS from 'exceljs';
-    import fs from 'fs';
     import { app } from '$lib/firebase';
     import { getDatabase, ref, get } from 'firebase/database';
-    import { adminPlay } from '$lib/stores/AdminStore';
 
     const database = getDatabase(app);
 
@@ -18,9 +16,7 @@
         if (dataSnapshot.exists()) {
             data.blocks = dataSnapshot.val();
             crunchData();
-        }
-        
-        // window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
+        }    
     }
 
     function crunchData() {
@@ -71,10 +67,6 @@
             a.click();
             URL.revokeObjectURL(a.href);
         });
-  }
-
-  function adminPlayClicked() {
-    $adminPlay = true;
   }
 </script>
 

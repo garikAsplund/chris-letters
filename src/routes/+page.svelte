@@ -10,6 +10,12 @@
 	import GameOver from '$lib/components/GameOver.svelte';
     
     let refreshRate = 60;
+    getScreenRefreshRate(function(FPS){
+        refreshRate = Math.round(FPS / 5) * 5;
+        console.log(`${FPS} FPS`);
+        console.log(refreshRate);
+    });
+    
     let currentLetter = ' ';
     let receivedLetter = ' ';
     let targetLetter = '';
@@ -73,11 +79,7 @@
 
     let count = 0;
 
-    getScreenRefreshRate(function(FPS){
-        refreshRate = Math.round(FPS / 5) * 5;
-        console.log(`${FPS} FPS`);
-        console.log(refreshRate);
-    });
+    
     
     function streamAB() {
         const currentTime = performance.now();
