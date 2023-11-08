@@ -1,111 +1,15 @@
 <script>
-    import ProgressBar from '$lib/components/ProgressBar.svelte';
-    import Admin from '$lib/components/Admin.svelte';
-    import { emojisplosions } from 'emojisplosion';
-    import { getDatabase, ref, set, child, get } from "firebase/database";
-    import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
-    import { app } from "$lib/firebase";
-    import ShortUniqueId from 'short-unique-id';
-	import GameOver from '$lib/components/GameOver.svelte';
     import interact from 'interactjs';
-    import { afterUpdate, onMount }  from 'svelte';
-    import { randomRange, DISTRACTORS, LETTERS, NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
+    import { onMount }  from 'svelte';
+    import { LETTERS, NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
     import { createABTrials } from '$lib/logic/AB';
     import { createCCTrials } from '$lib/logic/CC';
     import { createSiBTrials } from '$lib/logic/SiB';
     import { getScreenRefreshRate } from '$lib/logic/refreshRate';
 	import AuthCheck from '$lib/components/AuthCheck.svelte';
-
-    // const db = getDatabase(app);
-    // const dbRef = ref(getDatabase());
-    // const auth = getAuth(app);
-    // let isAdmin;
-
-    // const googleProvider = new GoogleAuthProvider();
-
-    // async function signInWithGoogle() {
-    //     try {
-    //         const result = await signInWithPopup(auth, googleProvider);
-    //         const user = result.user;
-            
-    //         const userAlreadyExists = await get(child(dbRef, `users/${user.uid}`)).then((snapshot) => {
-    //             if (!snapshot.exists()) {
-    //                 console.log("No data available, creating user");
-    //                 if (user && user.displayName) {
-    //                     writeUserData(user.uid, user.displayName);
-    //                 } 
-    //             }
-    //             }).catch((error) => {
-    //             console.error(error);
-    //         });
-            
-    //         get(child(dbRef, `users/${user.uid}/admin`)).then((snapshot) => {
-    //             if (snapshot.exists()) {
-    //                 isAdmin = snapshot.val();
-    //             } else {
-    //                 console.log("No data available");
-    //             }
-    //             }).catch((error) => {
-    //             console.error(error);
-    //         }); 
-    //     } catch (error) {
-    //         console.error("Error signing in with Google:", error.message);
-    //     }
-    // }
-
-    // let user = null;
+	import GameOver from '$lib/components/GameOver.svelte';
     
-    // onAuthStateChanged(auth, (currentUser) => {
-    //     user = currentUser;
-    //     isAdmin = false;
-
-    //     if (currentUser) {
-    //         get(child(dbRef, `users/${currentUser.uid}/admin`)).then((snapshot) => {
-    //             if (snapshot.exists()) {
-    //                 isAdmin = snapshot.val();
-    //             }
-    //         }).catch((error) => {
-    //             console.error(error);
-    //         });
-    //     }
-    // });
-
-    // async function handleSignOut() {
-    //     try {
-    //         await signOut(auth);
-    //     } catch (error) {
-    //         console.error("Error signing out:", error.message);
-    //     }
-    // }
-
-    // function writeUserData(userId, displayName) {
-    //     set(ref(db, `users/${userId}`), {
-    //         displayName: displayName,
-    //         admin: false,
-    //     });
-    // }
-
-    function writeTrialData(trialType, everyTarget, everyGuess, everyAccuracy, everyReactionTime) {
-        const uid = new ShortUniqueId();
-        const trialId = uid();
-
-        set(ref(db, `blocks/${trialId}`), {
-            trialType: trialType,
-            targets: everyTarget,
-            guesses: everyGuess,
-            accuracy: everyAccuracy,
-            reactionTime: everyReactionTime,
-        });
-    }
-
     let refreshRate = 60;
-
-    getScreenRefreshRate(function(FPS){
-        refreshRate = Math.round(FPS / 5) * 5;
-        console.log(`${FPS} FPS`);
-        console.log(refreshRate);
-    });
-
     let currentLetter = ' ';
     let receivedLetter = ' ';
     let targetLetter = '';
@@ -136,11 +40,6 @@
     let numberOfFlashes = 0;
     let inProgress = true;
     let boxColor = 'white';
-
-    // start out 8 trials of practice before EACH task
-    // then AB 96
-    // then CC 2 x 96
-    // then SiB 2 x 96--first 60 and final 60 for SiB
 
     const { ABLetters, ABTargets, ABTextColors } = createABTrials();
     const { CCLetters, CCTargets, CCTextColors, CCBoxColors } = createCCTrials();
@@ -173,6 +72,12 @@
     console.log({SiB2Surprise});
 
     let count = 0;
+
+    getScreenRefreshRate(function(FPS){
+        refreshRate = Math.round(FPS / 5) * 5;
+        console.log(`${FPS} FPS`);
+        console.log(refreshRate);
+    });
     
     function streamAB() {
         const currentTime = performance.now();
@@ -300,20 +205,6 @@
             }
     });
 
-    function gameOver() {
-        const { cancel } = emojisplosions({
-                emojis: ["🍕", "🍷", "🙌", "🎆", "🍻", "🎊","🥮", "🏆", "🍾", "🪇", "🥇", "🎇", "🎉", "🪅", "🎁", "🪩", "✨", "🌠", "💯", "🔥", ],
-                interval: 40,
-                physics: {
-                    fontSize: {
-                        max: 54,
-                        min: 24,
-                    },
-                },
-            });
-            setTimeout(cancel, 2000); 
-    } 
-
     function onClick() {
         buttonText = "Trial already in progress";
         clicked = true;
@@ -325,7 +216,6 @@
         if (!guessed) return;
         if (!AB && !CC && !SiB) return;
         if (++currentTrial === NUMBER_OF_TRIALS) {
-            gameOver();  
             writeTrialData(trialType, everyTarget, everyGuess, everyAccuracy, everyReactionTime);
         }
 
@@ -505,7 +395,6 @@
                     Surprise-induced blindness
                 </label>
             </div>
-            
             <div class="flex justify-center mx-4 space-x-4 translate-y-24">
                 <div id="resizable-div" class={`flex justify-center resize-handle cursor-pointer`} style="border-width: {borderWidth}px; width: {boxText}px; height: {boxText}px; border-color: {boxColor}">
                     <p class={`self-center font-thin text-center font-courier-new`} class:text-red-500={isTarget} style="color: {textColor}; font-size: {boxText}px">
@@ -535,16 +424,14 @@
                     </p>
                 </div> 
             </div>
-
             <div class="flex flex-col items-center">
-
                 <label class="flex flex-col m-4 text-xl text-center translate-y-32">
                     <input type="range" bind:value min="20" max="400"/>
                     <br>
                     {value} ms
                 </label>       
             </div>
-        {:else if currentTrial === NUMBER_OF_TRIALS}
+        {:else}
             <GameOver />
         {/if}
     </AuthCheck>

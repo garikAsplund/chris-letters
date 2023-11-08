@@ -1,5 +1,40 @@
 <script>
     import { correct, incorrect } from "$lib/stores/GameStore";
+    import { emojisplosions } from 'emojisplosion';
+    import ShortUniqueId from 'short-unique-id';
+    import { ref, set } from "firebase/database";
+    import { db } from "$lib/firebase";
+    
+    function gameOver() {
+        const { cancel } = emojisplosions({
+                emojis: ["🍕", "🍷", "🙌", "🎆", "🍻", "🎊","🥮", "🏆", "🍾", "🪇", "🥇", "🎇", "🎉", "🪅", "🎁", "🪩", "✨", "🌠", "💯", "🔥", ],
+                interval: 40,
+                physics: {
+                    fontSize: {
+                        max: 54,
+                        min: 24,
+                    },
+                },
+            });
+            setTimeout(cancel, 2000); 
+    }
+
+    function writeTrialData(trialType, everyTarget, everyGuess, everyAccuracy, everyReactionTime) {
+        const uid = new ShortUniqueId();
+        const trialId = uid();
+
+        set(ref(db, `blocks/${trialId}`), {
+            trialType: trialType,
+            targets: everyTarget,
+            guesses: everyGuess,
+            accuracy: everyAccuracy,
+            reactionTime: everyReactionTime,
+        });
+    }
+
+    
+    writeTrialData(); // Add params from $tore
+    gameOver();
 </script>
 
 <h1 class="flex justify-center text-4xl font-bold transform translate-y-20 ">

@@ -4,7 +4,7 @@
     import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "firebase/auth";
     import ProgressBar from "./ProgressBar.svelte";
     import Admin from "./Admin.svelte";
-    
+    console.log($user);
     const dbRef = ref(getDatabase());
     let isAdmin;
 
@@ -41,7 +41,6 @@
     }
     
     onAuthStateChanged(auth, (currentUser) => {
-        $user = currentUser;
         isAdmin = false;
 
         if (currentUser) {
