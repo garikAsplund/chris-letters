@@ -78,13 +78,9 @@
     console.log({SiB2Surprise});
 
     let count = 0;
-
-    
     
     function streamAB() {
         const currentTime = performance.now();
-        const elapsed = currentTime - lastTime;
-        // inProgress = true;
 
         if (numberOfFlashes > 32) {
             inProgress = false;
@@ -93,7 +89,6 @@
         }
         
         if (++count % (Math.floor(value / Math.floor(1000 / refreshRate))) === 0) {
-        // if (elapsed >= (value)) {
             isOn = !isOn;
             numberOfFlashes++;
             
@@ -118,8 +113,6 @@
 
     function streamCC() {
         const currentTime = performance.now();
-        const elapsed = currentTime - lastTime;
-        // inProgress = true;
 
         if (numberOfFlashes > 32) {
             inProgress = false;
@@ -128,17 +121,16 @@
         }
  
         if (++count % (Math.floor(value / Math.floor(1000 / refreshRate))) === 0) {
-        // if (elapsed >= (value)) {
             isOn = !isOn;
             numberOfFlashes++;
             
             if (isOn) {
                 // console.log('ON ' + (performance.now() - lastTime));
                 
-                currentLetter = CC1Letters[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                textColor = CC1TextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                isTarget = CC1Targets[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                boxColor = CC1BoxColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                currentLetter = CCLetters[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                textColor = CCTextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                isTarget = CCTargets[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                boxColor = CCBoxColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
                 
                 if (isTarget) {
                     targetLetter += currentLetter;
@@ -156,8 +148,6 @@
 
     function streamSiB() {
         const currentTime = performance.now();
-        const elapsed = currentTime - lastTime;
-        // inProgress = true;
 
         if (numberOfFlashes > 32) {
             inProgress = false;
@@ -167,17 +157,16 @@
         }
 
         if (++count % (Math.floor(value / Math.floor(1000 / refreshRate))) === 0) {
-        // if (elapsed >= (value)) {
             isOn = !isOn;
             numberOfFlashes++;
             
             if (isOn) {
                 // console.log('ON ' + (performance.now() - lastTime));
                 
-                currentLetter = SiB1Letters[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                textColor = SiB1TextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                isTarget = SiB1Targets[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                displayFace = SiB1Surprise[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                currentLetter = SiBLetters[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                textColor = SiBTextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                isTarget = SiBTargets[currentTrial - 1][(numberOfFlashes / 2) - 1];
+                displayFace = SiBSurprise[currentTrial - 1][(numberOfFlashes / 2) - 1];
                  
                 if (isTarget) {
                     targetLetter += currentLetter;
@@ -185,7 +174,7 @@
             } else {
                 // console.log('OFF ' + (performance.now() - lastTime));
                 currentLetter = ' ';
-                displayFace = SiB1Surprise[currentTrial - 1][((numberOfFlashes - 1) / 2) - 1];   
+                displayFace = SiBSurprise[currentTrial - 1][((numberOfFlashes - 1) / 2) - 1];   
             }
 
             lastTime = currentTime;
@@ -196,16 +185,6 @@
 
     let lastTime = performance.now();
     let isOn = true;
-
-    onMount(() => {
-        const storedBoxText = localStorage.getItem('boxText');
-        const storedBorderWidth = localStorage.getItem('borderWidth');
-            if (storedBoxText && storedBorderWidth) {
-                boxText = parseInt(storedBoxText, 10);
-                borderWidth = parseInt(storedBorderWidth, 10);
-                // console.log({boxText}, {borderWidth});
-            }
-    });
 
     function onClick() {
         buttonText = "Trial already in progress";
@@ -322,6 +301,15 @@
         }
     }
 
+    onMount(() => {
+        const storedBoxText = localStorage.getItem('boxText');
+        const storedBorderWidth = localStorage.getItem('borderWidth');
+            if (storedBoxText && storedBorderWidth) {
+                boxText = parseInt(storedBoxText, 10);
+                borderWidth = parseInt(storedBorderWidth, 10);
+            }
+    });
+
     const resizableDiv = document.getElementById('resizable-div');
 
     interact('.resize-handle')
@@ -351,8 +339,6 @@
 
             localStorage.setItem('boxText', boxText.toString());
             localStorage.setItem('borderWidth', borderWidth.toString());
-
-            // console.log({boxText}, {borderWidth});
         });
 </script>
     

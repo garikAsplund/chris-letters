@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, onSnapshot } from "firebase/firestore";
+import { getDatabase } from "firebase/database";
 import { getAuth, onAuthStateChanged, type User } from "firebase/auth";
 import { writable } from "svelte/store";
 
@@ -26,7 +26,7 @@ const firebaseConfig = {
 };
 
 export const app = initializeApp(firebaseConfig);
-export const db = getFirestore();
+export const db = getDatabase(app);
 export const auth = getAuth();
 
 /**
