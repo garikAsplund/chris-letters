@@ -3,9 +3,10 @@
     import { fade } from 'svelte/transition';
     let locked = false;
     $: unlocked = !locked;
+    export let signIn;
 
     function onCompleteHandler(e) { 
-        console.log('event:complete', e); 
+        signIn();
     }
 </script>
 
