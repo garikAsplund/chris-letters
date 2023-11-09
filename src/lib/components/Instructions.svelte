@@ -12,8 +12,8 @@
 
 <div class="flex justify-center translate-y-36">
     <div class="w-3/5 p-4 mb-36 card text-token">
-        <Stepper buttonCompleteLabel="Sign in with Google" on:complete={onCompleteHandler} transitionInParams={{ duration: 400 }} >
-            <Step>
+        <Stepper class="m-5" buttonCompleteLabel="Sign in with Google" on:complete={onCompleteHandler} transitionInParams={{ duration: 400 }} >
+            <Step >
                 <svelte:fragment slot="header">Requirements</svelte:fragment>
                 <p>Please take note of the following requirements for participating in this study:</p>
                     <ul class="m-3">
