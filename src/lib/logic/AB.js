@@ -41,8 +41,8 @@ export function createABTrials() {
     }
     
     return {
-            ABLetters,
-            ABTargets,
-            ABTextColors,
+            letters: ABLetters,
+            targets: ABTargets,
+            textColors: ABTextColors,
         }
 }

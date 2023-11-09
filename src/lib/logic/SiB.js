@@ -33,8 +33,8 @@ export function createSiBTrials() {
         surpriseTrials2.push(trial);
     }
     
-    console.log({surpriseTrials});
-    console.log({surpriseTrials2});
+    // console.log({surpriseTrials});
+    // console.log({surpriseTrials2});
             
     while (SiBLetters.length < NUMBER_OF_TRIALS) {
         const SiBLettersTrial = [];
@@ -79,9 +79,9 @@ export function createSiBTrials() {
     }
 
     return {
-        SiBLetters,
-        SiBTargets,
-        SiBTextColors,
-        SiBSurprise,
+        letters: SiBLetters,
+        targets: SiBTargets,
+        textColors: SiBTextColors,
+        surprise: SiBSurprise,
     }
 }

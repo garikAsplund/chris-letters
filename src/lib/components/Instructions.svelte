@@ -62,14 +62,16 @@
                     
                     Do you consent to participate?
                     </p>
-                    <aside class="alert variant-ghost-warning">
+                    <div class="flex justify-end">
+                    <aside class="w-1/3 alert variant-ghost-warning">
                         <div class="alert-message">
-                            <p>{unlocked ? 'No, I do not' : 'Yes, I do'}</p>
+                            <p><b>{unlocked ? 'No, I do not' : 'Yes, I do'}</b></p>
                         </div>
                         <div class="alert-actions">
                             <SlideToggle name="locked-state" bind:checked={locked} active="bg-warning-500" />
                         </div>
                     </aside>
+                     </div>
             </Step>
             <Step>
                 <svelte:fragment slot="header">Settings</svelte:fragment>

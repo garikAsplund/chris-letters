@@ -50,9 +50,9 @@ export function createCCTrials() {
     }
     
     return {
-        CCLetters,
-        CCTargets,
-        CCTextColors,
-        CCBoxColors,
+        letters: CCLetters,
+        targets: CCTargets,
+        textColors: CCTextColors,
+        boxColors: CCBoxColors,
     }
 }

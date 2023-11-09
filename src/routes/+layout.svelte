@@ -2,7 +2,7 @@
     import "../app.css";
     import { dev } from '$app/environment';
     import { inject } from '@vercel/analytics';
-    import { fade, blur } from "svelte/transition";
+    import { blur } from "svelte/transition";
     import { onMount } from 'svelte';
 
     let ready = false;

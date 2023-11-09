@@ -2,194 +2,94 @@
     import interact from 'interactjs';
     import { onMount }  from 'svelte';
     import { LETTERS, NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
-    import { createABTrials } from '$lib/logic/AB';
-    import { createCCTrials } from '$lib/logic/CC';
-    import { createSiBTrials } from '$lib/logic/SiB';
     import { getScreenRefreshRate } from '$lib/logic/refreshRate';
 	import AuthCheck from '$lib/components/AuthCheck.svelte';
 	import GameOver from '$lib/components/GameOver.svelte';
     import { fade } from 'svelte/transition';
-    
-    let refreshRate = 60;
+    // import { stream } from '$lib/logic/stream';
+    import { ABTrials, CCTrials, SiBTrials, numberOfFlashes, startTime, inProgress, count, refreshRate, isOn, lastTime, currentLetter, textColor, isTarget, targetLetter, boxColor, displayFace, currentTrial } from '$lib/stores/GameStore';
+
+    console.log($ABTrials);
+    // let refreshRate = 60;
     setTimeout(() => {
         getScreenRefreshRate(function(FPS){
-        refreshRate = Math.round(FPS / 5) * 5;
+        $refreshRate = Math.round(FPS / 5) * 5;
         console.log(`${FPS} FPS`);
-        console.log(refreshRate);
+        console.log($refreshRate);
     })}, 400);
     
-    let currentLetter = ' ';
     let receivedLetter = ' ';
-    let targetLetter = '';
-    let targetIndex = 14;
-    let isTarget = false;
-    let textColor;
-    let currentTrial = 0;
     let started = false;
     let guessed = true;
     let reactionTime = 0;
-    let startTime = null;
     let AB = false; 
     let CC = false; 
     let SiB = false;
     let guesses = [];
-    let surpriseTrials = [];
-    let displayFace = false;
     let buttonText = "Start";
     let clicked = false;
     let everyTarget = [];
     let everyGuess = [];
     let everyAccuracy = [];
     let everyReactionTime = [];
-    let trialType;
     let boxText = 280;
     let borderWidth = 8;
     let value = 50;
-    let numberOfFlashes = 0;
-    let inProgress = true;
-    let boxColor = 'white';
-
-    const { ABLetters, ABTargets, ABTextColors } = createABTrials();
-    const { CCLetters, CCTargets, CCTextColors, CCBoxColors } = createCCTrials();
-    const { CCLetters: CC2Letters, CCTargets: CC2Targets, CCTextColors: CC2TextColors, CCBoxColors: CC2BoxColors } = createCCTrials();
-    const { SiBLetters, SiBTargets, SiBTextColors, SiBSurprise } = createSiBTrials();
-    const { SiBLetters: SiB2Letters, SiBTargets: SiB2Targets, SiBTextColors: SiB2TextColors, SiBSurprise: SiB2Surprise} = createSiBTrials();
     
-    // console.log({ABLetters});
-    // console.log({ABTargets});
-    // console.log({ABTextColors});
+    // let currentTrial = 0;
+    // let displayFace = false;
+    // let startTime = null;
+    // let targetLetter = '';
+    // let isTarget = false;
+    // let textColor;
+    // let currentLetter = ' ';
+    // let numberOfFlashes = 0;
+    // let inProgress = true;
+    // let boxColor = 'white';
+    // let lastTime = performance.now();
+    // let isOn = true;
+    // let count = 0;
 
-    // console.log({CCLetters});
-    // console.log({CCTargets});
-    // console.log({CCTextColors});
-    // console.log({CCBoxColors});
-    
-    // console.log({CC2Letters});
-    // console.log({CC2Targets});
-    // console.log({CC2TextColors});
-    // console.log({CC2BoxColors});
-
-    // console.log({SiBLetters});
-    // console.log({SiBTargets});
-    // console.log({SiBTextColors});
-    // console.log({SiBSurprise});
-    
-    // console.log({SiB2Letters});
-    // console.log({SiB2Targets});
-    // console.log({SiB2TextColors});
-    // console.log({SiB2Surprise});
-
-    let count = 0;
-    
-    function streamAB() {
+    function stream(trialType) {
         const currentTime = performance.now();
 
-        if (numberOfFlashes > 32) {
-            startTime = Date.now();
+        if ($numberOfFlashes > 32) {
+            $startTime = Date.now();
             setTimeout(() => {
-                inProgress = false;;
-            }, 600)
-            return;
-        }
-        
-        if (++count % (Math.floor(value / Math.floor(1000 / refreshRate))) === 0) {
-            isOn = !isOn;
-            numberOfFlashes++;
-            
-            if (isOn) {
-                console.log('ON ' + (performance.now() - lastTime));
-                currentLetter = ABLetters[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                textColor = ABTextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                isTarget = ABTargets[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                if (isTarget) {
-                    targetLetter += currentLetter;
-                }
-            } else {
-                console.log('OFF ' + (performance.now() - lastTime));
-                currentLetter = ' ';
-            }
-
-            lastTime = currentTime;
-        }
-
-        requestAnimationFrame(streamAB);
-    }
-
-    function streamCC() {
-        const currentTime = performance.now();
-
-        if (numberOfFlashes > 32) {
-            inProgress = false;
-            startTime = Date.now();
-            return;
-        }
- 
-        if (++count % (Math.floor(value / Math.floor(1000 / refreshRate))) === 0) {
-            isOn = !isOn;
-            numberOfFlashes++;
-            
-            if (isOn) {
-                // console.log('ON ' + (performance.now() - lastTime));
-                
-                currentLetter = CCLetters[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                textColor = CCTextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                isTarget = CCTargets[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                boxColor = CCBoxColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                
-                if (isTarget) {
-                    targetLetter += currentLetter;
-                }
-            } else {
-                // console.log('OFF ' + (performance.now() - lastTime));
-                currentLetter = ' ';
-            }
-
-            lastTime = currentTime;
-        }
-
-        requestAnimationFrame(streamCC);
-    }
-
-    function streamSiB() {
-        const currentTime = performance.now();
-
-        if (numberOfFlashes > 32) {
-            inProgress = false;
-            startTime = Date.now();
-            displayFace = false;
+                $inProgress = false;;
+            }, 600);
+            $displayFace = false;
             return;
         }
 
-        if (++count % (Math.floor(value / Math.floor(1000 / refreshRate))) === 0) {
-            isOn = !isOn;
-            numberOfFlashes++;
+        if (++$count % (Math.floor(50 / Math.floor(1000 / $refreshRate))) === 0) {
+            $isOn = !$isOn;
+            $numberOfFlashes++;
             
-            if (isOn) {
-                // console.log('ON ' + (performance.now() - lastTime));
-                
-                currentLetter = SiBLetters[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                textColor = SiBTextColors[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                isTarget = SiBTargets[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                displayFace = SiBSurprise[currentTrial - 1][(numberOfFlashes / 2) - 1];
-                 
-                if (isTarget) {
-                    targetLetter += currentLetter;
+            if ($isOn) {
+                // const test = trialType.letters[$currentTrial - 1][($numberOfFlashes / 2) - 1];
+                // console.log(test);
+                console.log($lastTime - currentTime);
+                $currentLetter = trialType.letters[$currentTrial - 1][($numberOfFlashes / 2) - 1];
+                $textColor = trialType.textColors[$currentTrial - 1][($numberOfFlashes / 2) - 1];
+                $isTarget = trialType.targets[$currentTrial - 1][($numberOfFlashes / 2) - 1];
+                if (CC) $boxColor = trialType?.boxColors[$currentTrial - 1][($numberOfFlashes / 2) - 1];
+                if (SiB) $displayFace = trialType?.surprise[$currentTrial - 1][($numberOfFlashes / 2) - 1];
+                    
+                if ($isTarget) {
+                    $targetLetter += $currentLetter;
                 }  
             } else {
-                // console.log('OFF ' + (performance.now() - lastTime));
-                currentLetter = ' ';
-                displayFace = SiBSurprise[currentTrial - 1][((numberOfFlashes - 1) / 2) - 1];   
+                $currentLetter = ' ';
+                if (SiB) $displayFace = trialType.surprise[$currentTrial - 1][(($numberOfFlashes - 1) / 2) - 1];   
             }
 
-            lastTime = currentTime;
+            $lastTime = currentTime;
         }
 
-        requestAnimationFrame(streamSiB);
+        requestAnimationFrame(() => stream(trialType));
     }
-
-    let lastTime = performance.now();
-    let isOn = true;
-
+    
     function onClick() {
         buttonText = "Trial already in progress";
         clicked = true;
@@ -201,25 +101,25 @@
         if (!guessed) return;
         if (!AB && !CC && !SiB) return;
         
-        currentTrial++;
-        inProgress = true;
+        $currentTrial++;
+        $inProgress = true;
         started = true;
         guessed = false;
         receivedLetter = ' ';
         guesses = [];
-        count = 0;
+        $count = 0;
 
-        if (AB) streamAB();
-        if (CC) streamCC();
-        if (SiB) streamSiB();
+        if (AB) stream($ABTrials);
+        if (CC) stream($CCTrials);
+        if (SiB) stream($SiBTrials);
     }
 
     function handleKeydown(event) {
-        if (AB && !inProgress) {
+        if (AB && !$inProgress) {
             if (event.key && event.key.length === 1) {
                 if (LETTERS.includes(event.key.toUpperCase()) && guesses.length < 2) {
                     // startTime = Date.now();
-                    if (startTime) {
+                    if ($startTime) {
                         reactionTime = Date.now() - startTime;
                         console.log({reactionTime});
                         guesses = [...guesses, event.key.toUpperCase()];
@@ -227,14 +127,14 @@
                     }
                     if (guesses.length === 2) {
                         guessed = true;
-                        startTime = null; 
+                        $startTime = null; 
                         everyReactionTime.push(reactionTime);
                         everyGuess.push(...guesses);
-                        everyTarget.push(targetLetter.split(''));
+                        everyTarget.push($targetLetter.split(''));
                         
                         if ((targetLetter[0] == guesses[0] && targetLetter[1] == guesses[1]) || (targetLetter[0] == guesses[1] && targetLetter[1] == guesses[0])) {
                             everyAccuracy.push(2);
-                        } else if (targetLetter.includes(guesses[0]) || targetLetter.includes(guesses[1])) {
+                        } else if ($targetLetter.includes(guesses[0]) || $targetLetter.includes(guesses[1])) {
                             everyAccuracy.push(1);
                         } else {
                             everyAccuracy.push(0);
@@ -242,28 +142,28 @@
                         
                         console.log({everyAccuracy}, {everyGuess}, {everyReactionTime}, {everyTarget});
 
-                        numberOfFlashes = 1;
+                        $numberOfFlashes = 1;
                         started = false;
-                        targetLetter = '';
-                        inProgress = true;
+                        $targetLetter = '';
+                        $inProgress = true;
                         setTimeout(begin, 600);
                     }
                 }
             }
-        } else if ((SiB || CC) && !inProgress) {
+        } else if ((SiB || CC) && !$inProgress) {
             if (event.key && event.key.length === 1) {
                 if (LETTERS.includes(event.key.toUpperCase())) {
-                    if (startTime) {
-                        reactionTime = Date.now() - startTime;
+                    if ($startTime) {
+                        reactionTime = Date.now() - $startTime;
                         everyReactionTime.push(reactionTime);
-                        startTime = null; 
+                        $startTime = null; 
                         started = false;
-                        numberOfFlashes = 1;
+                        $numberOfFlashes = 1;
                         guessed = true;
                         receivedLetter = event.key.toUpperCase();
                         everyTarget.push(targetLetter);
-                        receivedLetter === targetLetter ? everyAccuracy.push(1) : everyAccuracy.push(0);
-                        targetLetter = '';
+                        receivedLetter === $targetLetter ? everyAccuracy.push(1) : everyAccuracy.push(0);
+                        $targetLetter = '';
                         everyGuess.push(receivedLetter);
 
                         console.log({everyAccuracy}, {everyGuess}, {everyReactionTime}, {everyTarget});
@@ -289,17 +189,17 @@
                     CC = false;
                     SiB = false;
                     clicked = false;
-                    currentTrial = 0;
+                    $currentTrial = 0;
                 case "CC":
                     AB = false;
                     SiB = false;
                     clicked = false;
-                    currentTrial = 0;
+                    $currentTrial = 0;
                 case "SiB":
                     AB = false;
                     CC = false;
                     clicked = false;
-                    currentTrial = 0;
+                    $currentTrial = 0;
             }
         }
     }
@@ -356,7 +256,7 @@
     </head>
 <body>  
     <AuthCheck>
-        {#if currentTrial < NUMBER_OF_TRIALS}
+        {#if $currentTrial < NUMBER_OF_TRIALS}
             <div class="flex justify-center mx-4 space-x-4 translate-y-12 ">      
                 <label>
                     <input 
@@ -387,12 +287,12 @@
                 </label>
             </div>
             <div class="flex justify-center mx-4 space-x-4 translate-y-24">
-                <div id="resizable-div" class={`flex justify-center resize-handle cursor-pointer`} style="border-width: {borderWidth}px; width: {boxText}px; height: {boxText}px; border-color: {boxColor}">
-                    <p class={`self-center font-thin text-center font-courier-new`} class:text-red-500={isTarget} style="color: {textColor}; font-size: {boxText}px">
-                        {#if displayFace}
+                <div id="resizable-div" class={`flex justify-center resize-handle cursor-pointer`} style="border-width: {borderWidth}px; width: {boxText}px; height: {boxText}px; border-color: {$boxColor}">
+                    <p class={`self-center font-thin text-center font-courier-new`} class:text-red-500={$isTarget} style="color: {$textColor}; font-size: {boxText}px">
+                        {#if $displayFace}
                             <img src="garik_bw.jpg" alt="Garik!!!">
                         {:else}
-                            {currentLetter}
+                            {$currentLetter}
                         {/if}
                         {#if !AB && !CC && !SiB}
                             <p class="p-2 text-4xl text-gray-200">
@@ -403,11 +303,11 @@
                                 {buttonText}
                             </button>
                         {/if}
-                        {#if AB && !inProgress}
+                        {#if AB && !$inProgress}
                             <p class="p-2 text-4xl text-gray-200" in:fade={{ delay: 250, duration: 300 }}>
                                 Please enter your guesses
                             </p>
-                        {:else if (CC ||SiB) && !inProgress}
+                        {:else if (CC ||SiB) && !$inProgress}
                             <p class="p-2 text-4xl text-gray-200">
                                 Please enter your guess
                             </p>
