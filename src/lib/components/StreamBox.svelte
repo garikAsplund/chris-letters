@@ -1,30 +1,39 @@
 <script>
     import interact from 'interactjs';
     import { onMount }  from 'svelte';
+    import { fade } from 'svelte/transition';
     import { LETTERS, NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
     import { ABTrials, CCTrials, SiBTrials, numberOfFlashes, startTime, inProgress, count, refreshRate, isOn, lastTime, currentLetter, textColor, isTarget, targetLetter, boxColor, displayFace, currentTrial } from '$lib/stores/GameStore';
     import GameOver from './GameOver.svelte';
-    
+
     let receivedLetter = ' ';
     let started = false;
     let guessed = true;
     let reactionTime = 0;
+
     let AB = false; 
     let CC = false; 
     let SiB = false;
+    
     let guesses = [];
     let buttonText = "Start";
     let clicked = false;
+    
     let everyTarget = [];
     let everyGuess = [];
     let everyAccuracy = [];
     let everyReactionTime = [];
+    
     let boxText = 280;
     let borderWidth = 8;
-    let value = 50;
     
-    export function stream(trialType) {
+    let value = 50;
+    console.log($numberOfFlashes);
+    
+    function stream(trialType) {
         const currentTime = performance.now();
+        console.log(trialType.letters);
+        console.log($numberOfFlashes);
 
         if ($numberOfFlashes > 32) {
             $startTime = Date.now();
@@ -35,29 +44,31 @@
             return;
         }
 
-        if (++$count % (Math.floor(50 / Math.floor(1000 / $refreshRate))) === 0) {
+        $count += 1;
+
+        if ($count % (Math.floor(50 / Math.floor(1000 / $refreshRate))) === 0) {
             $isOn = !$isOn;
-            $numberOfFlashes++;
+            $numberOfFlashes += 1;
             
             if ($isOn) {
                 $currentLetter = trialType.letters[$currentTrial - 1][($numberOfFlashes / 2) - 1];
                 $textColor = trialType.textColors[$currentTrial - 1][($numberOfFlashes / 2) - 1];
                 $isTarget = trialType.targets[$currentTrial - 1][($numberOfFlashes / 2) - 1];
-                $boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes / 2) - 1];
-                $displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes / 2) - 1];
+                if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes / 2) - 1];
+                if (SiB) $displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes / 2) - 1];
                     
                 if ($isTarget) {
                     $targetLetter += $currentLetter;
                 }  
             } else {
                 $currentLetter = ' ';
-                $displayFace = trialType.surprise[$currentTrial - 1][(($numberOfFlashes - 1) / 2) - 1];   
+                if (SiB) $displayFace = trialType.surprise[$currentTrial - 1][(($numberOfFlashes - 1) / 2) - 1];   
             }
 
             $lastTime = currentTime;
         }
 
-        requestAnimationFrame(stream);
+        requestAnimationFrame(() => stream(trialType));
     }
 
     function onClick() {
@@ -71,7 +82,7 @@
         if (!guessed) return;
         if (!AB && !CC && !SiB) return;
         
-        $currentTrial++;
+        $currentTrial += 1;
         $inProgress = true;
         started = true;
         guessed = false;
@@ -79,7 +90,7 @@
         guesses = [];
         $count = 0;
 
-        if (AB) stream($ABTrials, trialStores);
+        if (AB) stream($ABTrials);
         if (CC) stream($CCTrials);
         if (SiB) stream($SiBTrials);
     }
@@ -214,6 +225,7 @@
             localStorage.setItem('borderWidth', borderWidth.toString());
         });
 </script>
+
 {#if $currentTrial < NUMBER_OF_TRIALS}
     <div class="flex justify-center mx-4 space-x-4 translate-y-12 ">      
         <label>
