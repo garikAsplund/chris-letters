@@ -5,6 +5,7 @@
     import ProgressBar from "./ProgressBar.svelte";
     import Admin from "./Admin.svelte";
     import Instructions from "./Instructions.svelte";
+    import { fade } from "svelte/transition";
 
     const dbRef = ref(getDatabase());
     let isAdmin;
@@ -72,11 +73,11 @@
 </script>
   
 {#if !$user}
-    <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-10">
-        🪇 Welcome to our experiment 🧑‍🔬
-    </h1>
+        <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-16">
+            🪇 Welcome to our experiment 🧑‍🔬
+        </h1>
 
-    <Instructions signIn={signInWithGoogle} />
+        <Instructions signIn={signInWithGoogle}/>
 {:else}
     <slot />
     <div class="fixed bottom-0 left-0 w-full backdrop-blur-3xl">
