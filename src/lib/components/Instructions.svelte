@@ -9,8 +9,8 @@
         signIn();
     }
 </script>
-<img src="/lilhalcyon.svg" height="300" width="300" >
 
+<img src="/lilhalcyon.svg" height="300" width="300">
 <div class="flex justify-center translate-y-12">
     <div class="w-3/5 p-4 mb-36 card text-token">
         <Stepper class="m-5" buttonCompleteLabel="Sign in with Google" on:complete={onCompleteHandler}>
@@ -66,6 +66,7 @@
                     
                     Do you consent to participate?
                     </p>
+                    <br>
                     <div class="flex justify-end">
                         <aside class=" alert variant-ghost-warning">
                             <div class="alert-message">

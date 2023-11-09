@@ -142,41 +142,35 @@
                         $numberOfFlashes = 1;
                         guessed = true;
                         receivedLetter = event.key.toUpperCase();
-                        everyTarget.push(targetLetter);
+                        everyTarget.push($targetLetter);
                         receivedLetter === $targetLetter ? everyAccuracy.push(1) : everyAccuracy.push(0);
-                        $targetLetter = '';
                         everyGuess.push(receivedLetter);
 
                         console.log({everyAccuracy}, {everyGuess}, {everyReactionTime}, {everyTarget});
                         
                         const correctGuess = {
-                            message: 'Nice work',
+                            message: 'Nice work!',
                             timeout: 2000,
                             hideDismiss: true,
                             background: 'bg-green-500',
                         };
                         const wrongGuess = {
-                            message: 'Not quite',
+                            message: 'Not quite. Keep trying!',
                             timeout: 2000,
                             hideDismiss: true,
                             background: 'bg-red-500',
                         }
-                        toastStore.trigger(correctGuess);
-                        toastStore.trigger(wrongGuess);
                         
+                        receivedLetter === $targetLetter ? toastStore.trigger(correctGuess) : toastStore.trigger(wrongGuess);
+                        
+                        $targetLetter = '';
+
                         setTimeout(begin, 600);
                     }
                 }
             }
         }
     }
-
-    function nextTrial(event) {
-        if (guessed === false) return;
-        if (event.key == " " && event.key.length === 1) {
-            begin();
-        }
-    } 
 
     // This will go away after getting logic correct
     function handleCheck(event) {
@@ -242,7 +236,7 @@
         });
 </script>
 
-<svelte:window on:keydown={handleKeydown} on:keyup={nextTrial}/>
+<svelte:window on:keydown={handleKeydown}/>
 
 {#if $currentTrial < NUMBER_OF_TRIALS}
     <div class="flex justify-center mx-4 space-x-4 translate-y-12 ">      
@@ -296,7 +290,7 @@
                         Please enter your guesses
                     </p>
                 {:else if (CC ||SiB) && !$inProgress}
-                    <p class="p-2 text-4xl text-gray-200">
+                    <p class="p-2 text-4xl text-gray-200" in:fade={{ delay: 250, duration: 300 }}>
                         Please enter your guess
                     </p>
                 {/if}

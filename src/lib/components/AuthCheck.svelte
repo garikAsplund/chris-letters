@@ -5,8 +5,8 @@
     import ProgressBar from "./ProgressBar.svelte";
     import Admin from "./Admin.svelte";
     import Instructions from "./Instructions.svelte";
-    import { draw } from 'svelte/transition';
-	import { quintOut } from 'svelte/easing';
+    import { currentTrial } from "$lib/stores/GameStore";
+    import { NUMBER_OF_TRIALS } from "$lib/logic/ConstantsAndHelpers";
     
     const dbRef = ref(getDatabase());
     let isAdmin;
@@ -92,6 +92,6 @@
                 </button>
             </div>
         {/if}
-        <ProgressBar current total/>
+        <ProgressBar current={$currentTrial} total={NUMBER_OF_TRIALS}/>
     </div>
 {/if}
