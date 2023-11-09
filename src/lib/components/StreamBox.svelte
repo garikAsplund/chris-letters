@@ -5,6 +5,9 @@
     import { LETTERS, NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
     import { ABTrials, CCTrials, SiBTrials, numberOfFlashes, startTime, inProgress, count, refreshRate, isOn, lastTime, currentLetter, textColor, isTarget, targetLetter, boxColor, displayFace, currentTrial } from '$lib/stores/GameStore';
     import GameOver from './GameOver.svelte';
+    import { getToastStore } from '@skeletonlabs/skeleton';
+
+    const toastStore = getToastStore();
 
     let receivedLetter = ' ';
     let started = false;
@@ -28,12 +31,9 @@
     let borderWidth = 8;
     
     let value = 50;
-    console.log($numberOfFlashes);
     
     function stream(trialType) {
         const currentTime = performance.now();
-        console.log(trialType.letters);
-        console.log($numberOfFlashes);
 
         if ($numberOfFlashes > 32) {
             $startTime = Date.now();
@@ -148,7 +148,22 @@
                         everyGuess.push(receivedLetter);
 
                         console.log({everyAccuracy}, {everyGuess}, {everyReactionTime}, {everyTarget});
-
+                        
+                        const correctGuess = {
+                            message: 'Nice work',
+                            timeout: 2000,
+                            hideDismiss: true,
+                            background: 'bg-green-500',
+                        };
+                        const wrongGuess = {
+                            message: 'Not quite',
+                            timeout: 2000,
+                            hideDismiss: true,
+                            background: 'bg-red-500',
+                        }
+                        toastStore.trigger(correctGuess);
+                        toastStore.trigger(wrongGuess);
+                        
                         setTimeout(begin, 600);
                     }
                 }
@@ -163,6 +178,7 @@
         }
     } 
 
+    // This will go away after getting logic correct
     function handleCheck(event) {
         if (event.target.checked) {
             switch (event.target.value) {
@@ -225,6 +241,8 @@
             localStorage.setItem('borderWidth', borderWidth.toString());
         });
 </script>
+
+<svelte:window on:keydown={handleKeydown} on:keyup={nextTrial}/>
 
 {#if $currentTrial < NUMBER_OF_TRIALS}
     <div class="flex justify-center mx-4 space-x-4 translate-y-12 ">      
