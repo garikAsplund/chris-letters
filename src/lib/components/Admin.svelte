@@ -1,9 +1,7 @@
 <script>
     import * as ExcelJS from 'exceljs';
-    import { app } from '$lib/firebase';
-    import { getDatabase, ref, get } from 'firebase/database';
-
-    const database = getDatabase(app);
+    import { db as database } from '$lib/firebase';
+    import { ref, get } from 'firebase/database';    
 
     let data = {
         blocks: {},
@@ -72,4 +70,7 @@
 
 <button class=" hover:text-gray-600" on:click={fetchDataFromFirebase}>
     Export data
-</button>  
+</button> 
+<button class=" hover:text-gray-600">
+    <a href="/admin">Go to admin panel</a>
+</button>

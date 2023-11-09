@@ -9,7 +9,7 @@
     import { NUMBER_OF_TRIALS } from "$lib/logic/ConstantsAndHelpers";
     
     const dbRef = ref(getDatabase());
-    let isAdmin;
+    let isAdmin = false;
 
     const googleProvider = new GoogleAuthProvider();
 

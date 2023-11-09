@@ -18,7 +18,8 @@
     let CC = false; 
     let SiB = false;
     
-    let guesses = [];
+    let guesses = ['A'];
+    let newGuess = '';
     let buttonText = "Start";
     let clicked = false;
     
@@ -99,12 +100,9 @@
         if (AB && !$inProgress) {
             if (event.key && event.key.length === 1) {
                 if (LETTERS.includes(event.key.toUpperCase()) && guesses.length < 2) {
-                    // startTime = Date.now();
                     if ($startTime) {
                         reactionTime = Date.now() - startTime;
-                        console.log({reactionTime});
                         guesses = [...guesses, event.key.toUpperCase()];
-                        console.log({guesses});
                     }
                     if (guesses.length === 2) {
                         guessed = true;
@@ -113,7 +111,7 @@
                         everyGuess.push(...guesses);
                         everyTarget.push($targetLetter.split(''));
                         
-                        if ((targetLetter[0] == guesses[0] && targetLetter[1] == guesses[1]) || (targetLetter[0] == guesses[1] && targetLetter[1] == guesses[0])) {
+                        if (($targetLetter[0] == guesses[0] && $targetLetter[1] == guesses[1]) || ($targetLetter[0] == guesses[1] && $targetLetter[1] == guesses[0])) {
                             everyAccuracy.push(2);
                         } else if ($targetLetter.includes(guesses[0]) || $targetLetter.includes(guesses[1])) {
                             everyAccuracy.push(1);
@@ -286,9 +284,12 @@
                     </button>
                 {/if}
                 {#if AB && !$inProgress}
-                    <p class="p-2 text-4xl text-gray-200" in:fade={{ delay: 250, duration: 300 }}>
-                        Please enter your guesses
-                    </p>
+                    <div in:fade={{ delay: 250, duration: 300 }}>
+                        <p class="p-2 text-4xl text-gray-200" in:fade={{ delay: 250, duration: 300 }}>
+                            Please enter your guesses
+                        </p>
+                        <input type="text" bind:value={newGuess} class="w-1/2 h-8 font-sans text-lg font-bold text-gray-200 uppercase input">
+                    </div>  
                 {:else if (CC ||SiB) && !$inProgress}
                     <p class="p-2 text-4xl text-gray-200" in:fade={{ delay: 250, duration: 300 }}>
                         Please enter your guess
