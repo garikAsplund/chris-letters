@@ -1,6 +1,6 @@
 <script>
     import { Stepper, Step, SlideToggle } from '@skeletonlabs/skeleton';
-    import { fade, blur, fly} from 'svelte/transition';
+    import { fly } from 'svelte/transition';
     let locked = false;
     $: unlocked = !locked;
     export let signIn;
@@ -10,26 +10,30 @@
     }
 </script>
 
-<div class="flex justify-center translate-y-36">
+<img src="/lilhalcyon.svg" height="300" width="300">
+<div class="flex justify-center translate-y-12">
     <div class="w-3/5 p-4 mb-36 card text-token">
-        <Stepper class="m-5" buttonCompleteLabel="Sign in with Google" on:complete={onCompleteHandler} transitionInParams={{ duration: 400 }} >
-            <Step >
-                <svelte:fragment slot="header">Requirements</svelte:fragment>
-                <p>Please take note of the following requirements for participating in this study:</p>
-                    <ul class="m-3">
-                        <li>Age 21-35 (18 for Yale-NUS or NUS students)</li>                   
-                        <li>Color vision (not color blind)</li>
-                        <li>Normal or corrected-to-normal vision</li>
-                        <li>Using Google Chrome, Firefox, or Safari browser (this survey will not work on Internet Explorer or Microsoft Edge)</li>
-                    </ul>
-                <p>If you do not meet these requirements, you are unfortunately not eligible to participate in this survey.</p>
-                <p>If you meet these requirements, please continue!</p>
+        <Stepper class="m-5" buttonCompleteLabel="Sign in with Google" on:complete={onCompleteHandler}>
+            <Step transitionIn={fly}>                
+                <svelte:fragment slot="header" >Requirements</svelte:fragment>
+                <div in:fly= {{ duration: 600, x: 40 }}>
+                    <p>Please take note of the following requirements for participating in this study:</p>
+                        <ul class="m-3">
+                            <li>Age 21-35 (18 for Yale-NUS or NUS students)</li>                   
+                            <li>Color vision (not color blind)</li>
+                            <li>Normal or corrected-to-normal vision</li>
+                            <li>Using Google Chrome, Firefox, or Safari browser (this survey will not work on Internet Explorer or Microsoft Edge)</li>
+                        </ul>
+                    <p>If you do not meet these requirements, you are unfortunately not eligible to participate in this survey.</p>
+                    <p>If you meet these requirements, please continue!</p>
+                </div>
             </Step>
-            <Step locked={unlocked} transitionIn={fade}>
+            <Step locked={unlocked}>
                 <svelte:fragment slot="header">Consent</svelte:fragment>
-                <p>Thank you for your interest in our study!</p>
+                <div in:fly={{ duration: 600, x: 40 }}>
+                    <p>Thank you for your interest in our study!</p>
     
-                   <p> Before we begin, we need to obtain your consent to participate. Please read the following information. The main task should take approximately 20 minutes and you will be reimbursed $3.00 for this time based on our rate.</p>               
+                    <p> Before we begin, we need to obtain your consent to participate. Please read the following information. The main task should take approximately 20 minutes and you will be reimbursed $3.00 for this time based on our rate.</p>               
                     
                     <p>Study information
                     
@@ -62,38 +66,48 @@
                     
                     Do you consent to participate?
                     </p>
+                    <br>
                     <div class="flex justify-end">
-                    <aside class="w-1/3 alert variant-ghost-warning">
-                        <div class="alert-message">
-                            <p><b>{unlocked ? 'No, I do not' : 'Yes, I do'}</b></p>
-                        </div>
-                        <div class="alert-actions">
-                            <SlideToggle name="locked-state" bind:checked={locked} active="bg-warning-500" />
-                        </div>
-                    </aside>
-                     </div>
+                        <aside class=" alert variant-ghost-warning">
+                            <div class="alert-message">
+                                <p><b>{unlocked ? 'No, I do not' : 'Yes, I do'}</b></p>
+                            </div>
+                            <div class="alert-actions">
+                                <SlideToggle name="locked-state" bind:checked={locked} active="bg-warning-500" />
+                            </div>
+                        </aside>
+                    </div>
+                </div>
             </Step>
             <Step>
                 <svelte:fragment slot="header">Settings</svelte:fragment>
-                <p>At this time, please take a moment to adjust your browser window so that it takes up as much of your screen as possible.</p>
-                <p>Please also take a moment now to close other browser tabs, silence your phone, etc., so that you are not interrupted by any messages mid-experiment. Finally, please switch off any software that might shift the colors of your display (like "Night Shift" in OS X).</p>
-                <p>We humbly ask that you complete the study in a single sitting, so please do your best to stay focused and attentive throughout. Once you begin, please do not use your browser's "Back" button or "Refresh" buttons throughout the study, as this may cause errors, or force you to redo certain sections of the study.</p>
+                <div in:fly= {{ duration: 600, x: 40 }}>
+                    <p>At this time, please take a moment to adjust your browser window so that it takes up as much of your screen as possible.</p>
+                    <p>Please also take a moment now to close other browser tabs, silence your phone, etc., so that you are not interrupted by any messages mid-experiment. Finally, please switch off any software that might shift the colors of your display (like "Night Shift" in OS X).</p>
+                    <p>We humbly ask that you complete the study in a single sitting, so please do your best to stay focused and attentive throughout. Once you begin, please do not use your browser's "Back" button or "Refresh" buttons throughout the study, as this may cause errors, or force you to redo certain sections of the study.</p>
+                </div>
             </Step>
             <Step>
                 <svelte:fragment slot="header">Instructions</svelte:fragment>
-                <p>For each trial, you will see a rapid stream of gray letters inside a gray box. Your task, for every stream, is to detect the designated target letter, which will be the only red letter.</p>
-                <p>After you finish viewing each stream, you will be prompted to type in the target letter you saw. Once you input the letter, you will automatically be taken to the next trial. Both capital and lowercase letters will be accepted.</p>
-                <p>If you do not know what the target letter is, you may just input your best guess.</p>
+                <div in:fly= {{ duration: 600, x: 40 }}>
+                    <p>For each trial, you will see a rapid stream of gray letters inside a gray box. Your task, for every stream, is to detect the designated target letter, which will be the only red letter.</p>
+                    <p>After you finish viewing each stream, you will be prompted to type in the target letter you saw. Once you input the letter, you will automatically be taken to the next trial. Both capital and lowercase letters will be accepted.</p>
+                    <p>If you do not know what the target letter is, you may just input your best guess.</p>
+                </div>
             </Step>
             <Step>
                 <svelte:fragment slot="header">Instructions</svelte:fragment>
-                <p>Before you begin the real trials, let's practice the task eight times for you to get acquainted with the procedure. For the first four trials, you will be asked to practice the task with slower speed. For the next four trials, you will be asked to practice the task with normal speed.</p>
-                <p>During the practice trials, feedback (i.e., correct or wrong) will be given after answering each question.</p>
+                <div in:fly= {{ duration: 600, x: 40 }}>
+                    <p>Before you begin the real trials, let's practice the task eight times for you to get acquainted with the procedure. For the first four trials, you will be asked to practice the task with slower speed. For the next four trials, you will be asked to practice the task with normal speed.</p>
+                    <p>During the practice trials, feedback (i.e., correct or wrong) will be given after answering each question.</p>
+                </div>
             </Step>
             <Step>
                 <svelte:fragment slot="header">Almost there</svelte:fragment>
-                <p>We will now begin the main experiment.</p>
-                <p>The main experiment will consist of 90 trials.</p>
+                <div in:fly= {{ duration: 600, x: 40 }}>
+                    <p>We will now begin the main experiment.</p>
+                    <p>The main experiment will consist of 90 trials.</p>
+                </div>
             </Step>
         </Stepper> 
     </div>

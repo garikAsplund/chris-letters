@@ -29,7 +29,7 @@ export const SiBTrials = writable(createSiBTrials());
 // }
 
 export const numberOfFlashes = writable(0);
-export const startTime = writable(null);
+export const startTime = writable(Date.now());
 export const inProgress = writable(true);
 export const count = writable(0);
 export const refreshRate = writable(60)

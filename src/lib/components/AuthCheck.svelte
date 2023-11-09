@@ -5,10 +5,11 @@
     import ProgressBar from "./ProgressBar.svelte";
     import Admin from "./Admin.svelte";
     import Instructions from "./Instructions.svelte";
-    import { fade } from "svelte/transition";
-
+    import { currentTrial } from "$lib/stores/GameStore";
+    import { NUMBER_OF_TRIALS } from "$lib/logic/ConstantsAndHelpers";
+    
     const dbRef = ref(getDatabase());
-    let isAdmin;
+    let isAdmin = false;
 
     const googleProvider = new GoogleAuthProvider();
 
@@ -74,7 +75,7 @@
   
 {#if !$user}
         <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-16">
-            🪇 Welcome to our experiment 🧑‍🔬
+            Welcome to our experiment 🧑‍🔬
         </h1>
 
         <Instructions signIn={signInWithGoogle}/>
@@ -91,6 +92,6 @@
                 </button>
             </div>
         {/if}
-            <ProgressBar current total/>
+        <ProgressBar current={$currentTrial} total={NUMBER_OF_TRIALS}/>
     </div>
 {/if}
