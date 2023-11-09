@@ -8,6 +8,7 @@
     import { getScreenRefreshRate } from '$lib/logic/refreshRate';
 	import AuthCheck from '$lib/components/AuthCheck.svelte';
 	import GameOver from '$lib/components/GameOver.svelte';
+    import { fade } from 'svelte/transition';
     
     let refreshRate = 60;
     setTimeout(() => {
@@ -84,8 +85,10 @@
         const currentTime = performance.now();
 
         if (numberOfFlashes > 32) {
-            inProgress = false;
             startTime = Date.now();
+            setTimeout(() => {
+                inProgress = false;;
+            }, 600)
             return;
         }
         
@@ -242,6 +245,7 @@
                         numberOfFlashes = 1;
                         started = false;
                         targetLetter = '';
+                        inProgress = true;
                         setTimeout(begin, 600);
                     }
                 }
@@ -400,7 +404,7 @@
                             </button>
                         {/if}
                         {#if AB && !inProgress}
-                            <p class="p-2 text-4xl text-gray-200">
+                            <p class="p-2 text-4xl text-gray-200" in:fade={{ delay: 250, duration: 300 }}>
                                 Please enter your guesses
                             </p>
                         {:else if (CC ||SiB) && !inProgress}
