@@ -1,19 +1,12 @@
-import { ref, child, get } from "firebase/database";
-import { db } from '$lib/firebase';
+// import { getUsers } from '$lib/controller/dbController.js'
 
-export async function load({ locals }) {
-    const dbRef = ref(db);
-    get(child(dbRef, 'users')).then((snapshot) => {
-    if (snapshot.exists()) {
-        console.log(snapshot.val());
-    } else {
-        console.log("No data available");
-    }
-    }).catch((error) => {
-        console.error(error);
-    });
-
+export async function load({ route }) {
+    // const users = await getUsers.getAll();
+    // return {
+    //     users
+    // }
+    console.log(route);
     return {
-        
+        route
     }
 }

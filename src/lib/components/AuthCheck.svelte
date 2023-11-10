@@ -71,8 +71,6 @@
             admin: false,
         });
     }
-
-    console.log($user);
 </script>
   
 {#if !$user}

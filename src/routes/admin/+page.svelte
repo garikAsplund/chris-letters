@@ -1,5 +1,8 @@
 <script>
 	import AdminPanel from "$lib/components/AdminPanel.svelte";
+	import AuthCheck from "$lib/components/AuthCheck.svelte";
 </script>
 
-<AdminPanel />
+<AuthCheck>
+	<AdminPanel />
+</AuthCheck>

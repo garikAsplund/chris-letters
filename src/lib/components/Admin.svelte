@@ -1,9 +1,10 @@
 <script>
     import * as ExcelJS from 'exceljs';
     import { db as database } from '$lib/firebase';
-    import { ref, get } from 'firebase/database';    
+    import { ref, get } from 'firebase/database';   
+    import { page } from '$app/stores'; 
 
-    let data = {
+    let excelData = {
         blocks: {},
     };
 
@@ -12,7 +13,7 @@
         const dataSnapshot = await get(dataRef);
         
         if (dataSnapshot.exists()) {
-            data.blocks = dataSnapshot.val();
+            excelData.blocks = dataSnapshot.val();
             crunchData();
         }    
     }
@@ -30,8 +31,8 @@
             'Reaction Time',
         ];
         
-        for (const blockKey in data.blocks) {
-            const block = data.blocks[blockKey];
+        for (const blockKey in excelData.blocks) {
+            const block = excelData.blocks[blockKey];
             const worksheet = workbook.addWorksheet(blockKey);
             worksheet.addRow(headers);
             
@@ -71,6 +72,12 @@
 <button class=" hover:text-gray-600" on:click={fetchDataFromFirebase}>
     Export data
 </button> 
-<button class=" hover:text-gray-600">
-    <a href="/admin">Go to admin panel</a>
-</button>
+{#if $page.data.route.id !== "/admin"}
+    <button class=" hover:text-gray-600">
+        <a href="/admin">Go to admin panel</a>
+    </button>
+{:else}
+    <button class=" hover:text-gray-600">
+        <a href="/">Go to game</a>
+    </button>
+{/if}

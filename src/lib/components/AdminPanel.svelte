@@ -1,21 +1,32 @@
 <script>
-    import { ref, child, get } from "firebase/database";
-    import { db } from '$lib/firebase';
+    import { child, get, set } from "firebase/database";
+    import { dbRef } from '$lib/firebase';
+    import { SlideToggle } from '@skeletonlabs/skeleton';
 
-    let things = [];
-    const dbRef = ref(db);
+    let things = {};
+
     get(child(dbRef, 'users')).then((snapshot) => {
-    if (snapshot.exists()) {
-        console.log(snapshot.val());
-        things = snapshot.val();
-    } else {
-        console.log("No data available");
-    }
+        if (snapshot.exists()) {
+            console.log(snapshot.val());
+            things = snapshot.val();
+            console.log({things});
+        } else {
+            console.log("No data available");
+        }
     }).catch((error) => {
         console.error(error);
     });
 
-    let tableArr = [1, 2, 3, 4, 5, 6, 7, 8, 9]    
+    function changeAdminStatus(userId, adminStatus) {
+        set(child(dbRef, `users/${userId}/admin`), !adminStatus)
+            .then(() => {
+                // Update the local object to reflect the new admin status
+                things[userId].admin = !adminStatus;
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
 </script>
 
 <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-16">
@@ -23,11 +34,10 @@
 </h1>
 
 <div class="flex justify-center translate-y-28">
-   <div class="w-2/3 table-container">
+   <div class="w-1/2 table-container">
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>UserID</th>
                     <th>Name</th>
                     <th>Admin</th>
                 </tr>
@@ -35,9 +45,11 @@
             <tbody>
                 {#each Object.entries(things) as [userId, user]}
                    <tr>
-                        <td>{userId}</td>
-                        <td>{user.displayName}</td>
-                        <td>{user.admin ? 'Yes' : 'No'}</td>
+                        <td class="text-xl">{user.displayName}</td>
+                        <td class="table-cell-fit">
+                            <SlideToggle name="slide" size="sm" bind:checked={user.admin} on:click={() => changeAdminStatus(userId, user.admin)} /> 
+                            {user.admin ? 'Admin' : 'Not admin'}
+                        </td>
                     </tr>
                 {/each}
             </tbody>
