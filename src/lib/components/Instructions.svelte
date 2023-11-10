@@ -39,24 +39,19 @@
                     
                     <p>Study information
                     
-                        <p>Protocol Title: Target report during rapid serial stimulus presentations</p>
+                    <p>Protocol Title: Target report during rapid serial stimulus presentations</p>
                     
-                            <p> Principal Investigator: Dr. Christopher L. Asplund, Division of Social Sciences, Yale-NUS College (tel: +65 6601 3327, e-mail: chris.asplund@yale-nus.edu.sg)</p>
+                    <p> Principal Investigator: Dr. Christopher L. Asplund, Division of Social Sciences, Yale-NUS College (tel: +65 6601 3327, e-mail: chris.asplund@yale-nus.edu.sg)</p>
                     
+                    <p>What is the purpose of this research?</p>
                     
-                                <p>What is the purpose of this research?</p>
+                    <p>You are invited to participate in a research study that investigates the effects of various manipulations (instruction, sequential learning, or distraction) on working memory and attention in young, healthy individuals. The long-term goal of the research is to better understand cognitive limitations and flexibility in the domains of visual working memory and attention. This information sheet provides you with information about the research.</p>
                     
-                                    <p>You are invited to participate in a research study that investigates the effects of various manipulations (instruction, sequential learning, or distraction) on working memory and attention in young, healthy individuals. The long-term goal of the research is to better understand cognitive limitations and flexibility in the domains of visual working memory and attention. This information sheet provides you with information about the research.</p>
+                    <p>Who can participate in the research? What is the expected duration of my participation? What is the duration of this research? What is the approximate number of participants involved?</p>
                     
+                    <p> What will be done if I take part in this research?
                     
-                    
-                                    <p>Who can participate in the research? What is the expected duration of my participation? What is the duration of this research? What is the approximate number of participants involved?</p>
-                    
-                    
-                                    <p> What will be done if I take part in this research?
-                    
-                                        <p>You will complete 1 session of a computer-based behavioral task, conducted in a location of your choice. You will complete attentional tasks given where your response to stimuli is recorded; and depending on the experiment, some participants will also be asked to complete brief questionnaires. The entire experimental session, including the briefing and consent process, will last no more than 20 minutes .
-                    
+                    <p>You will complete 1 session of a computer-based behavioral task, conducted in a location of your choice. You will complete attentional tasks given where your response to stimuli is recorded; and depending on the experiment, some participants will also be asked to complete brief questionnaires. The entire experimental session, including the briefing and consent process, will last no more than 20 minutes .
                     
                     <p>How will my privacy and the confidentiality of my research records be protected?</p>
                     
@@ -66,7 +61,7 @@
                     
                     <p> For an independent opinion regarding the research and the rights of research participants, you may contact a staff member of the National University of Singapore Institutional Review Board (Attn: Dr. Chan Tuck Wai, at telephone +65 6516 1234 or e-mail at irb@nus.edu.sg).                    
                     
-                        <p>Do you consent to participate?</p>
+                    <p>Do you consent to participate?</p>
                     <br>
                     <div class="flex justify-end">
                         <aside class=" alert variant-ghost-warning">
