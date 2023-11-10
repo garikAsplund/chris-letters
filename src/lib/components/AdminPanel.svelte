@@ -1,41 +1,46 @@
 <script>
-    let tableArr = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    export let data;
+    import { ref, child, get } from "firebase/database";
+    import { db } from '$lib/firebase';
+
+    let things = [];
+    const dbRef = ref(db);
+    get(child(dbRef, 'users')).then((snapshot) => {
+    if (snapshot.exists()) {
+        console.log(snapshot.val());
+        things = snapshot.val();
+    } else {
+        console.log("No data available");
+    }
+    }).catch((error) => {
+        console.error(error);
+    });
+
+    let tableArr = [1, 2, 3, 4, 5, 6, 7, 8, 9]    
 </script>
 
 <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-16">
     Admin panel 🧑‍🔬
 </h1>
 
-{data}
-
 <div class="flex justify-center translate-y-28">
    <div class="w-2/3 table-container">
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Position</th>
+                    <th>UserID</th>
                     <th>Name</th>
-                    <th>Symbol</th>
-                    <th>Weight</th>
+                    <th>Admin</th>
                 </tr>
             </thead>
             <tbody>
-                {#each tableArr as row, i}
-                    <tr>
-                        <td>{row.position}</td>
-                        <td>{row.name}</td>
-                        <td>{row.symbol}</td>
-                        <td>{row.weight}</td>
+                {#each Object.entries(things) as [userId, user]}
+                   <tr>
+                        <td>{userId}</td>
+                        <td>{user.displayName}</td>
+                        <td>{user.admin ? 'Yes' : 'No'}</td>
                     </tr>
                 {/each}
             </tbody>
-            <tfoot>
-                <tr>
-                    <th colspan="3">Calculated Total Weight</th>
-                    <td>Total Weight</td>
-                </tr>
-            </tfoot>
         </table>
     </div>
 </div>

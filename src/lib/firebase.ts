@@ -51,6 +51,8 @@ function userStore() {
     return () => unsubscribe();
   });
 
+  console.log({subscribe});
+
   return {
     subscribe,
   };
