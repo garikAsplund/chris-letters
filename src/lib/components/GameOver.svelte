@@ -32,7 +32,7 @@
         });
     }
 
-    writeTrialData(); // Add params from $tore
+    writeTrialData(1, 1, 1, 1, 1); // Add params from $tore
     gameOver();
 </script>
 

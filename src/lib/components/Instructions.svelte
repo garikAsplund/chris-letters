@@ -1,6 +1,7 @@
 <script>
     import { Stepper, Step, SlideToggle } from '@skeletonlabs/skeleton';
     import { fly } from 'svelte/transition';
+    
     let locked = false;
     $: unlocked = !locked;
     export let signIn;

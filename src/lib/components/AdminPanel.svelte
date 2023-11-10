@@ -7,9 +7,7 @@
 
     get(child(dbRef, 'users')).then((snapshot) => {
         if (snapshot.exists()) {
-            console.log(snapshot.val());
             things = snapshot.val();
-            console.log({things});
         } else {
             console.log("No data available");
         }
@@ -20,7 +18,6 @@
     function changeAdminStatus(userId, adminStatus) {
         set(child(dbRef, `users/${userId}/admin`), !adminStatus)
             .then(() => {
-                // Update the local object to reflect the new admin status
                 things[userId].admin = !adminStatus;
             })
             .catch((error) => {
@@ -39,7 +36,7 @@
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Admin</th>
+                    <th>Admin status</th>
                 </tr>
             </thead>
             <tbody>

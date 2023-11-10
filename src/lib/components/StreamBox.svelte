@@ -236,7 +236,7 @@
 
 <svelte:window on:keydown={handleKeydown}/>
 
-{#if $currentTrial < NUMBER_OF_TRIALS}
+{#if $currentTrial <= NUMBER_OF_TRIALS}
     <div class="flex justify-center mx-4 space-x-4 translate-y-12 ">      
         <label>
             <input 

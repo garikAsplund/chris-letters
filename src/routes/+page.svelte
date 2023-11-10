@@ -13,7 +13,7 @@
         $refreshRate = Math.round(FPS / 5) * 5;
         console.log(`${FPS} FPS`);
         console.log($refreshRate);
-    })}, 400);
+    })}, 1000);
 </script>
 
 <Toast position="t" />

@@ -32,11 +32,10 @@ export function getScreenRefreshRate(callback, runIndefinitely){
     
     window.requestAnimationFrame(triggerAnimation);
 
-    // Stop after half second if it shouldn't run indefinitely
     if(!runIndefinitely){
         window.setTimeout(function(){
             window.cancelAnimationFrame(requestId);
             requestId = null;
-        }, 500);
+        }, 1500);
     }
 }

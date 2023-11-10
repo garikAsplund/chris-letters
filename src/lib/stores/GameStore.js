@@ -10,24 +10,6 @@ export const ABTrials = writable(createABTrials());
 export const CCTrials = writable(createCCTrials());
 export const SiBTrials = writable(createSiBTrials());
 
-// function begin() {
-//     if (started) return;
-//     if (!guessed) return;
-//     if (!AB && !CC && !SiB) return;
-    
-//     currentTrial++;
-//     inProgress = true;
-//     started = true;
-//     guessed = false;
-//     receivedLetter = ' ';
-//     guesses = [];
-//     count = 0;
-
-//     if (AB) streamAB();
-//     if (CC) streamCC();
-//     if (SiB) streamSiB();
-// }
-
 export const numberOfFlashes = writable(0);
 export const startTime = writable(Date.now());
 export const inProgress = writable(true);
