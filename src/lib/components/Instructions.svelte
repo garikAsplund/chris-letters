@@ -34,7 +34,6 @@
                 <svelte:fragment slot="header">Consent</svelte:fragment>
                 <div  class="space-y-6" in:fly={{ duration: 600, x: 40 }}>
                     <p>Thank you for your interest in our study!</p>
-    
                     <p> Before we begin, we need to obtain your consent to participate. Please read the following information. The main task should take approximately 20 minutes and you will be reimbursed $3.00 for this time based on our rate.</p>               
                     <Accordion autocollapse class="bg-primary-300 bg-opacity-20" padding="py-4 px-6" regionPanel="bg-primary-100 bg-opacity-10" transitionIn={fade} transitionInParams={{ duration: 400 }}>
                         <AccordionItem>
@@ -42,7 +41,6 @@
                             <svelte:fragment slot="summary">Study information</svelte:fragment>
                             <svelte:fragment slot="content"> 
                                 <p>Protocol Title: Target report during rapid serial stimulus presentations</p>
-                    
                                 <p> Principal Investigator: Dr. Christopher L. Asplund, Division of Social Sciences, Yale-NUS College (tel: +65 6601 3327, e-mail: chris.asplund@yale-nus.edu.sg)</p>
                             </svelte:fragment>
                         </AccordionItem>
@@ -58,9 +56,7 @@
                             <svelte:fragment slot="summary">What will be done if I take part in this research?</svelte:fragment>
                             <svelte:fragment slot="content">
                                 <p>You will complete 1 session of a computer-based behavioral task, conducted in a location of your choice. You will complete attentional tasks given where your response to stimuli is recorded; and depending on the experiment, some participants will also be asked to complete brief questionnaires. The entire experimental session, including the briefing and consent process, will last no more than 20 minutes .
-                            
                                 <p>You are invited to participate in a research study that investigates the effects of various manipulations (instruction, sequential learning, or distraction) on working memory and attention in young, healthy individuals. The long-term goal of the research is to better understand cognitive limitations and flexibility in the domains of visual working memory and attention. This information sheet provides you with information about the research.</p>
-                    
                                 <p>Who can participate in the research? What is the expected duration of my participation? What is the duration of this research? What is the approximate number of participants involved?</p>
                             </svelte:fragment>
                         </AccordionItem>
@@ -76,7 +72,6 @@
                             <svelte:fragment slot="summary">Contact info</svelte:fragment>
                             <svelte:fragment slot="content">
                                 <p>Please contact the Principal Investigator (Dr. Christopher L. Asplund) at +65 6601 3327 or chris.asplund@yale-nus.edu.sg for all research-related matters.</p>
-                    
                                 <p> For an independent opinion regarding the research and the rights of research participants, you may contact a staff member of the National University of Singapore Institutional Review Board (Attn: Dr. Chan Tuck Wai, at telephone +65 6516 1234 or e-mail at irb@nus.edu.sg).                            
                             </svelte:fragment>
                         </AccordionItem>
