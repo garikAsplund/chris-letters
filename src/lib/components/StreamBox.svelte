@@ -6,6 +6,7 @@
     import { ABTrials, CCTrials, SiBTrials, numberOfFlashes, startTime, inProgress, count, refreshRate, isOn, lastTime, currentLetter, textColor, isTarget, targetLetter, boxColor, displayFace, currentTrial } from '$lib/stores/GameStore';
     import GameOver from './GameOver.svelte';
     import { getToastStore } from '@skeletonlabs/skeleton';
+    import CheckInput from './CheckInput.svelte';
 
     const toastStore = getToastStore();
 
@@ -291,9 +292,7 @@
                         <input type="text" bind:value={newGuess} class="w-1/2 h-8 font-sans text-lg font-bold text-gray-200 uppercase input">
                     </div>  
                 {:else if (CC ||SiB) && !$inProgress}
-                    <p class="p-2 text-4xl text-gray-200" in:fade={{ delay: 250, duration: 300 }}>
-                        Please enter your guess
-                    </p>
+                    <CheckInput />
                 {/if}
             </p>
         </div> 
