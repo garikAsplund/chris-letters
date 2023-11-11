@@ -14,7 +14,7 @@
 <img src="/lilhalcyon.svg" height="300" width="300">
 <div class="flex justify-center translate-y-12">
     <div class="w-3/5 p-4 text-lg mb-36 card text-token ">
-        <Stepper class="m-5" buttonCompleteLabel="Sign in with Google" on:complete={onCompleteHandler}>
+        <Stepper class="m-5" buttonCompleteLabel="Sign in with Google" buttonComplete="variant-ghost-warning btn-lg" on:complete={onCompleteHandler}>
             <Step>                
                 <svelte:fragment slot="header" >Requirements</svelte:fragment>
                 <div  class="space-y-6" in:fly={{ duration: 600, x: 40 }}>

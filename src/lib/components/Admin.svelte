@@ -69,15 +69,15 @@
   }
 </script>
 
-<button class=" hover:text-gray-600" on:click={fetchDataFromFirebase}>
+<button class=" hover:text-gray-400" on:click={fetchDataFromFirebase}>
     Export data
 </button> 
 {#if $page.data.route.id !== "/admin"}
-    <button class=" hover:text-gray-600">
+    <button class=" hover:text-gray-400">
         <a href="/admin">Go to admin panel</a>
     </button>
 {:else}
-    <button class=" hover:text-gray-600">
+    <button class=" hover:text-gray-400">
         <a href="/">Go to game</a>
     </button>
 {/if}

@@ -276,13 +276,14 @@
                     {$currentLetter}
                 {/if}
                 {#if !AB && !CC && !SiB}
-                    <p class="p-2 text-4xl text-gray-200 -translate-y-9">
+                    <p class="p-2 text-5xl text-gray-200 font-sans -translate-y-9">
                         <i class="fa-solid fa-angles-up m-5"></i>
                         <br>
-                        Please select an option from above                     
+                        Please select an option from above
+                        <i class="fa-regular fa-credit-card"></i>                     
                     </p>
                 {:else if !clicked}
-                    <button on:click={onClick} class="flex items-center p-12 text-4xl text-gray-800 bg-gray-100 border border-black rounded-sm hover:bg-gray-200">
+                    <button on:click={onClick} class="flex items-center p-12 font-sans text-5xl text-gray-800 bg-gray-100 border border-black rounded-sm hover:bg-gray-200">
                         {buttonText}
                     </button>
                 {/if}

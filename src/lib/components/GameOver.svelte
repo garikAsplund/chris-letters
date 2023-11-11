@@ -7,16 +7,16 @@
     
     function gameOver() {
         const { cancel } = emojisplosions({
-                emojis: ["🍕", "🍷", "🙌", "🎆", "🍻", "🎊","🥮", "🏆", "🍾", "🪇", "🥇", "🎇", "🎉", "🪅", "🎁", "🪩", "✨", "🌠", "💯", "🔥", ],
+                emojis: [ "🎊", "🎉", "🪅", "🎁", "🪩", "✨", "💯", "🔥", ],
                 interval: 100,
                 physics: {
                     fontSize: {
-                        max: 54,
-                        min: 24,
+                        max: 50,
+                        min: 35,
                     },
                 },
             });
-            setTimeout(cancel, 2000); 
+            setTimeout(cancel, 750); 
     }
 
     function writeTrialData(trialType, everyTarget, everyGuess, everyAccuracy, everyReactionTime) {
@@ -36,26 +36,13 @@
     gameOver();
 </script>
 
-<h1 class="flex justify-center text-4xl font-bold transform translate-y-20 ">
-    😍 Thanks for playing!!! 😎
+<h1 class="flex justify-center text-5xl font-bold transform translate-y-20 ">
+    Thanks for playing! 
+    <i class="fa-regular fa-face-laugh m-1"></i>
 </h1>
 
-{#if ($correct / ($correct + $incorrect)) > 0.8}
-    <h1 class="flex justify-center text-2xl font-bold transform translate-y-32">
-        🫨 Wow, way to go!
-    </h1>
-{:else if ($correct / ($correct + $incorrect)) > 0.65}
-    <h1 class="flex justify-center text-2xl font-bold transform translate-y-32">
-        👏 You're doing alright.
-    </h1>
-{:else}
-    <h1 class="flex justify-center text-2xl font-bold transform translate-y-32">
-        🫣 Keep trying.
-    </h1>
-{/if}
-
 <div class="flex flex-col items-center">
-    <h3 class="w-2/5 text-xl text-center transform translate-y-44">
+    <h3 class="w-2/5 text-4xl text-center transform translate-y-44">
         See you next time.
     </h3>
 </div>

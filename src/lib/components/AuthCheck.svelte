@@ -80,13 +80,13 @@
         <Instructions signIn={signInWithGoogle}/>
 {:else}
     <slot />
-    <div class="fixed bottom-0 left-0 w-full backdrop-blur-3xl">
+    <div class="fixed bottom-0 left-0 w-full backdrop-blur-3xl text-lg">
         {#if $user || $isAdmin}
             <div class="flex flex-col justify-center m-2 space-y-2">
                 {#if $isAdmin}
                     <Admin />
                 {/if}
-                <button class="hover:text-gray-600" on:click={handleSignOut}>
+                <button class="hover:text-gray-400" on:click={handleSignOut}>
                     Sign out
                 </button>
             </div>
