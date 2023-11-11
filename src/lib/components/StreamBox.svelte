@@ -268,7 +268,7 @@
         </label>
     </div>
     <div class="flex justify-center mx-4 space-x-4 translate-y-24">
-        <div id="resizable-div" class={`flex justify-center resize-handle cursor-pointer`} style="border-width: {borderWidth}px; width: {boxText}px; height: {boxText}px; border-color: {$boxColor}">
+        <div id="resizable-div" class={`flex justify-center resize-handle`} style="border-width: {borderWidth}px; width: {boxText}px; height: {boxText}px; border-color: {$boxColor}">
             <p class={`self-center font-thin text-center font-courier-new`} class:text-red-500={$isTarget} style="color: {$textColor}; font-size: {boxText}px">
                 {#if $displayFace}
                     <img src="garik_bw.jpg" alt="Garik!!!">
@@ -276,8 +276,10 @@
                     {$currentLetter}
                 {/if}
                 {#if !AB && !CC && !SiB}
-                    <p class="p-2 text-4xl text-gray-200">
-                        Please select an option from above 👆
+                    <p class="p-2 text-4xl text-gray-200 -translate-y-9">
+                        <i class="fa-solid fa-angles-up m-5"></i>
+                        <br>
+                        Please select an option from above                     
                     </p>
                 {:else if !clicked}
                     <button on:click={onClick} class="flex items-center p-12 text-4xl text-gray-800 bg-gray-100 border border-black rounded-sm hover:bg-gray-200">

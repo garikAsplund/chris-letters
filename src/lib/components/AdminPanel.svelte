@@ -33,7 +33,7 @@
 </script>
 
 <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-16">
-    Admin panel 🧑‍🔬
+    Admin panel<i class="fa-solid fa-screwdriver-wrench fa-xl m-5"></i>
 </h1>
 
 <div class="flex justify-center translate-y-28">
