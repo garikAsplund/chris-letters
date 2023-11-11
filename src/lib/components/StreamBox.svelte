@@ -285,14 +285,9 @@
                     </button>
                 {/if}
                 {#if AB && !$inProgress}
-                    <div in:fade={{ delay: 250, duration: 300 }}>
-                        <p class="p-2 text-4xl text-gray-200" in:fade={{ delay: 250, duration: 300 }}>
-                            Please enter your guesses
-                        </p>
-                        <input type="text" bind:value={newGuess} class="w-1/2 h-8 font-sans text-lg font-bold text-gray-200 uppercase input">
-                    </div>  
+                    <CheckInput isAB={true} />
                 {:else if (CC ||SiB) && !$inProgress}
-                    <CheckInput />
+                    <CheckInput isAB={false} />
                 {/if}
             </p>
         </div> 
