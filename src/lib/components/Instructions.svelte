@@ -36,7 +36,7 @@
                     <p>Thank you for your interest in our study!</p>
     
                     <p> Before we begin, we need to obtain your consent to participate. Please read the following information. The main task should take approximately 20 minutes and you will be reimbursed $3.00 for this time based on our rate.</p>               
-                    <Accordion autocollapse class="bg-primary-300 bg-opacity-20" padding="py-4 px-6" transitionIn={fade} transitionInParams={{ duration: 400 }}>
+                    <Accordion autocollapse class="bg-primary-300 bg-opacity-20" padding="py-4 px-6" regionPanel="bg-primary-100 bg-opacity-10" transitionIn={fade} transitionInParams={{ duration: 400 }}>
                         <AccordionItem>
                             <svelte:fragment slot="lead"><i class="fa-solid fa-circle-info fa-lg"></i></svelte:fragment>
                             <svelte:fragment slot="summary">Study information</svelte:fragment>
