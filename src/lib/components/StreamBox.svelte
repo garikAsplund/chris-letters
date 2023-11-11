@@ -279,6 +279,7 @@
                     <p class="p-2 text-5xl text-gray-200 font-sans -translate-y-9" style="font-size: {boxText / 11}px">
                         <i class="fa-solid fa-angles-up m-5"></i>
                         <br>
+                        <br>
                         Resize this box to be the size of a credit card
                         <br>
                         <br>
@@ -290,9 +291,9 @@
                     </button>
                 {/if}
                 {#if AB && !$inProgress}
-                    <CheckInput isAB={true} />
+                    <CheckInput isAB={true} textSize={boxText / 11}/>
                 {:else if (CC ||SiB) && !$inProgress}
-                    <CheckInput isAB={false} />
+                    <CheckInput isAB={false} textSize={boxText / 11} />
                 {/if}
             </p>
         </div> 

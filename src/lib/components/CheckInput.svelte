@@ -3,6 +3,7 @@
     import { fade } from 'svelte/transition';
 
     export let isAB;
+    export let textSize;
     
     let pinlength = isAB ? 2 : 1;
     let codeFields = Array(pinlength).fill('');
@@ -47,7 +48,7 @@
     });
 </script>
 <div in:fade={{ delay: 150, duration: 450 }}>
-    <div class="px-2 pb-12 font-sans text-5xl font-thin text-gray-200">
+    <div class="px-2 pb-12 font-sans text-5xl font-thin text-gray-200" style="font-size: {textSize}px">
         Please enter your guess
     </div>
     <div class="flex justify-center">
