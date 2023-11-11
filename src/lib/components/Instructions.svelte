@@ -1,6 +1,6 @@
 <script>
     import { Accordion, AccordionItem, Stepper, Step, SlideToggle } from '@skeletonlabs/skeleton';
-    import { fly } from 'svelte/transition';
+    import { fade, fly } from 'svelte/transition';
     
     let locked = false;
     $: unlocked = !locked;
@@ -15,7 +15,7 @@
 <div class="flex justify-center translate-y-12">
     <div class="w-3/5 p-4 text-lg mb-36 card text-token ">
         <Stepper class="m-5" buttonCompleteLabel="Sign in with Google" on:complete={onCompleteHandler}>
-            <Step transitionIn={fly}>                
+            <Step>                
                 <svelte:fragment slot="header" >Requirements</svelte:fragment>
                 <div  class="space-y-6" in:fly={{ duration: 600, x: 40 }}>
                     <p>Please take note of the following requirements for participating in this study:</p>
@@ -36,7 +36,7 @@
                     <p>Thank you for your interest in our study!</p>
     
                     <p> Before we begin, we need to obtain your consent to participate. Please read the following information. The main task should take approximately 20 minutes and you will be reimbursed $3.00 for this time based on our rate.</p>               
-                    <Accordion autocollapse class="bg-primary-300 bg-opacity-20">
+                    <Accordion autocollapse class="bg-primary-300 bg-opacity-20" padding="py-4 px-6" transitionIn={fade} transitionInParams={{ duration: 400 }}>
                         <AccordionItem>
                             <svelte:fragment slot="lead"><i class="fa-solid fa-circle-info fa-lg"></i></svelte:fragment>
                             <svelte:fragment slot="summary">Study information</svelte:fragment>
