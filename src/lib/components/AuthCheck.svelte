@@ -73,8 +73,8 @@
 </script>
   
 {#if !$user}
-        <h1 class="flex justify-center text-4xl font-bold text-center transform translate-y-16">
-            Welcome to our experiment 🧑‍🔬
+        <h1 class="flex justify-center text-5xl font-bold text-center transform translate-y-16">
+            <span class="text-transparent bg-gradient-to-br to-white from-cyan-300 bg-clip-text box-decoration-clone">Welcome to our experiment</span> 🧑‍🔬
         </h1>
 
         <Instructions signIn={signInWithGoogle}/>

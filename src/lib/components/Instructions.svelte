@@ -1,5 +1,5 @@
 <script>
-    import { Stepper, Step, SlideToggle } from '@skeletonlabs/skeleton';
+    import { Accordion, AccordionItem, Stepper, Step, SlideToggle } from '@skeletonlabs/skeleton';
     import { fly } from 'svelte/transition';
     
     let locked = false;
@@ -36,33 +36,52 @@
                     <p>Thank you for your interest in our study!</p>
     
                     <p> Before we begin, we need to obtain your consent to participate. Please read the following information. The main task should take approximately 20 minutes and you will be reimbursed $3.00 for this time based on our rate.</p>               
+                    <Accordion autocollapse class="bg-primary-300 bg-opacity-20">
+                        <AccordionItem>
+                            <svelte:fragment slot="lead"><i class="fa-solid fa-circle-info fa-lg"></i></svelte:fragment>
+                            <svelte:fragment slot="summary">Study information</svelte:fragment>
+                            <svelte:fragment slot="content"> 
+                                <p>Protocol Title: Target report during rapid serial stimulus presentations</p>
                     
-                    <p>Study information
+                                <p> Principal Investigator: Dr. Christopher L. Asplund, Division of Social Sciences, Yale-NUS College (tel: +65 6601 3327, e-mail: chris.asplund@yale-nus.edu.sg)</p>
+                            </svelte:fragment>
+                        </AccordionItem>
+                        <AccordionItem>
+                            <svelte:fragment slot="lead"><i class="fa-solid fa-brain fa-lg"></i></svelte:fragment>
+                            <svelte:fragment slot="summary">What is the purpose of this research?</svelte:fragment>
+                            <svelte:fragment slot="content">
+                               <p>Add something here to say. Something profound.</p>
+                            </svelte:fragment>
+                        </AccordionItem>
+                        <AccordionItem>
+                            <svelte:fragment slot="lead"><i class="fa-solid fa-circle-question fa-lg"></i></svelte:fragment>
+                            <svelte:fragment slot="summary">What will be done if I take part in this research?</svelte:fragment>
+                            <svelte:fragment slot="content">
+                                <p>You will complete 1 session of a computer-based behavioral task, conducted in a location of your choice. You will complete attentional tasks given where your response to stimuli is recorded; and depending on the experiment, some participants will also be asked to complete brief questionnaires. The entire experimental session, including the briefing and consent process, will last no more than 20 minutes .
+                            
+                                <p>You are invited to participate in a research study that investigates the effects of various manipulations (instruction, sequential learning, or distraction) on working memory and attention in young, healthy individuals. The long-term goal of the research is to better understand cognitive limitations and flexibility in the domains of visual working memory and attention. This information sheet provides you with information about the research.</p>
                     
-                    <p>Protocol Title: Target report during rapid serial stimulus presentations</p>
+                                <p>Who can participate in the research? What is the expected duration of my participation? What is the duration of this research? What is the approximate number of participants involved?</p>
+                            </svelte:fragment>
+                        </AccordionItem>
+                        <AccordionItem>
+                            <svelte:fragment slot="lead"><i class="fa-solid fa-key fa-lg"></i></svelte:fragment>
+                            <svelte:fragment slot="summary">How will my privacy and the confidentiality of my research records be protected?</svelte:fragment>
+                            <svelte:fragment slot="content">
+                                <p>We never receive identifiable data, all of the identifiers being held with Google. Non-identifiable data will be kept for a minimum of 10 years, in accordance with National University of Singapore's Research Data Management Policy.</p>
+                            </svelte:fragment>
+                        </AccordionItem>
+                        <AccordionItem>
+                            <svelte:fragment slot="lead"><i class="fa-solid fa-address-card fa-lg"></i></svelte:fragment>
+                            <svelte:fragment slot="summary">Contact info</svelte:fragment>
+                            <svelte:fragment slot="content">
+                                <p>Please contact the Principal Investigator (Dr. Christopher L. Asplund) at +65 6601 3327 or chris.asplund@yale-nus.edu.sg for all research-related matters.</p>
                     
-                    <p> Principal Investigator: Dr. Christopher L. Asplund, Division of Social Sciences, Yale-NUS College (tel: +65 6601 3327, e-mail: chris.asplund@yale-nus.edu.sg)</p>
-                    
-                    <p>What is the purpose of this research?</p>
-                    
-                    <p>You are invited to participate in a research study that investigates the effects of various manipulations (instruction, sequential learning, or distraction) on working memory and attention in young, healthy individuals. The long-term goal of the research is to better understand cognitive limitations and flexibility in the domains of visual working memory and attention. This information sheet provides you with information about the research.</p>
-                    
-                    <p>Who can participate in the research? What is the expected duration of my participation? What is the duration of this research? What is the approximate number of participants involved?</p>
-                    
-                    <p> What will be done if I take part in this research?
-                    
-                    <p>You will complete 1 session of a computer-based behavioral task, conducted in a location of your choice. You will complete attentional tasks given where your response to stimuli is recorded; and depending on the experiment, some participants will also be asked to complete brief questionnaires. The entire experimental session, including the briefing and consent process, will last no more than 20 minutes .
-                    
-                    <p>How will my privacy and the confidentiality of my research records be protected?</p>
-                    
-                    <p>We never receive identifiable data, all of the identifiers being held with Google. Non-identifiable data will be kept for a minimum of 10 years, in accordance with National University of Singapore's Research Data Management Policy.</p>
-                    
-                    <p>Please contact the Principal Investigator (Dr. Christopher L. Asplund) at +65 6601 3327 or chris.asplund@yale-nus.edu.sg for all research-related matters.</p>
-                    
-                    <p> For an independent opinion regarding the research and the rights of research participants, you may contact a staff member of the National University of Singapore Institutional Review Board (Attn: Dr. Chan Tuck Wai, at telephone +65 6516 1234 or e-mail at irb@nus.edu.sg).                    
-                    
-                    <p>Do you consent to participate?</p>
-                    <br>
+                                <p> For an independent opinion regarding the research and the rights of research participants, you may contact a staff member of the National University of Singapore Institutional Review Board (Attn: Dr. Chan Tuck Wai, at telephone +65 6516 1234 or e-mail at irb@nus.edu.sg).                            
+                            </svelte:fragment>
+                        </AccordionItem>
+                    </Accordion>                    
+                    <p class="flex justify-end font-bold">Do you consent to participate?</p>
                     <div class="flex justify-end">
                         <aside class=" alert variant-ghost-warning">
                             <div class="alert-message">
