@@ -5,11 +5,10 @@
     import ProgressBar from "./ProgressBar.svelte";
     import Admin from "./Admin.svelte";
     import Instructions from "./Instructions.svelte";
-    import { currentTrial } from "$lib/stores/GameStore";
+    import { currentTrial, isAdmin } from "$lib/stores/GameStore";
     import { NUMBER_OF_TRIALS } from "$lib/logic/ConstantsAndHelpers";
     
     const dbRef = ref(getDatabase());
-    let isAdmin = false;
 
     const googleProvider = new GoogleAuthProvider();
 
@@ -31,7 +30,7 @@
             
             get(child(dbRef, `users/${user.uid}/admin`)).then((snapshot) => {
                 if (snapshot.exists()) {
-                    isAdmin = snapshot.val();
+                    $isAdmin = snapshot.val();
                 } else {
                     console.log("No data available");
                 }
@@ -44,12 +43,12 @@
     }
     
     onAuthStateChanged(auth, (currentUser) => {
-        isAdmin = false;
+        $isAdmin = false;
 
         if (currentUser) {
             get(child(dbRef, `users/${currentUser.uid}/admin`)).then((snapshot) => {
                 if (snapshot.exists()) {
-                    isAdmin = snapshot.val();
+                    $isAdmin = snapshot.val();
                 }
             }).catch((error) => {
                 console.error(error);
@@ -82,9 +81,9 @@
 {:else}
     <slot />
     <div class="fixed bottom-0 left-0 w-full backdrop-blur-3xl">
-        {#if $user || isAdmin}
+        {#if $user || $isAdmin}
             <div class="flex flex-col justify-center m-2 space-y-2">
-                {#if isAdmin}
+                {#if $isAdmin}
                     <Admin />
                 {/if}
                 <button class="hover:text-gray-600" on:click={handleSignOut}>

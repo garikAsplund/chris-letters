@@ -2,8 +2,14 @@
     import { child, get, set } from "firebase/database";
     import { dbRef } from '$lib/firebase';
     import { SlideToggle } from '@skeletonlabs/skeleton';
+	import { goto } from "$app/navigation";
+    import { isAdmin } from "$lib/stores/GameStore";
 
     let things = {};
+
+    if (!$isAdmin) {
+        goto('/');
+    }
 
     get(child(dbRef, 'users')).then((snapshot) => {
         if (snapshot.exists()) {

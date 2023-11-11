@@ -3,6 +3,8 @@ import { createABTrials } from '$lib/logic/AB';
 import { createCCTrials } from '$lib/logic/CC';
 import { createSiBTrials } from '$lib/logic/SiB';
 
+export const isAdmin = writable(false);
+
 export const correct = writable(0);
 export const incorrect = writable(0);
 
