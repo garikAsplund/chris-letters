@@ -276,11 +276,13 @@
                     {$currentLetter}
                 {/if}
                 {#if !AB && !CC && !SiB}
-                    <p class="p-2 text-5xl text-gray-200 font-sans -translate-y-9">
+                    <p class="p-2 text-5xl text-gray-200 font-sans -translate-y-9" style="font-size: {boxText / 11}px">
                         <i class="fa-solid fa-angles-up m-5"></i>
                         <br>
-                        Please select an option from above
-                        <i class="fa-regular fa-credit-card"></i>                     
+                        Resize this box to be the size of a credit card
+                        <br>
+                        <br>
+                        <i class="fa-solid fa-credit-card fa-lg"></i>
                     </p>
                 {:else if !clicked}
                     <button on:click={onClick} class="flex items-center p-12 font-sans text-5xl text-gray-800 bg-gray-100 border border-black rounded-sm hover:bg-gray-200">
