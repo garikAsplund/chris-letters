@@ -1,69 +1,73 @@
 <script>
-    import { onMount } from 'svelte';
-    import { fade } from 'svelte/transition';
+	import { onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
 
-    export let isAB;
-    export let textSize;
-    
-    let pinlength = isAB ? 2 : 1;
-    let codeFields = Array(pinlength).fill('');
+	export let isAB;
+	export let textSize;
 
-    const resetValue = (i) => {
-        codeFields = codeFields.map((value, index) => (index >= i ? '' : value));
-    };
+	let pinlength = isAB ? 2 : 1;
+	let codeFields = Array(pinlength).fill('');
 
-    const stepForward = (i) => {
-        if (codeFields[i] && i !== pinlength - 1) {
-            codeFields[i + 1] = '';
-            resetFieldFocus(i + 1);
-        }
-        checkPin();
-    };
+	const resetValue = (i) => {
+		codeFields = codeFields.map((value, index) => (index >= i ? '' : value));
+	};
 
-    const stepBack = (i) => {
-        if (codeFields[i - 1] && i !== 0) {
-            codeFields[i - 1] = '';
-            resetFieldFocus(i - 1);
-        }
-    };
+	const stepForward = (i) => {
+		if (codeFields[i] && i !== pinlength - 1) {
+			codeFields[i + 1] = '';
+			resetFieldFocus(i + 1);
+		}
+		checkPin();
+	};
 
-    const checkPin = () => {
-        const code = codeFields.join('').toUpperCase();
-        if (code.length === pinlength) {
-            validatePin(code);
-        }
-    };
+	const stepBack = (i) => {
+		if (codeFields[i - 1] && i !== 0) {
+			codeFields[i - 1] = '';
+			resetFieldFocus(i - 1);
+		}
+	};
 
-    const validatePin = (code) => {
-        if (code === 'AB') alert('success'); 
-    };
+	const checkPin = () => {
+		const code = codeFields.join('').toUpperCase();
+		if (code.length === pinlength) {
+			validatePin(code);
+		}
+	};
 
-    const resetFieldFocus = (i) => {
-        const field = document.getElementById(`codefield_${i}`);
-        if (field) field.focus();
-    };
+	const validatePin = (code) => {
+		if (code === 'AB') alert('success');
+	};
 
-    onMount(() => {
-        resetFieldFocus(0);
-    });
+	const resetFieldFocus = (i) => {
+		const field = document.getElementById(`codefield_${i}`);
+		if (field) field.focus();
+	};
+
+	onMount(() => {
+		resetFieldFocus(0);
+	});
 </script>
+
 <div in:fade={{ delay: 150, duration: 450 }}>
-    <div class="px-2 pb-12 font-sans text-5xl font-thin text-gray-200" style="font-size: {textSize}px">
-        Please enter your guess
-    </div>
-    <div class="flex justify-center">
-        {#each codeFields as value, i (i)}
-            <input
-                autofocus={i === 0}
-                bind:value
-                id={`codefield_${i}`}
-                class="flex items-center w-12 h-16 mx-2 text-4xl text-center text-gray-200 uppercase bg-transparent border rounded-lg"
-                maxlength="1"
-                on:keyup={() => stepForward(i)}
-                on:keydown:backspace={() => stepBack(i)}
-                on:focus={() => resetValue(i)}
-                inputmode="text"  
-            />
-        {/each}
-    </div>
+	<div
+		class="px-2 pb-12 font-sans text-5xl font-thin text-gray-200"
+		style="font-size: {textSize}px"
+	>
+		Please enter your guess
+	</div>
+	<div class="flex justify-center">
+		{#each codeFields as value, i (i)}
+			<input
+				autofocus={i === 0}
+				bind:value
+				id={`codefield_${i}`}
+				class="flex items-center w-12 h-16 mx-2 text-4xl text-center text-gray-200 uppercase bg-transparent border rounded-lg"
+				maxlength="1"
+				on:keyup={() => stepForward(i)}
+				on:keydown:backspace={() => stepBack(i)}
+				on:focus={() => resetValue(i)}
+				inputmode="text"
+			/>
+		{/each}
+	</div>
 </div>

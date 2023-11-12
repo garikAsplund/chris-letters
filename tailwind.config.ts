@@ -10,24 +10,20 @@ const config = {
 	content: [
 		'./src/**/*.{html,js,svelte,ts}',
 		// 3. Append the path to the Skeleton package
-		join(require.resolve(
-			'@skeletonlabs/skeleton'),
-			'../**/*.{html,js,svelte,ts}'
-		)
+		join(require.resolve('@skeletonlabs/skeleton'), '../**/*.{html,js,svelte,ts}')
 	],
 	theme: {
-    extend: {
-      fontFamily: {
-        'courier-new': ['Courier New', 'monospace']  
-      }
-    }
-  },
+		extend: {
+			fontFamily: {
+				'courier-new': ['Courier New', 'monospace']
+			}
+		}
+	},
 	plugins: [
 		skeleton({
-			themes: { preset: [ "wintry" ] }
+			themes: { preset: ['wintry'] }
 		})
 	]
 } satisfies Config;
 
 export default config;
-						
