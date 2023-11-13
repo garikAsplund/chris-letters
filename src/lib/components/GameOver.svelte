@@ -1,10 +1,9 @@
 <script>
 	import { emojisplosions } from 'emojisplosion';
-	import ShortUniqueId from 'short-unique-id';
-	import { ref, set } from 'firebase/database';
-	import { db } from '$lib/database/firebase';
 	import { blur } from 'svelte/transition';
 	import { isComplete } from '$lib/stores/gameStore';
+	import { user } from '$lib/database/firebase';
+	import { dbController } from '$lib/database/dbController';
 
 	let gender = '';
 	let handedness = '';
@@ -14,16 +13,9 @@
 
 	$: isNotValid = !gender || !handedness || !age;
 
-	const submitForm = () => {
-		console.log('User Info:', { gender, age: handedness, encounteredProblems, problemDescription });
-
-		gender = '';
-		handedness = '';
-		age = '';
-		encounteredProblems = '';
-		problemDescription = '';
-		$isComplete = true;
-	};
+	dbController.writeTrialData($user.uid, 1, 1, 1, 1, 1); // Add params from $store
+	
+	if (!$isComplete) gameOver();
 
 	function handleNumericInput(event) {
 		const inputValue = event.target.value;
@@ -45,21 +37,10 @@
 		setTimeout(cancel, 750);
 	}
 
-	function writeTrialData(trialType, everyTarget, everyGuess, everyAccuracy, everyReactionTime) {
-		const uid = new ShortUniqueId();
-		const trialId = uid();
-
-		set(ref(db, `blocks/${trialId}`), {
-			trialType: trialType,
-			targets: everyTarget,
-			guesses: everyGuess,
-			accuracy: everyAccuracy,
-			reactionTime: everyReactionTime
-		});
-	}
-
-	writeTrialData(1, 1, 1, 1, 1); // Add params from $store
-	if (!$isComplete) gameOver();
+	const submitForm = (userId, gender, handedness, age, problemDescription) => {
+			dbController.writeParticipantData(userId, gender, handedness, age, problemDescription)
+			$isComplete = true;
+		};
 </script>
 
 <div class="flex justify-center translate-y-16 text-5xl font-bold" in:blur={{ duration: 1000 }}>
@@ -79,7 +60,7 @@
 
 		<div class="card mx-auto p-5 text-xl space-y-6">
 			{#if !$isComplete}
-			<form on:submit|preventDefault={submitForm} class="space-y-4">
+			<form on:submit|preventDefault={() => submitForm($user?.uid, gender, handedness, age, problemDescription)} class="space-y-4">
 				<p>Please select your gender:</p>
 				<div class="btn-group m-3 gap-4 px-8">
 					{#each ['Male', 'Female', 'Other', 'Prefer not to say'] as option}

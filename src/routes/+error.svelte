@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 </script>
 
-<div class="flex justify-center translate-y-16">
+<div class="flex h-screen justify-center translate-y-16">
 	<div class="text-center space-y-8">
 		<h1 class="h1">{$page.status}</h1>
 		<h3 class="h3">{$page.error.message}</h3>

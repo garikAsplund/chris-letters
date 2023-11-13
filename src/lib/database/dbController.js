@@ -1,5 +1,6 @@
 import { dbRef  } from "./firebase";
-import { child, get, set } from 'firebase/database';
+import { child, get, set, update } from 'firebase/database';
+import ShortUniqueId from 'short-unique-id';
 import { things } from "$lib/stores/gameStore";
 
 export const dbController = {
@@ -8,7 +9,7 @@ export const dbController = {
             .then((snapshot) => {
                 if (snapshot.exists()) {
                     const data = snapshot.val();
-                    things.set(data); // Use const data instead of $things
+                    things.set(data);
                 } else {
                     console.log('No data available');
                 }
@@ -31,7 +32,25 @@ export const dbController = {
             });
     },
 
-    writeTrialData() {
-        // Your implementation for writing trial data
-    }
+    writeParticipantData(userId, gender, handedness, age, problemDescription) {
+        update(child(dbRef, `users/${userId}`), {
+            gender: gender,
+            age: age,
+            handedness: handedness,
+            problemDescription: problemDescription,
+        });
+    },
+
+    writeTrialData(userId, trialType, everyTarget, everyGuess, everyAccuracy, everyReactionTime) {
+            const uid = new ShortUniqueId();
+            const trialId = uid();
+    
+            set(child(dbRef, `blocks/${userId}/${trialId}`), {
+                trialType: trialType,
+                targets: everyTarget,
+                guesses: everyGuess,
+                accuracy: everyAccuracy,
+                reactionTime: everyReactionTime
+            });
+        }
 }
