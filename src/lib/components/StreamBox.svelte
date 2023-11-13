@@ -21,7 +21,7 @@
 		boxColor,
 		displayFace,
 		currentTrial
-	} from '$lib/stores/gameStore';
+	} from '$lib/stores/GameStore';
 	import GameOver from './GameOver.svelte';
 	import { getToastStore } from '@skeletonlabs/skeleton';
 	import CheckInput from './CheckInput.svelte';

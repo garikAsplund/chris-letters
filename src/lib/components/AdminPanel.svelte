@@ -1,7 +1,7 @@
 <script>
 	import { SlideToggle } from '@skeletonlabs/skeleton';
 	import { goto } from '$app/navigation';
-	import { isAdmin, things } from '$lib/stores/gameStore';
+	import { isAdmin, things } from '$lib/stores/GameStore';
 	import { dbController } from '$lib/database/dbController';
 
 	if (!$isAdmin) {

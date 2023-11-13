@@ -1,7 +1,7 @@
 <script>
 	import { emojisplosions } from 'emojisplosion';
 	import { blur } from 'svelte/transition';
-	import { isComplete } from '$lib/stores/gameStore';
+	import { isComplete } from '$lib/stores/GameStore';
 	import { user } from '$lib/database/firebase';
 	import { dbController } from '$lib/database/dbController';
 
