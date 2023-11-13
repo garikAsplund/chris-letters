@@ -11,7 +11,7 @@
 	}
 </script>
 
-<img src="/lilhalcyon.svg" height="300" width="300" />
+<img src="/lilhalcyon.svg" height="300" width="300" alt="Halcyon!" />
 <div class="flex justify-center translate-y-12">
 	<div class="w-3/5 p-4 text-lg mb-36 card text-token">
 		<Stepper
