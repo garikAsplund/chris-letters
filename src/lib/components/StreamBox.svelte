@@ -2,7 +2,7 @@
 	import interact from 'interactjs';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { LETTERS, NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
+	import { LETTERS, NUMBER_OF_TRIALS } from '$lib/logic/constantsAndHelpers';
 	import {
 		ABTrials,
 		CCTrials,
@@ -21,7 +21,7 @@
 		boxColor,
 		displayFace,
 		currentTrial
-	} from '$lib/stores/GameStore';
+	} from '$lib/stores/gameStore';
 	import GameOver from './GameOver.svelte';
 	import { getToastStore } from '@skeletonlabs/skeleton';
 	import CheckInput from './CheckInput.svelte';

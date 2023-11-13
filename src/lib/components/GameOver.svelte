@@ -2,15 +2,15 @@
 	import { emojisplosions } from 'emojisplosion';
 	import ShortUniqueId from 'short-unique-id';
 	import { ref, set } from 'firebase/database';
-	import { db } from '$lib/firebase';
+	import { db } from '$lib/database/firebase';
 	import { blur } from 'svelte/transition';
+	import { isComplete } from '$lib/stores/GameStore';
 
 	let gender = '';
 	let handedness = '';
 	let age = '';
 	let encounteredProblems = '';
 	let problemDescription = '';
-	let isComplete = false;
 
 	$: isNotValid = !gender || !handedness || !age;
 
@@ -22,7 +22,7 @@
 		age = '';
 		encounteredProblems = '';
 		problemDescription = '';
-		isComplete = true;
+		$isComplete = true;
 	};
 
 	function handleNumericInput(event) {
@@ -59,7 +59,7 @@
 	}
 
 	writeTrialData(1, 1, 1, 1, 1); // Add params from $store
-	gameOver();
+	if (!$isComplete) gameOver();
 </script>
 
 <div class="flex justify-center translate-y-16 text-5xl font-bold" in:blur={{ duration: 1000 }}>
@@ -78,7 +78,7 @@
 		</div>
 
 		<div class="card mx-auto p-5 text-xl space-y-6">
-			{#if !isComplete}
+			{#if !$isComplete}
 			<form on:submit|preventDefault={submitForm} class="space-y-4">
 				<p>Please select your gender:</p>
 				<div class="btn-group m-3 gap-4 px-8">

@@ -1,6 +1,6 @@
 <script>
 	import * as ExcelJS from 'exceljs';
-	import { db as database } from '$lib/firebase';
+	import { db as database } from '$lib/database/firebase';
 	import { ref, get } from 'firebase/database';
 	import { page } from '$app/stores';
 

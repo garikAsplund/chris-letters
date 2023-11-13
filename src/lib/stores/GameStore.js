@@ -4,6 +4,8 @@ import { createCCTrials } from '$lib/logic/CC';
 import { createSiBTrials } from '$lib/logic/SiB';
 
 export const isAdmin = writable(false);
+export const things = writable({});
+export const isComplete = writable(false);
 
 export const correct = writable(0);
 export const incorrect = writable(0);
@@ -26,3 +28,5 @@ export const targetLetter = writable('');
 export const boxColor = writable('white');
 export const displayFace = writable(false);
 export const currentTrial = writable(0);
+
+
