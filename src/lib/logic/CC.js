@@ -3,7 +3,7 @@ import {
 	DISTRACTORS,
 	LETTERS,
 	NUMBER_OF_TRIALS
-} from '$lib/logic/constantsAndHelpers';
+} from '$lib/logic/ConstantsAndHelpers';
 
 export function createCCTrials() {
 	const CCLetters = [];
