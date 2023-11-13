@@ -4,7 +4,7 @@
 	import { ref, set } from 'firebase/database';
 	import { db } from '$lib/database/firebase';
 	import { blur } from 'svelte/transition';
-	import { isComplete } from '$lib/stores/GameStore';
+	import { isComplete } from '$lib/stores/gameStore';
 
 	let gender = '';
 	let handedness = '';
