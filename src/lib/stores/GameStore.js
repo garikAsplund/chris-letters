@@ -28,5 +28,3 @@ export const targetLetter = writable('');
 export const boxColor = writable('white');
 export const displayFace = writable(false);
 export const currentTrial = writable(0);
-
-

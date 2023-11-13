@@ -14,7 +14,7 @@
 	$: isNotValid = !gender || !handedness || !age;
 
 	dbController.writeTrialData($user.uid, 1, 1, 1, 1, 1); // Add params from $store
-	
+
 	if (!$isComplete) gameOver();
 
 	function handleNumericInput(event) {
@@ -38,9 +38,9 @@
 	}
 
 	const submitForm = (userId, gender, handedness, age, problemDescription) => {
-			dbController.writeParticipantData(userId, gender, handedness, age, problemDescription)
-			$isComplete = true;
-		};
+		dbController.writeParticipantData(userId, gender, handedness, age, problemDescription);
+		$isComplete = true;
+	};
 </script>
 
 <div class="flex justify-center translate-y-16 text-5xl font-bold" in:blur={{ duration: 1000 }}>
@@ -60,122 +60,127 @@
 
 		<div class="card mx-auto p-5 text-xl space-y-6">
 			{#if !$isComplete}
-			<form on:submit|preventDefault={() => submitForm($user?.uid, gender, handedness, age, problemDescription)} class="space-y-4">
-				<p>Please select your gender:</p>
-				<div class="btn-group m-3 gap-4 px-8">
-					{#each ['Male', 'Female', 'Other', 'Prefer not to say'] as option}
-						<input
-							type="radio"
-							id={option}
-							name="gender"
-							value={option}
-							class="hidden"
-							bind:group={gender}
-						/>
-						<label
-							for={option}
-							class="btn {gender === option
-								? 'variant-filled-primary'
-								: 'variant-ghost-primary'} rounded">{option}</label
-						>
-					{/each}
-				</div>
-
-				<label>
-					<p>Please select your handedness:</p>
+				<form
+					on:submit|preventDefault={() =>
+						submitForm($user?.uid, gender, handedness, age, problemDescription)}
+					class="space-y-4"
+				>
+					<p>Please select your gender:</p>
 					<div class="btn-group m-3 gap-4 px-8">
-						{#each ['Right', 'Left', 'Ambidextrous'] as option}
+						{#each ['Male', 'Female', 'Other', 'Prefer not to say'] as option}
 							<input
 								type="radio"
 								id={option}
-								name="handedness"
+								name="gender"
 								value={option}
 								class="hidden"
-								required
-								bind:group={handedness}
+								bind:group={gender}
 							/>
 							<label
 								for={option}
-								class="btn {handedness === option
+								class="btn {gender === option
 									? 'variant-filled-primary'
 									: 'variant-ghost-primary'} rounded">{option}</label
 							>
 						{/each}
 					</div>
-				</label>
 
-				<label>
-					<p>Enter your age:</p>
-					<div class="m-3 px-8 text-lg font-light">
-						<input
-							type="text"
-							inputmode="numeric"
-							pattern="[0-9]*"
-							class="w-16 h-16 mx-2 text-4xl text-center text-gray-200 uppercase bg-transparent border rounded-lg"
-							maxlength="2"
-							required
-							on:keyup={handleNumericInput}
-							bind:value={age}
-						/>
-					</div>
-				</label>
+					<label>
+						<p>Please select your handedness:</p>
+						<div class="btn-group m-3 gap-4 px-8">
+							{#each ['Right', 'Left', 'Ambidextrous'] as option}
+								<input
+									type="radio"
+									id={option}
+									name="handedness"
+									value={option}
+									class="hidden"
+									required
+									bind:group={handedness}
+								/>
+								<label
+									for={option}
+									class="btn {handedness === option
+										? 'variant-filled-primary'
+										: 'variant-ghost-primary'} rounded">{option}</label
+								>
+							{/each}
+						</div>
+					</label>
 
-				<label>
-					<p>Did you encounter any problems?</p>
-					<div class="btn-group m-3 gap-4 px-8">
-						<input
-							type="radio"
-							id="problems-yes"
-							name="problems"
-							value="yes"
-							class="hidden"
-							required
-							bind:group={encounteredProblems}
-						/>
-						<label
-							for="problems-yes"
-							class="btn {encounteredProblems
-								? 'variant-filled-primary'
-								: 'variant-ghost-primary'} rounded">Yes</label
-						>
+					<label>
+						<p>Enter your age:</p>
+						<div class="m-3 px-8 text-lg font-light">
+							<input
+								type="text"
+								inputmode="numeric"
+								pattern="[0-9]*"
+								class="w-16 h-16 mx-2 text-4xl text-center text-gray-200 uppercase bg-transparent border rounded-lg"
+								maxlength="2"
+								required
+								on:keyup={handleNumericInput}
+								bind:value={age}
+							/>
+						</div>
+					</label>
 
-						<input
-							type="radio"
-							id="problems-no"
-							name="problems"
-							value=""
-							class="hidden"
-							required
-							bind:group={encounteredProblems}
-						/>
-						<label
-							for="problems-no"
-							class="btn {encounteredProblems
-								? 'variant-ghost-primary'
-								: 'variant-filled-primary'} rounded">No</label
-						>
-					</div>
-				</label>
+					<label>
+						<p>Did you encounter any problems?</p>
+						<div class="btn-group m-3 gap-4 px-8">
+							<input
+								type="radio"
+								id="problems-yes"
+								name="problems"
+								value="yes"
+								class="hidden"
+								required
+								bind:group={encounteredProblems}
+							/>
+							<label
+								for="problems-yes"
+								class="btn {encounteredProblems
+									? 'variant-filled-primary'
+									: 'variant-ghost-primary'} rounded">Yes</label
+							>
 
-				{#if encounteredProblems}
-					<div class="m-3 px-8 text-lg font-light">
-						<textarea
-							rows="2"
-							class="textarea p-2"
-							bind:value={problemDescription}
-							placeholder="Tell us what went wrong..."
-						/>
-					</div>
-				{/if}
+							<input
+								type="radio"
+								id="problems-no"
+								name="problems"
+								value=""
+								class="hidden"
+								required
+								bind:group={encounteredProblems}
+							/>
+							<label
+								for="problems-no"
+								class="btn {encounteredProblems
+									? 'variant-ghost-primary'
+									: 'variant-filled-primary'} rounded">No</label
+							>
+						</div>
+					</label>
 
-				<button class="btn variant-filled-warning rounded" type="submit" disabled={isNotValid}>Submit</button>
-			</form>
-		{:else}
-		<h1 class="h1 m-3">You're all done :)</h1>
-		<i class="fa-solid fa-champagne-glasses fa-xl"></i>
-		<h3 class="h3">Thank you for participating!</h3>
-		{/if}
+					{#if encounteredProblems}
+						<div class="m-3 px-8 text-lg font-light">
+							<textarea
+								rows="2"
+								class="textarea p-2"
+								bind:value={problemDescription}
+								placeholder="Tell us what went wrong..."
+							/>
+						</div>
+					{/if}
 
+					<button class="btn variant-filled-warning rounded" type="submit" disabled={isNotValid}
+						>Submit</button
+					>
+				</form>
+			{:else}
+				<h1 class="h1 m-3">You're all done :)</h1>
+				<i class="fa-solid fa-champagne-glasses fa-xl" />
+				<h3 class="h3">Thank you for participating!</h3>
+			{/if}
 		</div>
 	</div>
 </div>
