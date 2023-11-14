@@ -14,6 +14,9 @@
 	} from '$lib/stores/GameStore';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
+	import { getToastStore } from '@skeletonlabs/skeleton';
+
+	const toastStore = getToastStore();
 
 	export let begin;
 	export let isAB;
@@ -60,6 +63,7 @@
 	// need to add backspace here and above with a timeout
 	function handleKeydown(event) {
 		let reactionTime;
+		let receivedLetter = ' ';
 
 		if (isAB && !$inProgress) {
 			if (event.key && event.key.length === 1) {
@@ -103,44 +107,52 @@
 					}
 				}
 			}
-			// } else if (!$inProgress) {
-			// 	if (event.key && event.key.length === 1) {
-			// 			if ($startTime) {
-			// 				reactionTime = Date.now() - $startTime;
-			// 				$everyReactionTime.push(reactionTime);
-			// 				$startTime = null;
-			// 				$started = false;
-			// 				$numberOfFlashes = 1;
-			// 				$guessed = true;
-			// 				receivedLetter = event.key.toUpperCase();
-			// 				$everyTarget.push($targetLetter);
-			// 				receivedLetter === $targetLetter ? everyAccuracy.push(1) : everyAccuracy.push(0);
-			// 				$everyGuess.push(receivedLetter);
+		} else if (!$inProgress) {
+			if (event.key && event.key.length === 1) {
+				if ($startTime) {
+					reactionTime = Date.now() - $startTime;
+					$everyReactionTime = [...$everyReactionTime, reactionTime];
+					$startTime = 0;
+					$started = false;
+					$numberOfFlashes = 1;
+					$guessed = true;
+					$inProgress = true;
+					receivedLetter = event.key.toUpperCase();
+					$everyTarget = [...$everyTarget, $targetLetter];
+					receivedLetter === $targetLetter
+						? ($everyAccuracy = [...$everyAccuracy, 1])
+						: ($everyAccuracy = [...$everyAccuracy, 0]);
+					$everyGuess = [...$everyGuess, receivedLetter];
 
-			// 				console.log({ everyAccuracy }, { everyGuess: $everyGuess }, { everyReactionTime: $everyReactionTime }, { everyTarget: $everyTarget });
+					console.log(
+						{ everyAccuracy },
+						{ everyGuess: $everyGuess },
+						{ everyReactionTime: $everyReactionTime },
+						{ everyTarget: $everyTarget }
+					);
 
-			// 				const correctGuess = {
-			// 					message: 'Nice work!',
-			// 					timeout: 2000,
-			// 					hideDismiss: true,
-			// 					background: 'bg-green-500'
-			// 				};
-			// 				const wrongGuess = {
-			// 					message: 'Not quite. Keep trying!',
-			// 					timeout: 2000,
-			// 					hideDismiss: true,
-			// 					background: 'bg-red-500'
-			// 				};
+					const correctGuess = {
+						message: 'Nice work!',
+						timeout: 2000,
+						hideDismiss: true,
+						background: 'bg-green-500'
+					};
+					const wrongGuess = {
+						message: 'Not quite. Keep trying!',
+						timeout: 2000,
+						hideDismiss: true,
+						background: 'bg-red-500'
+					};
 
-			// 				receivedLetter === $targetLetter
-			// 					? toastStore.trigger(correctGuess)
-			// 					: toastStore.trigger(wrongGuess);
+					receivedLetter === $targetLetter
+						? toastStore.trigger(correctGuess)
+						: toastStore.trigger(wrongGuess);
 
-			// 				$targetLetter = '';
+					$targetLetter = '';
 
-			// 				setTimeout(begin, 600);
-			// 		}
-			// 	}
+					setTimeout(begin, 600);
+				}
+			}
 		}
 	}
 

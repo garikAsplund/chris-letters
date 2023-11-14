@@ -1,8 +1,7 @@
 <script>
 	import interact from 'interactjs';
 	import { onMount } from 'svelte';
-	import { fade } from 'svelte/transition';
-	import { LETTERS, NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
+	import { NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
 	import {
 		ABTrials,
 		CCTrials,
@@ -25,13 +24,7 @@
 		guessed
 	} from '$lib/stores/GameStore';
 	import GameOver from './GameOver.svelte';
-	import { getToastStore } from '@skeletonlabs/skeleton';
 	import CheckInput from './CheckInput.svelte';
-
-	const toastStore = getToastStore();
-
-	let receivedLetter = ' ';
-	let reactionTime = 0;
 
 	let AB = false;
 	let CC = false;
@@ -40,11 +33,6 @@
 	let guesses = ['A'];
 	let buttonText = 'Start';
 	let clicked = false;
-
-	let everyTarget = [];
-	let everyGuess = [];
-	let everyAccuracy = [];
-	let everyReactionTime = [];
 
 	let boxText = 280;
 	let borderWidth = 8;
@@ -107,7 +95,6 @@
 		$inProgress = true;
 		$started = true;
 		$guessed = false;
-		receivedLetter = ' ';
 		guesses = [];
 		$count = 0;
 
@@ -235,7 +222,7 @@
 				{#if AB && !$inProgress}
 					<CheckInput {begin} isAB={true} textSize={boxText / 11} />
 				{:else if (CC || SiB) && !$inProgress}
-					<CheckInput isAB={false} textSize={boxText / 11} />
+					<CheckInput {begin} isAB={false} textSize={boxText / 11} />
 				{/if}
 			</p>
 		</div>
