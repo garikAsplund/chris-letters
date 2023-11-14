@@ -27,20 +27,20 @@
 			<thead>
 				<tr>
 					<th>Name</th>
-					<th>Admin status</th>
+					<th class="">Admin status</th>
 				</tr>
 			</thead>
 			<tbody>
 				{#each Object.entries($things) as [userId, user]}
-					<tr>
+					<tr class="table-row">
 						{#if user.problemDescription}
-							<a href="#" on:click={() => toggleAccordion(userId)}>
-								<td class="text-xl text-blue-400">
+							<td>
+								<a href="#" class="text-blue-300" on:click={() => toggleAccordion(userId)}>
 									{user.displayName}
-								</td>
-							</a>
+								</a>
+							</td>
 						{:else}
-							<td class="text-xl"> {user.displayName}</td>
+							<td> {user.displayName}</td>
 						{/if}
 
 						<td class="table-cell-fit">
@@ -55,7 +55,7 @@
 					</tr>
 					{#if userId === expandedUser}
 						<tr>
-							<td colspan="2" class="text-xl bg-red-400 ">
+							<td colspan="2" class="text-xl bg-red-400">
 								<p class="whitespace-pre-wrap">{user.problemDescription}</p>
 							</td>
 						</tr>
