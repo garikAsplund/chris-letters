@@ -1,7 +1,7 @@
 import { dbRef } from './firebase';
 import { child, get, set, update } from 'firebase/database';
 import ShortUniqueId from 'short-unique-id';
-import { things } from '$lib/stores/GameStore';
+import { things } from '$lib/stores/gameStore';
 
 export const dbController = {
 	getAllUsers() {

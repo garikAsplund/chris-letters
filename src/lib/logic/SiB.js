@@ -3,7 +3,7 @@ import {
 	DISTRACTORS,
 	LETTERS,
 	NUMBER_OF_TRIALS
-} from '$lib/logic/ConstantsAndHelpers';
+} from '$lib/logic/constantsAndHelpers';
 
 export function createSiBTrials() {
 	const SiBLetters = [];

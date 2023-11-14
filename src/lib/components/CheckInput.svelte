@@ -11,7 +11,7 @@
 		everyGuess,
 		everyReactionTime,
 		everyTarget
-	} from '$lib/stores/GameStore';
+	} from '$lib/stores/gameStore';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 
