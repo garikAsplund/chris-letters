@@ -2,7 +2,7 @@
 	import interact from 'interactjs';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { LETTERS, NUMBER_OF_TRIALS } from '$lib/logic/constantsAndHelpers';
+	import { LETTERS, NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
 	import {
 		ABTrials,
 		CCTrials,

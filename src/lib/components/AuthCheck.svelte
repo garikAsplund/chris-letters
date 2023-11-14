@@ -6,7 +6,7 @@
 	import Admin from './Admin.svelte';
 	import Instructions from './Instructions.svelte';
 	import { currentTrial, isAdmin } from '$lib/stores/GameStore';
-	import { NUMBER_OF_TRIALS } from '$lib/logic/constantsAndHelpers';
+	import { NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
 
 	const dbRef = ref(getDatabase());
 
