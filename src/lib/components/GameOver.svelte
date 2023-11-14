@@ -8,7 +8,7 @@
 		everyGuess,
 		everyAccuracy,
 		everyReactionTime
-	} from '$lib/stores/gameStore';
+	} from '$lib/stores/GameStore';
 	import { user } from '$lib/database/firebase';
 	import { dbController } from '$lib/database/dbController';
 	import { NUMBER_OF_TRIALS } from '$lib/logic/constantsAndHelpers';

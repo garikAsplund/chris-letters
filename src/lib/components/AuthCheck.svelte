@@ -5,7 +5,7 @@
 	import ProgressBar from './ProgressBar.svelte';
 	import Admin from './Admin.svelte';
 	import Instructions from './Instructions.svelte';
-	import { currentTrial, isAdmin } from '$lib/stores/gameStore';
+	import { currentTrial, isAdmin } from '$lib/stores/GameStore';
 	import { NUMBER_OF_TRIALS } from '$lib/logic/constantsAndHelpers';
 
 	const dbRef = ref(getDatabase());
