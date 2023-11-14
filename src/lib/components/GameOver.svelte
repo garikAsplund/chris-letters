@@ -1,9 +1,17 @@
 <script>
 	import { emojisplosions } from 'emojisplosion';
 	import { blur } from 'svelte/transition';
-	import { isComplete } from '$lib/stores/GameStore';
+	import {
+		isComplete,
+		currentTrial,
+		everyTarget,
+		everyGuess,
+		everyAccuracy,
+		everyReactionTime
+	} from '$lib/stores/GameStore';
 	import { user } from '$lib/database/firebase';
 	import { dbController } from '$lib/database/dbController';
+	import { NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
 
 	let gender = '';
 	let handedness = '';
@@ -13,9 +21,18 @@
 
 	$: isNotValid = !gender || !handedness || !age;
 
-	dbController.writeTrialData($user.uid, 1, 1, 1, 1, 1); // Add params from $store
-
-	if (!$isComplete) gameOver();
+	if ($currentTrial === NUMBER_OF_TRIALS + 1) {
+		dbController.writeTrialData(
+			$user.uid,
+			'ab',
+			$everyTarget,
+			$everyGuess,
+			$everyAccuracy,
+			$everyReactionTime
+		); // Add params from $store
+		gameOver();
+		$currentTrial += 1;
+	}
 
 	function handleNumericInput(event) {
 		const inputValue = event.target.value;
@@ -43,22 +60,22 @@
 	};
 </script>
 
-<div class="flex justify-center translate-y-16 text-5xl font-bold" in:blur={{ duration: 1000 }}>
-	<div class="text-center space-y-12 mb-48">
+<div class="flex justify-center text-5xl font-bold translate-y-16" in:blur={{ duration: 1000 }}>
+	<div class="mb-48 space-y-12 text-center">
 		<h1 class="h1">
 			Thanks for playing!
-			<i class="fa-regular fa-face-laugh m-1" />
+			<i class="m-1 fa-regular fa-face-laugh" />
 		</h1>
 
-		<div class="relative overflow-hidden w-full h-72 backdrop-blur-2xl">
+		<div class="relative w-full overflow-hidden h-72 backdrop-blur-2xl">
 			<img
 				src="https://imgs.search.brave.com/LvdVh7q_k40_FmRD8kg9gRbNn3aGkmO9nT_TBf2Idzc/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90ZWNo/cHAuY29tL3dwLWNv/bnRlbnQvdXBsb2Fk/cy8yMDExLzA2L3N0/ZXZlLWpvYnMtb25l/LW1vcmUtdGhpbmcu/anBn"
 				alt="One last thing"
-				class="w-full h-full object-cover object-bottom filter brightness-80 blur-2"
+				class="object-cover object-bottom w-full h-full filter brightness-80 blur-2"
 			/>
 		</div>
 
-		<div class="card mx-auto p-5 text-xl space-y-6">
+		<div class="p-5 mx-auto space-y-6 text-xl card">
 			{#if !$isComplete}
 				<form
 					on:submit|preventDefault={() =>
@@ -66,7 +83,7 @@
 					class="space-y-4"
 				>
 					<p>Please select your gender:</p>
-					<div class="btn-group m-3 gap-4 px-8">
+					<div class="gap-4 px-8 m-3 btn-group">
 						{#each ['Male', 'Female', 'Other', 'Prefer not to say'] as option}
 							<input
 								type="radio"
@@ -87,7 +104,7 @@
 
 					<label>
 						<p>Please select your handedness:</p>
-						<div class="btn-group m-3 gap-4 px-8">
+						<div class="gap-4 px-8 m-3 btn-group">
 							{#each ['Right', 'Left', 'Ambidextrous'] as option}
 								<input
 									type="radio"
@@ -110,7 +127,7 @@
 
 					<label>
 						<p>Enter your age:</p>
-						<div class="m-3 px-8 text-lg font-light">
+						<div class="px-8 m-3 text-lg font-light">
 							<input
 								type="text"
 								inputmode="numeric"
@@ -126,7 +143,7 @@
 
 					<label>
 						<p>Did you encounter any problems?</p>
-						<div class="btn-group m-3 gap-4 px-8">
+						<div class="gap-4 px-8 m-3 btn-group">
 							<input
 								type="radio"
 								id="problems-yes"
@@ -162,22 +179,22 @@
 					</label>
 
 					{#if encounteredProblems}
-						<div class="m-3 px-8 text-lg font-light">
+						<div class="px-8 m-3 text-lg font-light">
 							<textarea
 								rows="2"
-								class="textarea p-2"
+								class="p-2 textarea"
 								bind:value={problemDescription}
 								placeholder="Tell us what went wrong..."
 							/>
 						</div>
 					{/if}
 
-					<button class="btn variant-filled-warning rounded" type="submit" disabled={isNotValid}
+					<button class="rounded btn variant-filled-warning" type="submit" disabled={isNotValid}
 						>Submit</button
 					>
 				</form>
 			{:else}
-				<h1 class="h1 m-3">You're all done :)</h1>
+				<h1 class="m-3 h1">You're all done :)</h1>
 				<i class="fa-solid fa-champagne-glasses fa-xl" />
 				<h3 class="h3">Thank you for participating!</h3>
 			{/if}

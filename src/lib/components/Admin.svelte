@@ -14,37 +14,39 @@
 
 		if (dataSnapshot.exists()) {
 			excelData.blocks = dataSnapshot.val();
+			console.log(excelData.blocks);
 			crunchData();
 		}
 	}
 
 	function crunchData() {
-		console.log('clicked!!');
 		const workbook = new ExcelJS.Workbook();
+		const headers = [
+			'User ID',
+			'Trial ID',
+			'Trial Type',
+			'Targets',
+			'Guesses',
+			'Accuracy',
+			'Reaction Time'
+		];
+		const worksheet = workbook.addWorksheet('Worksheet name');
+		worksheet.addRow(headers);
 
-		const headers = ['Trial ID', 'Trial Type', 'Targets', 'Guesses', 'Accuracy', 'Reaction Time'];
+		for (const uid in excelData.blocks) {
+			const block = excelData.blocks[uid];
 
-		for (const blockKey in excelData.blocks) {
-			const block = excelData.blocks[blockKey];
-			const worksheet = workbook.addWorksheet(blockKey);
-			worksheet.addRow(headers);
+			console.log(block);
 
-			const numRows = Math.max(
-				block.trialType.length,
-				block.targets.length,
-				block.guesses.length,
-				block.accuracy.length,
-				block.reactionTime.length
-			);
-
-			for (let i = 0; i < numRows; i++) {
+			for (const trial in block) {
+				console.log(trial);
 				const newRow = [
-					blockKey,
-					block.trialType,
-					block.targets[i] || '',
-					block.guesses[i] || '',
-					block.accuracy[i] !== undefined ? block.accuracy[i] : '',
-					block.reactionTime[i] || ''
+					uid,
+					block[trial].trialType,
+					block[trial].targets,
+					block[trial].guesses,
+					block[trial].accuracy,
+					block[trial].reactionTime
 				];
 				worksheet.addRow(newRow);
 			}

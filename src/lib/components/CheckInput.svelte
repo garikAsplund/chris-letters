@@ -1,7 +1,21 @@
 <script>
+	import {
+		guessed,
+		inProgress,
+		started,
+		startTime,
+		numberOfFlashes,
+		guesses,
+		targetLetter,
+		everyAccuracy,
+		everyGuess,
+		everyReactionTime,
+		everyTarget
+	} from '$lib/stores/GameStore';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 
+	export let begin;
 	export let isAB;
 	export let textSize;
 
@@ -43,12 +57,101 @@
 		if (field) field.focus();
 	};
 
+	// need to add backspace here and above with a timeout
+	function handleKeydown(event) {
+		let reactionTime;
+
+		if (isAB && !$inProgress) {
+			if (event.key && event.key.length === 1) {
+				if ($guesses.length < 2) {
+					if ($startTime) {
+						reactionTime = Date.now() - $startTime;
+						$guesses = [...$guesses, event.key.toUpperCase()];
+					}
+					if ($guesses.length === 2) {
+						$guessed = true;
+						$startTime = 0;
+						$everyReactionTime.push(reactionTime);
+						$everyGuess.push(...$guesses);
+						$everyTarget.push($targetLetter.split(''));
+
+						if (
+							($targetLetter[0] == $guesses[0] && $targetLetter[1] == $guesses[1]) ||
+							($targetLetter[0] == $guesses[1] && $targetLetter[1] == $guesses[0])
+						) {
+							$everyAccuracy = [...$everyAccuracy, 2];
+						} else if ($targetLetter.includes($guesses[0]) || $targetLetter.includes($guesses[1])) {
+							$everyAccuracy = [...$everyAccuracy, 1];
+						} else {
+							$everyAccuracy = [...$everyAccuracy, 0];
+						}
+
+						console.log(
+							{ everyAccuracy: $everyAccuracy },
+							{ everyGuess: $everyGuess },
+							{ everyReactionTime: $everyReactionTime },
+							{ everyTarget: $everyTarget }
+						);
+
+						setTimeout(() => {
+							$numberOfFlashes = 1;
+							$started = false;
+							$targetLetter = '';
+							$inProgress = true;
+							begin();
+						}, 600);
+					}
+				}
+			}
+			// } else if (!$inProgress) {
+			// 	if (event.key && event.key.length === 1) {
+			// 			if ($startTime) {
+			// 				reactionTime = Date.now() - $startTime;
+			// 				$everyReactionTime.push(reactionTime);
+			// 				$startTime = null;
+			// 				$started = false;
+			// 				$numberOfFlashes = 1;
+			// 				$guessed = true;
+			// 				receivedLetter = event.key.toUpperCase();
+			// 				$everyTarget.push($targetLetter);
+			// 				receivedLetter === $targetLetter ? everyAccuracy.push(1) : everyAccuracy.push(0);
+			// 				$everyGuess.push(receivedLetter);
+
+			// 				console.log({ everyAccuracy }, { everyGuess: $everyGuess }, { everyReactionTime: $everyReactionTime }, { everyTarget: $everyTarget });
+
+			// 				const correctGuess = {
+			// 					message: 'Nice work!',
+			// 					timeout: 2000,
+			// 					hideDismiss: true,
+			// 					background: 'bg-green-500'
+			// 				};
+			// 				const wrongGuess = {
+			// 					message: 'Not quite. Keep trying!',
+			// 					timeout: 2000,
+			// 					hideDismiss: true,
+			// 					background: 'bg-red-500'
+			// 				};
+
+			// 				receivedLetter === $targetLetter
+			// 					? toastStore.trigger(correctGuess)
+			// 					: toastStore.trigger(wrongGuess);
+
+			// 				$targetLetter = '';
+
+			// 				setTimeout(begin, 600);
+			// 		}
+			// 	}
+		}
+	}
+
 	onMount(() => {
 		resetFieldFocus(0);
 	});
 </script>
 
-<div in:fade={{ delay: 150, duration: 450 }}>
+<svelte:window on:keydown={handleKeydown} />
+
+<div transition:fade={{ delay: 150, duration: 450 }}>
 	<div
 		class="px-2 pb-12 font-sans text-5xl font-thin text-gray-200"
 		style="font-size: {textSize}px"

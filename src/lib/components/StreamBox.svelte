@@ -2,7 +2,7 @@
 	import interact from 'interactjs';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { LETTERS, NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
+	import { LETTERS, NUMBER_OF_TRIALS } from '$lib/logic/constantsAndHelpers';
 	import {
 		ABTrials,
 		CCTrials,
@@ -20,8 +20,10 @@
 		targetLetter,
 		boxColor,
 		displayFace,
-		currentTrial
-	} from '$lib/stores/GameStore';
+		currentTrial,
+		started,
+		guessed
+	} from '$lib/stores/gameStore';
 	import GameOver from './GameOver.svelte';
 	import { getToastStore } from '@skeletonlabs/skeleton';
 	import CheckInput from './CheckInput.svelte';
@@ -29,8 +31,6 @@
 	const toastStore = getToastStore();
 
 	let receivedLetter = ' ';
-	let started = false;
-	let guessed = true;
 	let reactionTime = 0;
 
 	let AB = false;
@@ -38,7 +38,6 @@
 	let SiB = false;
 
 	let guesses = ['A'];
-	let newGuess = '';
 	let buttonText = 'Start';
 	let clicked = false;
 
@@ -99,14 +98,15 @@
 	}
 
 	function begin() {
-		if (started) return;
-		if (!guessed) return;
+		console.log('in begin');
+		if ($started) return;
+		if (!$guessed) return;
 		if (!AB && !CC && !SiB) return;
 
 		$currentTrial += 1;
 		$inProgress = true;
-		started = true;
-		guessed = false;
+		$started = true;
+		$guessed = false;
 		receivedLetter = ' ';
 		guesses = [];
 		$count = 0;
@@ -114,85 +114,6 @@
 		if (AB) stream($ABTrials);
 		if (CC) stream($CCTrials);
 		if (SiB) stream($SiBTrials);
-	}
-
-	function handleKeydown(event) {
-		if (AB && !$inProgress) {
-			if (event.key && event.key.length === 1) {
-				if (LETTERS.includes(event.key.toUpperCase()) && guesses.length < 2) {
-					if ($startTime) {
-						reactionTime = Date.now() - startTime;
-						guesses = [...guesses, event.key.toUpperCase()];
-					}
-					if (guesses.length === 2) {
-						guessed = true;
-						$startTime = null;
-						everyReactionTime.push(reactionTime);
-						everyGuess.push(...guesses);
-						everyTarget.push($targetLetter.split(''));
-
-						if (
-							($targetLetter[0] == guesses[0] && $targetLetter[1] == guesses[1]) ||
-							($targetLetter[0] == guesses[1] && $targetLetter[1] == guesses[0])
-						) {
-							everyAccuracy.push(2);
-						} else if ($targetLetter.includes(guesses[0]) || $targetLetter.includes(guesses[1])) {
-							everyAccuracy.push(1);
-						} else {
-							everyAccuracy.push(0);
-						}
-
-						console.log({ everyAccuracy }, { everyGuess }, { everyReactionTime }, { everyTarget });
-
-						$numberOfFlashes = 1;
-						started = false;
-						$targetLetter = '';
-						$inProgress = true;
-						setTimeout(begin, 600);
-					}
-				}
-			}
-		} else if ((SiB || CC) && !$inProgress) {
-			if (event.key && event.key.length === 1) {
-				if (LETTERS.includes(event.key.toUpperCase())) {
-					if ($startTime) {
-						reactionTime = Date.now() - $startTime;
-						everyReactionTime.push(reactionTime);
-						$startTime = null;
-						started = false;
-						$numberOfFlashes = 1;
-						guessed = true;
-						receivedLetter = event.key.toUpperCase();
-						everyTarget.push($targetLetter);
-						receivedLetter === $targetLetter ? everyAccuracy.push(1) : everyAccuracy.push(0);
-						everyGuess.push(receivedLetter);
-
-						console.log({ everyAccuracy }, { everyGuess }, { everyReactionTime }, { everyTarget });
-
-						const correctGuess = {
-							message: 'Nice work!',
-							timeout: 2000,
-							hideDismiss: true,
-							background: 'bg-green-500'
-						};
-						const wrongGuess = {
-							message: 'Not quite. Keep trying!',
-							timeout: 2000,
-							hideDismiss: true,
-							background: 'bg-red-500'
-						};
-
-						receivedLetter === $targetLetter
-							? toastStore.trigger(correctGuess)
-							: toastStore.trigger(wrongGuess);
-
-						$targetLetter = '';
-
-						setTimeout(begin, 600);
-					}
-				}
-			}
-		}
 	}
 
 	// This will go away after getting logic correct
@@ -259,8 +180,6 @@
 		});
 </script>
 
-<svelte:window on:keydown={handleKeydown} />
-
 {#if $currentTrial <= NUMBER_OF_TRIALS}
 	<div class="flex justify-center mx-4 space-x-4 translate-y-12">
 		<label>
@@ -294,10 +213,10 @@
 				{/if}
 				{#if !AB && !CC && !SiB}
 					<p
-						class="p-2 text-5xl text-gray-200 font-sans -translate-y-9"
+						class="p-2 font-sans text-5xl text-gray-200 -translate-y-9"
 						style="font-size: {boxText / 11}px"
 					>
-						<i class="fa-solid fa-angles-up m-5" />
+						<i class="m-5 fa-solid fa-angles-up" />
 						<br />
 						<br />
 						Resize this box to be the size of a credit card
@@ -314,7 +233,7 @@
 					</button>
 				{/if}
 				{#if AB && !$inProgress}
-					<CheckInput isAB={true} textSize={boxText / 11} />
+					<CheckInput {begin} isAB={true} textSize={boxText / 11} />
 				{:else if (CC || SiB) && !$inProgress}
 					<CheckInput isAB={false} textSize={boxText / 11} />
 				{/if}
