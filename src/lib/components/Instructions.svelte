@@ -1,5 +1,6 @@
 <script>
 	import { Accordion, AccordionItem, Stepper, Step, SlideToggle } from '@skeletonlabs/skeleton';
+	import { onMount } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
 
 	let locked = false;
@@ -9,9 +10,33 @@
 	function onCompleteHandler(e) {
 		signIn();
 	}
+	let x = 0;
+	let y = 0;
+	let rotation = 0;
+
+	function updateHalcyon() {
+		x = Math.random() * 2 - 1;
+		y = Math.random() * 2 - 1;
+		rotation = Math.random() * 1 - 11;
+	}
+
+	onMount(() => {
+		const interval = setInterval(updateHalcyon, 50);
+
+		setTimeout(() => {
+			clearInterval(interval);
+		}, 5555);
+	});
 </script>
 
-<img src="/lilhalcyon.svg" height="300" width="300" alt="Halcyon!" />
+<img
+	class="halcyon"
+	src="/lilhalcyon.svg"
+	height="300"
+	width="300"
+	alt="Halcyon!"
+	style="transform: translate({x}px, {y}px) rotate({rotation}deg);"
+/>
 <div class="flex justify-center translate-y-12">
 	<div class="w-3/5 p-4 text-lg mb-36 card text-token">
 		<Stepper
