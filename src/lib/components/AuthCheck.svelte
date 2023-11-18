@@ -137,7 +137,7 @@
 
 <style lang="postcss">
 	.experiment {
-    animation: hueShift 120s infinite linear;
+    animation: hueShift 80s infinite linear;
   }
 
   @keyframes hueShift {
