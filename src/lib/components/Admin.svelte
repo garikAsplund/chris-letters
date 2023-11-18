@@ -3,7 +3,16 @@
 	import { db as database } from '$lib/database/firebase';
 	import { ref, get } from 'firebase/database';
 	import { page } from '$app/stores';
-	import { currentTrial } from '$lib/stores/GameStore';
+	import {
+		currentTrial,
+		numberOfFlashes,
+		targetLetter,
+		currentLetter,
+		started,
+		guesses,
+		inProgress,
+		guessed
+	} from '$lib/stores/GameStore';
 
 	let excelData = {
 		blocks: {}
@@ -68,6 +77,13 @@
 
 	function onGoToGameClicked() {
 		$currentTrial = 0;
+		$numberOfFlashes = 0;
+		$started = false;
+		$targetLetter = '';
+		$guesses = [];
+		$inProgress = true;
+		$guessed = true;
+		$currentLetter = '';
 	}
 </script>
 

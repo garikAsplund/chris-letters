@@ -30,14 +30,14 @@
 	<div class="flex justify-center translate-y-8">
 		<div class="w-3/5 p-4 text-lg mb-36 card text-token">
 			<Stepper
-				class="m-5"
+				class="m-5 "
 				buttonCompleteLabel="Sign in with Google"
 				buttonComplete="variant-ghost-warning btn-lg"
 				on:complete={onCompleteHandler}
 			>
 				<Step>
 					<svelte:fragment slot="header">Requirements</svelte:fragment>
-					<div class="space-y-6" in:fly={{ duration: 600, x: 40 }}>
+					<div class="space-y-6 mb-8" in:fly={{ duration: 600, x: 40 }}>
 						<p>Please take note of the following requirements for participating in this study:</p>
 						<ul class="m-3 list">
 							<li>Age 21-35 (18+ for Yale-NUS or NUS students)</li>
@@ -52,12 +52,11 @@
 							participate in this survey.
 						</p>
 						<p>If you meet these requirements, please continue!</p>
-						<br />
 					</div>
 				</Step>
 				<Step locked={unlocked}>
 					<svelte:fragment slot="header">Consent</svelte:fragment>
-					<div class="space-y-6" in:fly={{ duration: 600, x: 40 }}>
+					<div class="space-y-6 mb-8" in:fly={{ duration: 600, x: 40 }}>
 						<p>Thank you for your interest in our study!</p>
 						<p>
 							Before we begin, we need to obtain your consent to participate. Please read the
@@ -173,7 +172,7 @@
 				</Step>
 				<Step>
 					<svelte:fragment slot="header">Settings</svelte:fragment>
-					<div class="space-y-6" in:fly={{ duration: 600, x: 40 }}>
+					<div class="space-y-6 mb-8" in:fly={{ duration: 600, x: 40 }}>
 						<p>
 							At this time, please take a moment to adjust your browser window so that it takes up
 							as much of your screen as possible.
@@ -210,7 +209,7 @@
 				</Step>
 				<Step>
 					<svelte:fragment slot="header">Instructions</svelte:fragment>
-					<div class="space-y-6" in:fly={{ duration: 600, x: 40 }}>
+					<div class="space-y-6 mb-8" in:fly={{ duration: 600, x: 40 }}>
 						<p>
 							Before you begin the real trials, let's practice the task eight times for you to get
 							acquainted with the procedure. For the first four trials, you will be asked to
@@ -225,7 +224,7 @@
 				</Step>
 				<Step>
 					<svelte:fragment slot="header">Almost there</svelte:fragment>
-					<div class="space-y-6" in:fly={{ duration: 600, x: 40 }}>
+					<div class="space-y-6 mb-8" in:fly={{ duration: 600, x: 40 }}>
 						<p>We will now begin the main experiment.</p>
 						<p>The main experiment will consist of 90 trials.</p>
 					</div>

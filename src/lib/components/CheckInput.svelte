@@ -44,17 +44,6 @@
 		}
 	};
 
-	const checkPin = () => {
-		const code = codeFields.join('').toUpperCase();
-		if (code.length === pinlength) {
-			validatePin(code);
-		}
-	};
-
-	const validatePin = (code) => {
-		if (code === 'AB') alert('success');
-	};
-
 	const resetFieldFocus = (i) => {
 		const field = document.getElementById(`codefield_${i}`);
 		if (field) field.focus();
@@ -96,14 +85,16 @@
 							{ everyReactionTime: $everyReactionTime },
 							{ everyTarget: $everyTarget }
 						);
-
+						$numberOfFlashes = 1;
+						$started = false;
+						$targetLetter = '';
+						$guesses = [];
 						setTimeout(() => {
-							$numberOfFlashes = 1;
-							$started = false;
-							$targetLetter = '';
 							$inProgress = true;
+						}, 100);
+						setTimeout(() => {
 							begin();
-						}, 600);
+						}, 900);
 					}
 				}
 			}
@@ -150,7 +141,7 @@
 
 					$targetLetter = '';
 
-					setTimeout(begin, 600);
+					setTimeout(begin, 900);
 				}
 			}
 		}
@@ -163,7 +154,7 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
-<div transition:fade={{ delay: 150, duration: 450 }}>
+<div transition:fade={{ delay: 125, duration: 350 }}>
 	<div
 		class="px-2 pb-12 font-sans text-5xl font-thin text-gray-200"
 		style="font-size: {textSize}px"

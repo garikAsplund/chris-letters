@@ -93,7 +93,7 @@
 
 		setTimeout(() => {
 			clearInterval(interval);
-		}, 5555);
+		}, 3333);
 	});
 </script>
 
