@@ -102,7 +102,7 @@
 			}
 		} else if (!$inProgress) {
 			if (event.key !== ' ') {
-				if ($startTime) {
+				if ($startTime && receivedLetter.length === 0) {
 					console.log(event.key);
 					console.log(receivedLetter);
 					receivedLetter = event.key.toUpperCase();
@@ -160,6 +160,12 @@
 
 	onMount(() => {
 		resetFieldFocus(0);
+
+		document.getElementById('codefield')?.addEventListener('input', function (event) {
+			if (event.target.value.includes(' ')) {
+				event.target.value = event.target.value.replace(/\s/g, '');
+			}
+		});
 	});
 </script>
 
@@ -172,12 +178,12 @@
 	>
 		Please enter your guess
 	</div>
-	<div class="flex justify-center">
+	<div class="flex justify-center nospaces">
 		{#each codeFields as value, i (i)}
 			<input
 				autofocus={i === 0}
 				bind:value
-				id={`codefield_${i}`}
+				id={`codefield`}
 				class="flex items-center w-12 h-16 mx-2 text-4xl text-center text-gray-200 uppercase bg-transparent border rounded-lg"
 				maxlength="1"
 				on:keyup={() => stepForward(i)}
