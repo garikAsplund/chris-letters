@@ -7,37 +7,27 @@
 	$: unlocked = !locked;
 	export let signIn;
 
+	let isMobile = false;
+
+	addEventListener("resize", (event) => {});
+
+	onresize = (event) => {
+	if (window.innerWidth < 800) {
+		isMobile = true;
+	} else isMobile = false;
+	};
+
 	function onCompleteHandler(e) {
 		signIn();
 	}
-	let x = 0;
-	let y = 0;
-	let rotation = 0;
 
-	function updateHalcyon() {
-		x = Math.random() * 2 - 1;
-		y = Math.random() * 2 - 1;
-		rotation = Math.random() * 1 - 11;
+	if (window.innerWidth < 800) {
+		isMobile = true;
 	}
-
-	onMount(() => {
-		const interval = setInterval(updateHalcyon, 50);
-
-		setTimeout(() => {
-			clearInterval(interval);
-		}, 5555);
-	});
 </script>
 
-<img
-	class="halcyon"
-	src="/lilhalcyon.svg"
-	height="300"
-	width="300"
-	alt="Halcyon!"
-	style="transform: translate({x}px, {y}px) rotate({rotation}deg);"
-/>
-<div class="flex justify-center translate-y-12">
+{#if !isMobile}
+<div class="flex justify-center translate-y-8">
 	<div class="w-3/5 p-4 text-lg mb-36 card text-token">
 		<Stepper
 			class="m-5"
@@ -238,3 +228,15 @@
 		</Stepper>
 	</div>
 </div>
+{:else}
+<div class="flex flex-col justify-center items-center">
+  <div class="w-3/4 space-y-12 fixed top-1/3 text-primary-50">
+    <p class="text-4xl ">
+      Oh no, your screen is too small for this study.
+    </p>
+    <p class="text-3xl font-light">
+    	Please move to a larger screen with a keyboard to participate.
+    </p>
+  </div>
+</div>
+{/if}
