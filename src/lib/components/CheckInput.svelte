@@ -22,6 +22,8 @@
 	export let isAB;
 	export let textSize;
 
+	let receivedLetter = ' ';
+
 	let pinlength = isAB ? 2 : 1;
 	let codeFields = Array(pinlength).fill('');
 
@@ -34,12 +36,12 @@
 			codeFields[i + 1] = '';
 			resetFieldFocus(i + 1);
 		}
-		checkPin();
 	};
 
 	const stepBack = (i) => {
 		if (codeFields[i - 1] && i !== 0) {
 			codeFields[i - 1] = '';
+			$guesses.pop();
 			resetFieldFocus(i - 1);
 		}
 	};
@@ -52,7 +54,6 @@
 	// need to add backspace here and above with a timeout
 	function handleKeydown(event) {
 		let reactionTime;
-		let receivedLetter = ' ';
 
 		if (isAB && !$inProgress) {
 			if (event.key && event.key.length === 1) {
@@ -92,57 +93,60 @@
 						setTimeout(() => {
 							$inProgress = true;
 						}, 100);
-						setTimeout(() => {
-							begin();
-						}, 900);
+						setTimeout(begin, 900);
 					}
 				}
 			}
 		} else if (!$inProgress) {
-			if (event.key && event.key.length === 1) {
+			if (event.key != ' ') {
 				if ($startTime) {
-					reactionTime = Date.now() - $startTime;
-					$everyReactionTime = [...$everyReactionTime, reactionTime];
-					$startTime = 0;
-					$started = false;
-					$numberOfFlashes = 1;
-					$guessed = true;
-					$inProgress = true;
 					receivedLetter = event.key.toUpperCase();
+					console.log(receivedLetter);
 					$everyTarget = [...$everyTarget, $targetLetter];
-					receivedLetter === $targetLetter
-						? ($everyAccuracy = [...$everyAccuracy, 1])
-						: ($everyAccuracy = [...$everyAccuracy, 0]);
-					$everyGuess = [...$everyGuess, receivedLetter];
-
-					console.log(
-						{ everyAccuracy },
-						{ everyGuess: $everyGuess },
-						{ everyReactionTime: $everyReactionTime },
-						{ everyTarget: $everyTarget }
-					);
-
-					const correctGuess = {
-						message: 'Nice work!',
-						timeout: 2000,
-						hideDismiss: true,
-						background: 'bg-green-500'
-					};
-					const wrongGuess = {
-						message: 'Not quite. Keep trying!',
-						timeout: 2000,
-						hideDismiss: true,
-						background: 'bg-red-500'
-					};
-
-					receivedLetter === $targetLetter
-						? toastStore.trigger(correctGuess)
-						: toastStore.trigger(wrongGuess);
-
-					$targetLetter = '';
-
-					setTimeout(begin, 900);
 				}
+			} else {
+				reactionTime = Date.now() - $startTime;
+				$everyReactionTime = [...$everyReactionTime, reactionTime];
+				$everyGuess = [...$everyGuess, receivedLetter];
+				console.log(receivedLetter);
+
+				receivedLetter === $targetLetter
+					? ($everyAccuracy = [...$everyAccuracy, 1])
+					: ($everyAccuracy = [...$everyAccuracy, 0]);
+
+				const correctGuess = {
+					message: 'Nice work!',
+					timeout: 2000,
+					hideDismiss: true,
+					background: 'bg-green-500'
+				};
+
+				const wrongGuess = {
+					message: 'Not quite. Keep trying!',
+					timeout: 2000,
+					hideDismiss: true,
+					background: 'bg-red-500'
+				};
+
+				console.log(
+					{ everyAccuracy },
+					{ everyGuess: $everyGuess },
+					{ everyReactionTime: $everyReactionTime },
+					{ everyTarget: $everyTarget }
+				);
+
+				receivedLetter === $targetLetter
+					? toastStore.trigger(correctGuess)
+					: toastStore.trigger(wrongGuess);
+
+				$inProgress = true;
+				$guessed = true;
+				$startTime = 0;
+				$started = false;
+				$numberOfFlashes = 1;
+				$targetLetter = '';
+
+				setTimeout(begin, 900);
 			}
 		}
 	}
@@ -170,7 +174,11 @@
 				class="flex items-center w-12 h-16 mx-2 text-4xl text-center text-gray-200 uppercase bg-transparent border rounded-lg"
 				maxlength="1"
 				on:keyup={() => stepForward(i)}
-				on:keydown:backspace={() => stepBack(i)}
+				on:keydown={(e) => {
+					if (e.key === 'Backspace') {
+						stepBack(i);
+					}
+				}}
 				on:focus={() => resetValue(i)}
 				inputmode="text"
 			/>

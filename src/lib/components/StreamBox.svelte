@@ -58,11 +58,7 @@
 			$numberOfFlashes += 1;
 
 			if ($isOn) {
-				console.log($currentLetter);
-				console.log({ $currentTrial });
-				console.log({ $numberOfFlashes });
 				$currentLetter = trialType.letters[$currentTrial - 1][$numberOfFlashes / 2 - 1];
-				console.log($currentLetter);
 				$textColor = trialType.textColors[$currentTrial - 1][$numberOfFlashes / 2 - 1];
 				$isTarget = trialType.targets[$currentTrial - 1][$numberOfFlashes / 2 - 1];
 				if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][$numberOfFlashes / 2 - 1];
@@ -90,7 +86,6 @@
 	}
 
 	function begin() {
-		console.log('in begin');
 		if ($started) return;
 		if (!$guessed) return;
 		if (!AB && !CC && !SiB) return;
