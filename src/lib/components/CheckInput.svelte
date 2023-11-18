@@ -22,7 +22,7 @@
 	export let isAB;
 	export let textSize;
 
-	let receivedLetter = ' ';
+	let receivedLetter = '';
 
 	let pinlength = isAB ? 2 : 1;
 	let codeFields = Array(pinlength).fill('');
@@ -43,6 +43,9 @@
 			codeFields[i - 1] = '';
 			$guesses.pop();
 			resetFieldFocus(i - 1);
+			setTimeout(() => {
+				receivedLetter = '';
+			}, 200);
 		}
 	};
 
@@ -56,7 +59,7 @@
 		let reactionTime;
 
 		if (isAB && !$inProgress) {
-			if (event.key && event.key.length === 1) {
+			if (event.key && event.key.length === 1 && event.key !== ' ') {
 				if ($guesses.length < 2) {
 					if ($startTime) {
 						reactionTime = Date.now() - $startTime;
@@ -98,17 +101,21 @@
 				}
 			}
 		} else if (!$inProgress) {
-			if (event.key != ' ') {
+			if (event.key !== ' ') {
 				if ($startTime) {
-					receivedLetter = event.key.toUpperCase();
+					console.log(event.key);
 					console.log(receivedLetter);
-					$everyTarget = [...$everyTarget, $targetLetter];
+					receivedLetter = event.key.toUpperCase();
 				}
-			} else {
+				if (event.key === 'Backspace') {
+					receivedLetter = '';
+				}
+			} else if (receivedLetter.length > 0) {
 				reactionTime = Date.now() - $startTime;
 				$everyReactionTime = [...$everyReactionTime, reactionTime];
 				$everyGuess = [...$everyGuess, receivedLetter];
 				console.log(receivedLetter);
+				$everyTarget = [...$everyTarget, $targetLetter];
 
 				receivedLetter === $targetLetter
 					? ($everyAccuracy = [...$everyAccuracy, 1])
