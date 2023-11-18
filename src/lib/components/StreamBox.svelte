@@ -53,7 +53,7 @@
 
 		$count += 1;
 
-		if ($count % Math.floor(50 / Math.floor(1000 / $refreshRate)) === 0) {
+		if ($count % Math.floor(value / Math.floor(1000 / $refreshRate)) === 0) {
 			$isOn = !$isOn;
 			$numberOfFlashes += 1;
 

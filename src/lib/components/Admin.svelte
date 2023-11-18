@@ -3,6 +3,7 @@
 	import { db as database } from '$lib/database/firebase';
 	import { ref, get } from 'firebase/database';
 	import { page } from '$app/stores';
+	import { currentTrial } from '$lib/stores/GameStore';
 
 	let excelData = {
 		blocks: {}
@@ -64,6 +65,10 @@
 			URL.revokeObjectURL(a.href);
 		});
 	}
+
+	function onGoToGameClicked() {
+		$currentTrial = 0;
+	}
 </script>
 
 <button class=" hover:text-gray-400" on:click={fetchDataFromFirebase}> Export data </button>
@@ -72,7 +77,7 @@
 		<a href="/admin">Go to admin panel</a>
 	</button>
 {:else}
-	<button class=" hover:text-gray-400">
+	<button class=" hover:text-gray-400" on:click={onGoToGameClicked}>
 		<a href="/">Go to game</a>
 	</button>
 {/if}

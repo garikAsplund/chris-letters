@@ -98,28 +98,28 @@
 </script>
 
 {#if !$user}
-<div class="h-screen w-screen">
-	<h1 class=" md:text-6xl text-5xl font-bold text-center items-center transform translate-y-20 m-4">
-		<span
-			class="experiment text-transparent bg-gradient-to-br to-white from-cyan-300 bg-clip-text box-decoration-clone"
-			>Welcome to our experiment</span
-		> 🧑‍🔬
-	</h1>
-<div class="invisible lg:visible">
-	<img
-	class="halcyon"
-	src="/lilhalcyon.svg"
-	height="300"
-	width="300"
-	alt="Halcyon!"
-	style="transform: translate({x}px, {y}px) rotate({rotation}deg);"
-/></div>
+	<div class="h-screen w-screen">
+		<h1
+			class=" md:text-6xl text-5xl font-bold text-center items-center transform translate-y-20 m-4"
+		>
+			<span
+				class="experiment text-transparent bg-gradient-to-br to-white from-cyan-300 bg-clip-text box-decoration-clone"
+				>Welcome to our experiment</span
+			> 🧑‍🔬
+		</h1>
+		<div class="invisible lg:visible">
+			<img
+				class="halcyon"
+				src="/lilhalcyon.svg"
+				height="300"
+				width="300"
+				alt="Halcyon!"
+				style="transform: translate({x}px, {y}px) rotate({rotation}deg);"
+			/>
+		</div>
 
-
-	<Instructions signIn={signInWithGoogle} />
-
-</div>
-
+		<Instructions signIn={signInWithGoogle} />
+	</div>
 {:else}
 	<slot />
 	<div class="fixed bottom-0 left-0 w-full backdrop-blur-3xl text-lg">
@@ -137,15 +137,15 @@
 
 <style lang="postcss">
 	.experiment {
-    animation: hueShift 80s infinite linear;
-  }
+		animation: hueShift 80s infinite linear;
+	}
 
-  @keyframes hueShift {
-    0% {
-      filter: hue-rotate(0deg);
-    }
-    100% {
-      filter: hue-rotate(360deg);
-    }
-  }
+	@keyframes hueShift {
+		0% {
+			filter: hue-rotate(0deg);
+		}
+		100% {
+			filter: hue-rotate(360deg);
+		}
+	}
 </style>
