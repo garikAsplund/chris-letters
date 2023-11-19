@@ -39,14 +39,12 @@
 	};
 
 	const stepBack = (i) => {
-		if (codeFields[i - 1] && i !== 0) {
-			codeFields[i - 1] = '';
+			codeFields[i] = '';			
+			if ($guesses.length === 1) resetFieldFocus(i - 1);
 			$guesses.pop();
-			resetFieldFocus(i - 1);
 			setTimeout(() => {
 				receivedLetter = '';
-			}, 200);
-		}
+			}, 200);			
 	};
 
 	const resetFieldFocus = (i) => {
@@ -57,15 +55,19 @@
 	// need to add backspace here and above with a timeout
 	function handleKeydown(event) {
 		let reactionTime;
-
+		console.log('key');
 		if (isAB && !$inProgress) {
-			if (event.key && event.key.length === 1 && event.key !== ' ') {
-				if ($guesses.length < 2) {
+			if (event.key && event.key.length === 1) {
+				if ($guesses.length <= 2) {
 					if ($startTime) {
 						reactionTime = Date.now() - $startTime;
-						$guesses = [...$guesses, event.key.toUpperCase()];
+						if (event.key !== 'Backspace' && event.key !== ' ') {
+							$guesses = [...$guesses, event.key.toUpperCase()];
+							console.log("guesses: " + $guesses);
+						}
 					}
-					if ($guesses.length === 2) {
+					if ($guesses.length === 2 && event.key === ' ') {
+						console.log("hereweare");
 						$guessed = true;
 						$startTime = 0;
 						$everyReactionTime.push(reactionTime);
@@ -161,7 +163,12 @@
 	onMount(() => {
 		resetFieldFocus(0);
 
-		document.getElementById('codefield')?.addEventListener('input', function (event) {
+		document.getElementById('codefield_0')?.addEventListener('input', function (event) {
+			if (event.target.value.includes(' ')) {
+				event.target.value = event.target.value.replace(/\s/g, '');
+			}
+		});
+		document.getElementById('codefield_1')?.addEventListener('input', function (event) {
 			if (event.target.value.includes(' ')) {
 				event.target.value = event.target.value.replace(/\s/g, '');
 			}
@@ -183,16 +190,16 @@
 			<input
 				autofocus={i === 0}
 				bind:value
-				id={`codefield`}
+				id={`codefield_${i}`}
 				class="flex items-center w-12 h-16 mx-2 text-4xl text-center text-gray-200 uppercase bg-transparent border rounded-lg"
 				maxlength="1"
-				on:keyup={() => stepForward(i)}
+				name="codefield"
+				on:keyup={(e) => {if (e.key !== ' ') stepForward(i)}}
 				on:keydown={(e) => {
 					if (e.key === 'Backspace') {
 						stepBack(i);
 					}
 				}}
-				on:focus={() => resetValue(i)}
 				inputmode="text"
 			/>
 		{/each}
