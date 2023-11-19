@@ -114,7 +114,6 @@
 				reactionTime = Date.now() - $startTime;
 				$everyReactionTime = [...$everyReactionTime, reactionTime];
 				$everyGuess = [...$everyGuess, receivedLetter];
-				console.log(receivedLetter);
 				$everyTarget = [...$everyTarget, $targetLetter];
 
 				receivedLetter === $targetLetter
@@ -136,7 +135,7 @@
 				};
 
 				console.log(
-					{ everyAccuracy },
+					{ everyAccuracy: $everyAccuracy },
 					{ everyGuess: $everyGuess },
 					{ everyReactionTime: $everyReactionTime },
 					{ everyTarget: $everyTarget }
