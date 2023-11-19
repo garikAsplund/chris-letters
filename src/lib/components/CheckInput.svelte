@@ -121,17 +121,19 @@
 					: ($everyAccuracy = [...$everyAccuracy, 0]);
 
 				const correctGuess = {
-					message: 'Nice work!',
+					message: '<font size="+2">Nice work!</font>',
 					timeout: 2000,
 					hideDismiss: true,
-					background: 'bg-green-500'
+					background: 'bg-green-500',
+					classes: 'p-12 m-8 w-auto h-18 text-center',
 				};
 
 				const wrongGuess = {
-					message: 'Not quite. Keep trying!',
+					message: '<font size="+2">Not quite. Keep trying!</font>',
 					timeout: 2000,
 					hideDismiss: true,
-					background: 'bg-red-500'
+					background: 'bg-red-500',
+					classes: 'p-12 m-8 w-auto h-18 text-center',
 				};
 
 				console.log(
@@ -177,7 +179,7 @@
 
 <div transition:fade={{ delay: 125, duration: 350 }}>
 	<div
-		class="px-2 pb-12 font-sans text-5xl font-thin text-gray-200"
+		class="px-2 pb-12 font-sans font-thin text-gray-200"
 		style="font-size: {textSize}px"
 	>
 		Please enter your guess
@@ -201,4 +203,6 @@
 			/>
 		{/each}
 	</div>
+	<div class="px-2 pt-12 font-sans font-thin text-gray-200"
+	style="font-size: {textSize - 11}px">Then hit spacebar to continue</div>
 </div>
