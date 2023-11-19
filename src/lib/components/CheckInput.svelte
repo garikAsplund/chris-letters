@@ -55,7 +55,7 @@
 	// need to add backspace here and above with a timeout
 	function handleKeydown(event) {
 		let reactionTime;
-		console.log('key');
+
 		if (isAB && !$inProgress) {
 			if (event.key && event.key.length === 1) {
 				if ($guesses.length <= 2) {
@@ -67,7 +67,6 @@
 						}
 					}
 					if ($guesses.length === 2 && event.key === ' ') {
-						console.log("hereweare");
 						$guessed = true;
 						$startTime = 0;
 						$everyReactionTime.push(reactionTime);
@@ -105,8 +104,7 @@
 		} else if (!$inProgress) {
 			if (event.key !== ' ') {
 				if ($startTime && receivedLetter.length === 0) {
-					console.log(event.key);
-					console.log(receivedLetter);
+
 					receivedLetter = event.key.toUpperCase();
 				}
 				if (event.key === 'Backspace') {
