@@ -168,7 +168,7 @@
 </script>
 
 {#if $currentTrial <= NUMBER_OF_TRIALS}
-<div class="text-3xl text-primary-50 text-center mt-8">Hi, {$user.displayName.split(' ')[0]}</div>
+<!-- <div class="text-3xl text-primary-50 text-center mt-8">Hi, {$user.displayName.split(' ')[0]}</div> -->
 	<div class="flex justify-center mx-4 space-x-4 translate-y-12">
 		<label>
 			<input type="checkbox" value="AB" on:input={handleCheck} bind:checked={AB} />

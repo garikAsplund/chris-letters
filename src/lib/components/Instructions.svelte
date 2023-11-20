@@ -1,28 +1,21 @@
 <script>
 	import { Accordion, AccordionItem, Stepper, Step, SlideToggle } from '@skeletonlabs/skeleton';
-	import { onMount } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
 
 	let locked = false;
 	$: unlocked = !locked;
 	export let signIn;
 
-	let isMobile = false;
+	let isMobile = window.innerWidth < 800 ? true : false;
 
 	addEventListener('resize', (event) => {});
 
-	onresize = (event) => {
-		if (window.innerWidth < 800) {
-			isMobile = true;
-		} else isMobile = false;
+	onresize = () => {
+		window.innerWidth < 800 ? isMobile = true : isMobile = false;
 	};
 
 	function onCompleteHandler(e) {
 		signIn();
-	}
-
-	if (window.innerWidth < 800) {
-		isMobile = true;
 	}
 </script>
 
@@ -235,7 +228,9 @@
 {:else}
 	<div class="flex flex-col justify-center items-center">
 		<div class="w-3/4 space-y-12 fixed top-1/3 text-primary-50">
-			<p class="text-4xl">Oh no, your screen is too small for this study.</p>
+			<p class="text-4xl">
+				Oh no, your screen is too small for this study.
+			</p>
 			<p class="text-3xl font-light">
 				Please move to a larger screen with a keyboard to participate.
 			</p>

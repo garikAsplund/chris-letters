@@ -27,10 +27,6 @@
 	let pinlength = isAB ? 2 : 1;
 	let codeFields = Array(pinlength).fill('');
 
-	const resetValue = (i) => {
-		codeFields = codeFields.map((value, index) => (index >= i ? '' : value));
-	};
-
 	const stepForward = (i) => {
 		if (codeFields[i] && i !== pinlength - 1) {
 			codeFields[i + 1] = '';
@@ -52,10 +48,17 @@
 		if (field) field.focus();
 	};
 
-	// need to add backspace here and above with a timeout
 	function handleKeydown(event) {
 		let reactionTime;
 
+		const field0 = document.getElementById(`codefield_0`);
+		// field0?.value.length === 0 ? resetFieldFocus(0) : resetFieldFocus(1);
+		if (field0?.value.length === 0) {
+			resetFieldFocus(0);
+		} else if (field0?.value.length === 1 && event.key !== 'Backspace') {
+			resetFieldFocus(1);
+		}
+	
 		if (isAB && !$inProgress) {
 			if (event.key && event.key.length === 1) {
 				if ($guesses.length <= 2) {
