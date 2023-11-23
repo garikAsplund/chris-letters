@@ -25,7 +25,32 @@
 	} from '$lib/stores/GameStore';
 	import GameOver from './GameOver.svelte';
 	import CheckInput from './CheckInput.svelte';
-	import { user } from '$lib/database/firebase';
+	import { dbController } from '$lib/database/dbController';
+
+	const targets = ['red', 'green'];
+	dbController.getTargetColor()
+		.then(index => {
+			console.log(targets[index]);
+		})
+		.catch(error => {
+			console.error('An error occurred:', error);
+		});
+
+	const trialOrder = [
+		['AB', 'CC', 'SiB'],
+		['AB', 'SiB', 'CC'],
+		['CC', 'AB', 'SiB'],
+		['CC', 'SiB', 'AB'],
+		['SiB', 'AB', 'CC'],
+		['SiB', 'CC', 'AB']
+	];
+	dbController.getTrialOrder()
+		.then(index => {
+			console.log(trialOrder[index]);
+		})
+		.catch(error => {
+			console.error('An error occurred:', error);
+		});
 
 	let AB = false;
 	let CC = false;
@@ -39,6 +64,7 @@
 	let borderWidth = 8;
 
 	let value = 50;
+	let streamTime;
 
 	function stream(trialType) {
 		const currentTime = performance.now();
@@ -49,6 +75,7 @@
 				$inProgress = false;
 			}, 600);
 			$displayFace = false;
+			console.log('Stream length: ', performance.now() - streamTime); // convert to seconds
 			return;
 		}
 
@@ -90,6 +117,8 @@
 		if ($started) return;
 		if (!$guessed) return;
 		if (!AB && !CC && !SiB) return;
+		
+		streamTime = performance.now();
 
 		$currentTrial += 1;
 		$inProgress = true;

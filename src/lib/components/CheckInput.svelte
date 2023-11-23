@@ -52,7 +52,6 @@
 		let reactionTime;
 
 		const field0 = document.getElementById(`codefield_0`);
-		// field0?.value.length === 0 ? resetFieldFocus(0) : resetFieldFocus(1);
 		if (field0?.value.length === 0) {
 			resetFieldFocus(0);
 		} else if (field0?.value.length === 1 && event.key !== 'Backspace') {
