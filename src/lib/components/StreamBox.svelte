@@ -68,6 +68,8 @@
 	let CC = false;
 	let SiB = false;
 
+	let blockCount = 1;
+
 	let guesses = ['A'];
 	let buttonText = 'Start';
 	let clicked = false;
@@ -134,14 +136,7 @@
 		if ($started) return;
 		if (!$guessed) return;
 		if (trialIndex === 3) return;
-		if ($currentTrial > NUMBER_OF_TRIALS) {
-			$currentTrial = 0;
-			trialIndex += 1;
-			$isPractice = true;
-			buttonText = 'Click to practice';
-			clicked = false;
-			return;
-		}
+
 		if ($isPracticeCount === 8) {
 			$isPractice = false;
 			$isPracticeCount = 0;
@@ -152,8 +147,8 @@
 				buttonText = 'Click to begin';
 				clicked = false;
 			}
+			return;
 		}
-		console.log({ $isPractice });
 
 		streamTime = performance.now();
 
@@ -163,6 +158,26 @@
 		$guessed = true;
 		guesses = [];
 		$count = 0;
+
+		if ($currentTrial > NUMBER_OF_TRIALS) {
+			$currentTrial = 0;
+			if (AB) {
+				trialIndex += 1;
+				$isPractice = true;
+				buttonText = 'Click to practice';
+			}
+			if ((CC || SiB) && blockCount < 2) {
+				blockCount += 1;
+				buttonText = 'Click to begin';
+			} else {
+				trialIndex += 1;
+				$isPractice = true;
+				blockCount = 1;
+				buttonText = 'Click to practice';
+			}
+			clicked = false;
+			return;
+		}
 
 		if ($isPractice) {
 			$isPracticeCount += 1;
@@ -255,7 +270,7 @@
 </script>
 
 {#if trialIndex < 3}
-	<div class="flex justify-center h-full w-full mx-4 space-x-4">
+	<div class="flex justify-center h-view w-view mx-4 space-x-4">
 		<div class="translate-y-64">
 			{#if !clicked}
 				<div class="flex flex-col items-center justify-center -translate-y-32 space-y-16">

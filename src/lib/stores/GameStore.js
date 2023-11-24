@@ -14,6 +14,9 @@ export const ABTrials = writable(createABTrials());
 export const CCTrials = writable(createCCTrials());
 export const SiBTrials = writable(createSiBTrials());
 
+export const CCTrials2 = writable(createCCTrials());
+export const SiBTrials2 = writable(createSiBTrials());
+
 export const ABPractice = writable(createABTrials());
 export const CCPractice = writable(createCCTrials());
 export const SiBPractice = writable(createSiBTrials(true));
