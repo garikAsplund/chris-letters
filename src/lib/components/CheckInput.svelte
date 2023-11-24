@@ -65,7 +65,7 @@
 					if ($guesses.length === 2) {
 						$startTime = 0;
 						$everyReactionTime.push(reactionTime);
-						$everyGuess.push(...$guesses);
+						$everyGuess.push([...$guesses]);
 						$everyTarget.push($targetLetter.split(''));
 
 						const correctGuess = {
@@ -73,6 +73,14 @@
 							timeout: 2000,
 							hideDismiss: true,
 							background: 'bg-green-500',
+							classes: 'p-12 m-8 w-auto h-18 text-center'
+						};
+
+						const halfCorrectGuess = {
+							message: '<font size="+2">Half right! Half wrong.</font>',
+							timeout: 2000,
+							hideDismiss: true,
+							background: 'bg-gradient-to-tr from-green-500 to-red-500',
 							classes: 'p-12 m-8 w-auto h-18 text-center'
 						};
 
@@ -91,6 +99,7 @@
 							if ($isPractice) toastStore.trigger(correctGuess);
 						} else if ($targetLetter.includes($guesses[0]) || $targetLetter.includes($guesses[1])) {
 							$everyAccuracy = [...$everyAccuracy, 1];
+							if ($isPractice) toastStore.trigger(halfCorrectGuess);
 						} else {
 							$everyAccuracy = [...$everyAccuracy, 0];
 							if ($isPractice) toastStore.trigger(wrongGuess);
@@ -103,18 +112,6 @@
 							{ everyTarget: $everyTarget }
 						);
 
-						if ($isPractice) {
-							receivedLetter === $targetLetter
-								? toastStore.trigger(correctGuess)
-								: toastStore.trigger(wrongGuess);
-						}
-
-						console.log(
-							{ everyAccuracy: $everyAccuracy },
-							{ everyGuess: $everyGuess },
-							{ everyReactionTime: $everyReactionTime },
-							{ everyTarget: $everyTarget }
-						);
 						$numberOfFlashes = 1;
 						$started = false;
 						$targetLetter = '';

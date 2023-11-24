@@ -28,19 +28,24 @@
 		started,
 		guessed,
 		isPractice,
-		isPracticeCount
+		isPracticeCount,
+		everyAccuracy,
+		everyTarget,
+		everyReactionTime,
+		everyGuess,
+		targetColor
 	} from '$lib/stores/GameStore';
 	import GameOver from './GameOver.svelte';
 	import CheckInput from './CheckInput.svelte';
 	import { dbController } from '$lib/database/dbController';
+	import { user } from '$lib/database/firebase';
 
 	const targets = ['red', 'green'];
-	let targetColor;
 	dbController
 		.getTargetColor()
 		.then((index) => {
 			console.log(targets[index]);
-			targetColor = targets[index];
+			$targetColor = targets[index];
 		})
 		.catch((error) => {
 			console.error('An error occurred:', error);
@@ -134,6 +139,15 @@
 		setTimeout(begin, 400);
 	}
 
+	function resetDataGathering() {
+		$everyTarget = [];
+		$everyGuess = [];
+		$everyAccuracy = [];
+		$everyReactionTime = [];
+
+		console.log('reset data gathering');
+	}
+
 	function begin() {
 		if ($started) return;
 		if (!$guessed) return;
@@ -143,6 +157,7 @@
 			$isPractice = false;
 			$isPracticeCount = 0;
 			$currentTrial = 0;
+			resetDataGathering();
 
 			if (AB || CC || SiB) {
 				$guessed = true;
@@ -167,15 +182,21 @@
 				trialIndex += 1;
 				$isPractice = true;
 				buttonText = 'Click to practice';
+				dbController.writeAB($user.uid, $everyTarget, $everyGuess, $everyAccuracy, $everyReactionTime);
+				resetDataGathering();
 			}
 			if ((CC || SiB) && blockCount < 2) {
+				CC ? dbController.writeCC($user.uid, $everyTarget, $everyGuess, $everyAccuracy, $everyReactionTime, blockCount) : dbController.writeSiB($user.uid, $everyTarget, $everyGuess, $everyAccuracy, $everyReactionTime, blockCount);
 				blockCount += 1;
 				buttonText = 'Click to begin';
-			} else {
+				resetDataGathering();
+			} else if (CC || SiB) {
+				CC ? dbController.writeCC($user.uid, $everyTarget, $everyGuess, $everyAccuracy, $everyReactionTime, blockCount) : dbController.writeSiB($user.uid, $everyTarget, $everyGuess, $everyAccuracy, $everyReactionTime, blockCount);
 				trialIndex += 1;
 				$isPractice = true;
 				blockCount = 1;
 				buttonText = 'Click to practice';
+				resetDataGathering();
 			}
 			clicked = false;
 			return;
@@ -304,7 +325,7 @@
 				>
 					<p
 						class={`self-center font-thin text-center font-courier-new`}
-						style="color: {$isTarget ? targetColor : $textColor}; font-size: {boxText}px"
+						style="color: {$isTarget ? $targetColor : $textColor}; font-size: {boxText}px"
 					>
 						{#if $displayFace}
 							<img src="garik_bw.jpg" alt="Garik!!!" />

@@ -25,18 +25,7 @@
 
 	$: isNotValid = !gender || !handedness || !age;
 
-	if ($currentTrial === NUMBER_OF_TRIALS + 1) {
-		dbController.writeTrialData(
-			$user.uid,
-			'ab',
-			$everyTarget,
-			$everyGuess,
-			$everyAccuracy,
-			$everyReactionTime
-		);
-		gameOver();
-		$currentTrial += 1;
-	}
+	gameOver();
 
 	function handleNumericInput(event) {
 		const inputValue = event.target.value;

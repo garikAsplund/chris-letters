@@ -2,6 +2,7 @@ import { dbRef } from './firebase';
 import { child, get, set, update, runTransaction } from 'firebase/database';
 import ShortUniqueId from 'short-unique-id';
 import { things } from '$lib/stores/GameStore';
+import { NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
 
 export const dbController = {
 	// update user info
@@ -96,54 +97,60 @@ export const dbController = {
 		}
 	},
 
-	async writeAB(userId, trialType, everyTarget, everyGuess, everyAccuracy, everyReactionTime) {
+	async writeAB(userId, everyTarget, everyGuess, everyAccuracy, everyReactionTime) {
 		try {
-			const uid = new ShortUniqueId();
-			const trialId = uid();
-
-			await set(child(dbRef, `blocks/${userId}/${trialId}`), {
-				trialType: trialType,
-				targets: everyTarget,
-				guesses: everyGuess,
-				accuracy: everyAccuracy,
-				reactionTime: everyReactionTime
-			});
+		  const updates = {};
+		  
+		  for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
+			updates[`AB/${userId}/${i + 1}`] = {
+			  targets: everyTarget[i],
+			  guesses: everyGuess[i],
+			  accuracy: everyAccuracy[i],
+			  reactionTime: everyReactionTime[i]
+			};
+		  }
+	  
+		  await update(dbRef, updates);
 		} catch (error) {
-			console.error(error);
+		  console.error(error);
 		}
+	  },
+
+	async writeCC(userId, everyTarget, everyGuess, everyAccuracy, everyReactionTime, blockCount) {
+		try {
+			const updates = {};
+			
+			for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
+			  updates[`CC/${userId}/block${blockCount}/${i + 1}`] = {
+				targets: everyTarget[i],
+				guesses: everyGuess[i],
+				accuracy: everyAccuracy[i],
+				reactionTime: everyReactionTime[i]
+			  };
+			}
+		
+			await update(dbRef, updates);
+		  } catch (error) {
+			console.error(error);
+		  }
 	},
 
-	async writeCC(userId, trialType, everyTarget, everyGuess, everyAccuracy, everyReactionTime) {
+	async writeSiB(userId, everyTarget, everyGuess, everyAccuracy, everyReactionTime, blockCount) {
 		try {
-			const uid = new ShortUniqueId();
-			const trialId = uid();
-
-			await set(child(dbRef, `blocks/${userId}/${trialId}`), {
-				trialType: trialType,
-				targets: everyTarget,
-				guesses: everyGuess,
-				accuracy: everyAccuracy,
-				reactionTime: everyReactionTime
-			});
-		} catch (error) {
+			const updates = {};
+			
+			for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
+			  updates[`SiB/${userId}/block${blockCount}/${i + 1}`] = {
+				targets: everyTarget[i],
+				guesses: everyGuess[i],
+				accuracy: everyAccuracy[i],
+				reactionTime: everyReactionTime[i]
+			  };
+			}
+		
+			await update(dbRef, updates);
+		  } catch (error) {
 			console.error(error);
-		}
-	},
-
-	async writeSiB(userId, trialType, everyTarget, everyGuess, everyAccuracy, everyReactionTime) {
-		try {
-			const uid = new ShortUniqueId();
-			const trialId = uid();
-
-			await set(child(dbRef, `blocks/${userId}/${trialId}`), {
-				trialType: trialType,
-				targets: everyTarget,
-				guesses: everyGuess,
-				accuracy: everyAccuracy,
-				reactionTime: everyReactionTime
-			});
-		} catch (error) {
-			console.error(error);
-		}
-	}
-};
+		  }
+		},
+}

@@ -37,6 +37,7 @@ export const displayFace = writable(false);
 export const currentTrial = writable(0);
 export const isPractice = writable(true);
 export const isPracticeCount = writable(0);
+export const targetColor = writable('');
 
 export const started = writable(false);
 export const guessed = writable(true);
@@ -46,3 +47,5 @@ export const everyReactionTime = writable([]);
 export const everyGuess = writable([]);
 export const everyTarget = writable([]);
 export const everyAccuracy = writable([]);
+export const everyStreamDuration = writable([]);
+
