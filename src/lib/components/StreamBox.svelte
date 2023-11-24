@@ -6,6 +6,8 @@
 		ABTrials,
 		CCTrials,
 		SiBTrials,
+		CCTrials2,
+		SiBTrials2,
 		ABPractice,
 		CCPractice,
 		SiBPractice,
@@ -216,13 +218,13 @@
 					AB = false;
 					CC = true;
 					SiB = false;
-					stream($CCTrials);
+					blockCount === 1 ? stream($CCTrials) : stream($CCTrials2);
 					break;
 				case 'SiB':
 					AB = false;
 					CC = false;
 					SiB = true;
-					stream($SiBTrials);
+					blockCount === 1 ? stream($SiBTrials) : stream($SiBTrials2);
 					break;
 			}
 		}
