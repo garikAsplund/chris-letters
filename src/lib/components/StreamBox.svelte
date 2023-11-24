@@ -33,10 +33,12 @@
 	import { dbController } from '$lib/database/dbController';
 
 	const targets = ['red', 'green'];
+	let targetColor;
 	dbController
 		.getTargetColor()
 		.then((index) => {
 			console.log(targets[index]);
+			targetColor = targets[index];
 		})
 		.catch((error) => {
 			console.error('An error occurred:', error);
@@ -285,8 +287,7 @@
 				>
 					<p
 						class={`self-center font-thin text-center font-courier-new`}
-						class:text-red-500={$isTarget}
-						style="color: {$textColor}; font-size: {boxText}px"
+						style="color: {$isTarget ? targetColor : $textColor}; font-size: {boxText}px"
 					>
 						{#if $displayFace}
 							<img src="garik_bw.jpg" alt="Garik!!!" />
