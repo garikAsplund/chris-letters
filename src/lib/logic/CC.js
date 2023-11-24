@@ -11,18 +11,30 @@ export function createCCTrials() {
 	const CCTextColors = [];
 	const CCBoxColors = [];
 
-	while (CCLetters.length < NUMBER_OF_TRIALS) {
+	const targetOffsets = Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 3)
+		.concat(Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 8))
+		.sort(() => Math.random() - 0.5);
+
+	const distractorColor = Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 'red')
+		.concat(Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 'green'))
+		.sort(() => Math.random() - 0.5);
+
+	const distractorIndices = Array.from({ length: NUMBER_OF_TRIALS / 3 }, () => 5)
+		.concat(Array.from({ length: NUMBER_OF_TRIALS / 3 }, () => 6))
+		.concat(Array.from({ length: NUMBER_OF_TRIALS / 3 }, () => 7))
+		.sort(() => Math.random() - 0.5);
+
+	console.log({ targetOffsets, distractorIndices, distractorColor });
+
+	for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
 		const CCLettersTrial = [];
 		const CCTargetsTrial = [];
 		const CCTextColorsTrial = [];
 		const CCBoxColorsTrial = [];
 
-		let targetOffset = Math.random() < 0.5 ? 3 : 8;
-		let distractorIndex;
-
-		let targetIndex = 4;
-		distractorIndex = targetIndex + randomRange(3);
-		targetIndex = distractorIndex + targetOffset;
+		let targetOffset = targetOffsets[i];
+		let distractorIndex = distractorIndices[i];
+		let targetIndex = distractorIndex + targetOffset;
 
 		while (CCLettersTrial.length < 16) {
 			let letterToAdd = randomRange(LETTERS.length - 1);
@@ -40,7 +52,7 @@ export function createCCTrials() {
 			}
 
 			if (CCTargetsTrial.length === distractorIndex) {
-				CCBoxColorsTrial.push(Math.random() < 0.5 ? 'red' : 'green');
+				CCBoxColorsTrial.push(distractorColor[i]);
 			} else {
 				CCBoxColorsTrial.push('white');
 			}
