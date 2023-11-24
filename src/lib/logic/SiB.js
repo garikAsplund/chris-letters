@@ -44,10 +44,20 @@ export function createSiBTrials(practice = false) {
 		}
 	}
 
-	console.log({ surpriseTrials });
-	console.log({ surpriseTrials2 });
+	// console.log({ surpriseTrials });
+	// console.log({ surpriseTrials2 });
 
-	while (SiBLetters.length < NUMBER_OF_TRIALS) {
+	const targetIndices = Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 7)
+		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 8))
+		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 9))
+		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 10))
+		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 11))
+		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 12))
+		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 13))
+		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 14))
+		.sort(() => Math.random() - 0.5);
+
+	for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
 		const SiBLettersTrial = [];
 		const SiBTargetsTrial = [];
 		const SiBTextColorsTrial = [];
@@ -55,8 +65,7 @@ export function createSiBTrials(practice = false) {
 
 		let targetOffset = 3;
 
-		let targetIndex = 6;
-		targetIndex += randomRange(8);
+		let targetIndex = targetIndices[i];
 		let surpriseIndex = targetIndex - targetOffset;
 
 		while (SiBLettersTrial.length < 16) {
