@@ -35,12 +35,12 @@
 	};
 
 	const stepBack = (i) => {
-			codeFields[i] = '';			
-			if ($guesses.length === 1) resetFieldFocus(i - 1);
-			$guesses.pop();
-			setTimeout(() => {
-				receivedLetter = '';
-			}, 200);			
+		codeFields[i] = '';
+		if ($guesses.length === 1) resetFieldFocus(i - 1);
+		$guesses.pop();
+		setTimeout(() => {
+			receivedLetter = '';
+		}, 200);
 	};
 
 	const resetFieldFocus = (i) => {
@@ -51,13 +51,6 @@
 	function handleKeydown(event) {
 		let reactionTime;
 
-		const field0 = document.getElementById(`codefield_0`);
-		if (field0?.value.length === 0) {
-			resetFieldFocus(0);
-		} else if (field0?.value.length === 1 && event.key !== 'Backspace') {
-			resetFieldFocus(1);
-		}
-	
 		if (isAB && !$inProgress) {
 			if (event.key && event.key.length === 1) {
 				if ($guesses.length <= 2) {
@@ -65,11 +58,10 @@
 						reactionTime = Date.now() - $startTime;
 						if (event.key !== 'Backspace' && event.key !== ' ') {
 							$guesses = [...$guesses, event.key.toUpperCase()];
-							console.log("guesses: " + $guesses);
+							console.log('guesses: ' + $guesses);
 						}
 					}
-					if ($guesses.length === 2 && event.key === ' ') {
-						$guessed = true;
+					if ($guesses.length === 2) {
 						$startTime = 0;
 						$everyReactionTime.push(reactionTime);
 						$everyGuess.push(...$guesses);
@@ -96,23 +88,18 @@
 						$started = false;
 						$targetLetter = '';
 						$guesses = [];
+						$guessed = true;
 						setTimeout(() => {
 							$inProgress = true;
-						}, 100);
+						}, 900);
 						setTimeout(begin, 900);
 					}
 				}
 			}
 		} else if (!$inProgress) {
-			if (event.key !== ' ') {
-				if ($startTime && receivedLetter.length === 0) {
+			if (event.key && event.key.length === 1) {
+				receivedLetter = event.key.toUpperCase();
 
-					receivedLetter = event.key.toUpperCase();
-				}
-				if (event.key === 'Backspace') {
-					receivedLetter = '';
-				}
-			} else if (receivedLetter.length > 0) {
 				reactionTime = Date.now() - $startTime;
 				$everyReactionTime = [...$everyReactionTime, reactionTime];
 				$everyGuess = [...$everyGuess, receivedLetter];
@@ -127,7 +114,7 @@
 					timeout: 2000,
 					hideDismiss: true,
 					background: 'bg-green-500',
-					classes: 'p-12 m-8 w-auto h-18 text-center',
+					classes: 'p-12 m-8 w-auto h-18 text-center'
 				};
 
 				const wrongGuess = {
@@ -135,7 +122,7 @@
 					timeout: 2000,
 					hideDismiss: true,
 					background: 'bg-red-500',
-					classes: 'p-12 m-8 w-auto h-18 text-center',
+					classes: 'p-12 m-8 w-auto h-18 text-center'
 				};
 
 				console.log(
@@ -149,13 +136,14 @@
 					? toastStore.trigger(correctGuess)
 					: toastStore.trigger(wrongGuess);
 
-				$inProgress = true;
-				$guessed = true;
 				$startTime = 0;
 				$started = false;
 				$numberOfFlashes = 1;
 				$targetLetter = '';
-
+				$guessed = true;
+				setTimeout(() => {
+					$inProgress = true;
+				}, 900);
 				setTimeout(begin, 900);
 			}
 		}
@@ -179,13 +167,8 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
-<div transition:fade={{ delay: 125, duration: 350 }}>
-	<div
-		class="px-2 pb-12 font-sans font-thin text-gray-200"
-		style="font-size: {textSize}px"
-	>
-		Please enter your guess
-	</div>
+<div transition:fade={{ delay: 75, duration: 250 }} class="-translate-y-24">
+	<div class="m-12 text-4xl font-sans font-thin text-gray-200">Please enter your guess</div>
 	<div class="flex justify-center nospaces">
 		{#each codeFields as value, i (i)}
 			<input
@@ -195,7 +178,9 @@
 				class="flex items-center w-12 h-16 mx-2 text-4xl text-center text-gray-200 uppercase bg-transparent border rounded-lg"
 				maxlength="1"
 				name="codefield"
-				on:keyup={(e) => {if (e.key !== ' ') stepForward(i)}}
+				on:keyup={(e) => {
+					if (e.key !== ' ') stepForward(i);
+				}}
 				on:keydown={(e) => {
 					if (e.key === 'Backspace') {
 						stepBack(i);
@@ -205,6 +190,4 @@
 			/>
 		{/each}
 	</div>
-	<div class="px-2 pt-12 font-sans font-thin text-gray-200"
-	style="font-size: {textSize - 11}px">Then hit spacebar to continue</div>
 </div>

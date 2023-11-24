@@ -5,7 +5,7 @@
 	import ProgressBar from './ProgressBar.svelte';
 	import Admin from './Admin.svelte';
 	import Instructions from './Instructions.svelte';
-	import { currentTrial, isAdmin } from '$lib/stores/GameStore';
+	import { currentTrial, isAdmin, isPractice } from '$lib/stores/GameStore';
 	import { NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
 	import { onMount } from 'svelte';
 
@@ -131,7 +131,7 @@
 				<button class="hover:text-gray-400" on:click={handleSignOut}> Sign out </button>
 			</div>
 		{/if}
-		<ProgressBar current={$currentTrial} total={NUMBER_OF_TRIALS} />
+		<ProgressBar current={$currentTrial} total={ $isPractice ? 8 : NUMBER_OF_TRIALS} />
 	</div>
 {/if}
 

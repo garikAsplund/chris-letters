@@ -14,6 +14,10 @@ export const ABTrials = writable(createABTrials());
 export const CCTrials = writable(createCCTrials());
 export const SiBTrials = writable(createSiBTrials());
 
+export const ABPractice = writable(createABTrials());
+export const CCPractice = writable(createCCTrials());
+export const SiBPractice = writable(createSiBTrials(true));
+
 export const numberOfFlashes = writable(0);
 export const startTime = writable(Date.now());
 export const inProgress = writable(true);
@@ -28,6 +32,8 @@ export const targetLetter = writable('');
 export const boxColor = writable('white');
 export const displayFace = writable(false);
 export const currentTrial = writable(0);
+export const isPractice = writable(true);
+export const isPracticeCount = writable(0);
 
 export const started = writable(false);
 export const guessed = writable(true);

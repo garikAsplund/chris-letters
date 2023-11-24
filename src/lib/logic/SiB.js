@@ -5,7 +5,7 @@ import {
 	NUMBER_OF_TRIALS
 } from '$lib/logic/ConstantsAndHelpers';
 
-export function createSiBTrials() {
+export function createSiBTrials(practice = false) {
 	const SiBLetters = [];
 	const SiBTargets = [];
 	const SiBTextColors = [];
@@ -14,36 +14,38 @@ export function createSiBTrials() {
 	const surpriseTrials = [];
 	const surpriseTrials2 = [];
 
-	while (surpriseTrials.length < 6) {
-		let trial = randomRange(60 - 1);
+	if (!practice) {
+		while (surpriseTrials.length < 6) {
+			let trial = randomRange(60 - 1);
 
-		if (
-			surpriseTrials.includes(trial) ||
-			surpriseTrials.includes(trial - 1) ||
-			surpriseTrials.includes(trial + 1)
-		) {
-			continue;
+			if (
+				surpriseTrials.includes(trial) ||
+				surpriseTrials.includes(trial - 1) ||
+				surpriseTrials.includes(trial + 1)
+			) {
+				continue;
+			}
+
+			surpriseTrials.push(trial);
 		}
 
-		surpriseTrials.push(trial);
-	}
+		while (surpriseTrials2.length < 6) {
+			let trial = randomRange(60 - 1) + 36;
 
-	while (surpriseTrials2.length < 6) {
-		let trial = randomRange(60 - 1) + 36;
+			if (
+				surpriseTrials2.includes(trial) ||
+				surpriseTrials2.includes(trial - 1) ||
+				surpriseTrials2.includes(trial + 1)
+			) {
+				continue;
+			}
 
-		if (
-			surpriseTrials2.includes(trial) ||
-			surpriseTrials2.includes(trial - 1) ||
-			surpriseTrials2.includes(trial + 1)
-		) {
-			continue;
+			surpriseTrials2.push(trial);
 		}
-
-		surpriseTrials2.push(trial);
 	}
 
-	// console.log({surpriseTrials});
-	// console.log({surpriseTrials2});
+	console.log({ surpriseTrials });
+	console.log({ surpriseTrials2 });
 
 	while (SiBLetters.length < NUMBER_OF_TRIALS) {
 		const SiBLettersTrial = [];

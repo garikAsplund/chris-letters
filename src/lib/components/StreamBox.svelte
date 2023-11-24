@@ -6,6 +6,9 @@
 		ABTrials,
 		CCTrials,
 		SiBTrials,
+		ABPractice,
+		CCPractice,
+		SiBPractice,
 		numberOfFlashes,
 		startTime,
 		inProgress,
@@ -21,22 +24,25 @@
 		displayFace,
 		currentTrial,
 		started,
-		guessed
+		guessed,
+		isPractice,
+		isPracticeCount
 	} from '$lib/stores/GameStore';
 	import GameOver from './GameOver.svelte';
 	import CheckInput from './CheckInput.svelte';
 	import { dbController } from '$lib/database/dbController';
 
 	const targets = ['red', 'green'];
-	dbController.getTargetColor()
-		.then(index => {
+	dbController
+		.getTargetColor()
+		.then((index) => {
 			console.log(targets[index]);
 		})
-		.catch(error => {
+		.catch((error) => {
 			console.error('An error occurred:', error);
 		});
 
-	const trialOrder = [
+	const trialOrders = [
 		['AB', 'CC', 'SiB'],
 		['AB', 'SiB', 'CC'],
 		['CC', 'AB', 'SiB'],
@@ -44,11 +50,15 @@
 		['SiB', 'AB', 'CC'],
 		['SiB', 'CC', 'AB']
 	];
-	dbController.getTrialOrder()
-		.then(index => {
-			console.log(trialOrder[index]);
+	let trialOrder;
+	let trialIndex = 0;
+
+	dbController
+		.getTrialOrder()
+		.then((index) => {
+			trialOrder = trialOrders[index];
 		})
-		.catch(error => {
+		.catch((error) => {
 			console.error('An error occurred:', error);
 		});
 
@@ -70,14 +80,17 @@
 		const currentTime = performance.now();
 
 		if ($numberOfFlashes > 32) {
-			$startTime = Date.now();
 			setTimeout(() => {
+				$startTime = Date.now();
 				$inProgress = false;
+				$guessed = false;
 			}, 600);
 			$displayFace = false;
-			console.log('Stream length: ', performance.now() - streamTime); // convert to seconds
+			console.log('Stream length: ', performance.now() - streamTime);
 			return;
 		}
+
+		$isPractice && $isPracticeCount <= 4 ? (value = 100) : (value = 50);
 
 		$count += 1;
 
@@ -108,49 +121,83 @@
 	}
 
 	function onClick() {
-		buttonText = 'Trial already in progress';
 		clicked = true;
+		$started = false;
 		setTimeout(begin, 400);
 	}
 
 	function begin() {
 		if ($started) return;
 		if (!$guessed) return;
-		if (!AB && !CC && !SiB) return;
-		
+		if (trialIndex === 3) return;
+		if ($currentTrial === NUMBER_OF_TRIALS) {
+			$currentTrial = 0;
+			trialIndex += 1;
+		}
+		if ($isPracticeCount === 8) {
+			$isPractice = false;
+			$isPracticeCount = 0;
+			$currentTrial = 0;
+
+			if (AB || CC || SiB) {
+				$guessed = true;
+				clicked = false;
+			}
+		}
+
+		$isPracticeCount += 1;
 		streamTime = performance.now();
 
 		$currentTrial += 1;
 		$inProgress = true;
 		$started = true;
-		$guessed = false;
+		$guessed = true;
 		guesses = [];
 		$count = 0;
 
-		if (AB) stream($ABTrials);
-		if (CC) stream($CCTrials);
-		if (SiB) stream($SiBTrials);
-	}
-
-	// This will go away after getting logic correct
-	function handleCheck(event) {
-		if (event.target.checked) {
-			switch (event.target.value) {
+		if ($isPractice) {
+			switch (trialOrder[trialIndex]) {
 				case 'AB':
+					AB = true;
 					CC = false;
 					SiB = false;
-					clicked = false;
-					$currentTrial = 0;
+					stream($ABPractice);
+					break;
 				case 'CC':
 					AB = false;
+					CC = true;
 					SiB = false;
-					clicked = false;
-					$currentTrial = 0;
+					stream($CCPractice);
+					break;
 				case 'SiB':
 					AB = false;
 					CC = false;
-					clicked = false;
-					$currentTrial = 0;
+					SiB = true;
+					stream($SiBPractice);
+					break;
+			}
+		}
+
+		if (!$isPractice && clicked) {
+			switch (trialOrder[trialIndex]) {
+				case 'AB':
+					AB = true;
+					CC = false;
+					SiB = false;
+					stream($ABTrials);
+					break;
+				case 'CC':
+					AB = false;
+					CC = true;
+					SiB = false;
+					stream($CCTrials);
+					break;
+				case 'SiB':
+					AB = false;
+					CC = false;
+					SiB = true;
+					stream($SiBTrials);
+					break;
 			}
 		}
 	}
@@ -188,81 +235,64 @@
 			target.setAttribute('data-x', x);
 			target.setAttribute('data-y', y);
 
-			boxText = Math.floor(event.rect.width);
-			borderWidth = Math.floor(event.rect.width * 0.03);
+			boxText = Math.floor(event.rect.width / 7);
+			borderWidth = Math.floor((event.rect.width / 7) * 0.03);
 
 			localStorage.setItem('boxText', boxText.toString());
 			localStorage.setItem('borderWidth', borderWidth.toString());
 		});
 </script>
 
-{#if $currentTrial <= NUMBER_OF_TRIALS}
-<!-- <div class="text-3xl text-primary-50 text-center mt-8">Hi, {$user.displayName.split(' ')[0]}</div> -->
-	<div class="flex justify-center mx-4 space-x-4 translate-y-12">
-		<label>
-			<input type="checkbox" value="AB" on:input={handleCheck} bind:checked={AB} />
-			Attentional blink
-		</label>
-		<label>
-			<input type="checkbox" value="CC" on:input={handleCheck} bind:checked={CC} />
-			Contingent capture
-		</label>
-		<label>
-			<input type="checkbox" value="SiB" on:input={handleCheck} bind:checked={SiB} />
-			Surprise-induced blindness
-		</label>
-	</div>
-	<div class="flex justify-center mx-4 space-x-4 translate-y-24">
-		<div
-			id="resizable-div"
-			class={`flex justify-center resize-handle`}
-			style="border-width: {borderWidth}px; width: {boxText}px; height: {boxText}px; border-color: {$boxColor}"
-		>
-			<p
-				class={`self-center font-thin text-center font-courier-new`}
-				class:text-red-500={$isTarget}
-				style="color: {$textColor}; font-size: {boxText}px"
-			>
-				{#if $displayFace}
-					<img src="garik_bw.jpg" alt="Garik!!!" />
-				{:else}
-					{$currentLetter}
-				{/if}
-				{#if !AB && !CC && !SiB}
-					<p
-						class="p-2 font-sans text-5xl text-gray-200 -translate-y-9"
-						style="font-size: {boxText / 11}px"
-					>
-						<i class="m-5 fa-solid fa-angles-up" />
-						<br />
-						<br />
-						Resize this box to be the size of a credit card
-						<br />
-						<br />
-						<i class="fa-solid fa-credit-card fa-lg" />
-					</p>
-				{:else if !clicked}
+{#if trialIndex < 3}
+	<div class="flex justify-center h-full w-full mx-4 space-x-4">
+		<div class="translate-y-64">
+			{#if !clicked}
+				<div class="flex flex-col items-center justify-center -translate-y-32 space-y-16">
+					{#if !AB && !CC && !SiB}
+						<p class="p-2 font-sans text-3xl text-gray-200">
+							Resize this card to be the size of a real life credit card
+						</p>
+
+						<div id="resizable-div" class="resize-handle justify-center w-96 h-96">
+							<img
+								src="https://creditkarma-cms.imgix.net/wp-content/uploads/2023/07/CapitalBank01.png?fm=webp"
+								alt="Credit Card"
+							/>
+						</div>
+					{/if}
 					<button
 						on:click={onClick}
-						class="flex items-center p-12 font-sans text-5xl text-gray-800 bg-gray-100 border border-black rounded-sm hover:bg-gray-200"
+						class="p-6 -translate-y-24 font-sans text-5xl text-gray-800 bg-gray-100 border border-black rounded-sm hover:bg-gray-200"
 					>
 						{buttonText}
 					</button>
-				{/if}
-				{#if AB && !$inProgress}
-					<CheckInput {begin} isAB={true} textSize={boxText / 11} />
-				{:else if (CC || SiB) && !$inProgress}
-					<CheckInput {begin} isAB={false} textSize={boxText / 11} />
-				{/if}
-			</p>
+				</div>
+			{/if}
+			{#if $inProgress && clicked}
+				<div
+					class={`flex justify-center`}
+					style="border-width: {borderWidth}px; width: {boxText}px; height: {boxText}px; border-color: {$boxColor}"
+				>
+					<p
+						class={`self-center font-thin text-center font-courier-new`}
+						class:text-red-500={$isTarget}
+						style="color: {$textColor}; font-size: {boxText}px"
+					>
+						{#if $displayFace}
+							<img src="garik_bw.jpg" alt="Garik!!!" />
+						{:else}
+							{$currentLetter}
+						{/if}
+					</p>
+				</div>
+			{/if}
+
+			{#if AB && !$guessed}
+				<CheckInput {begin} isAB={true} textSize={boxText / 11} />
+			{:else if (CC || SiB) && !$guessed}
+				<CheckInput {begin} isAB={false} textSize={boxText / 11} />
+			{/if}
 		</div>
-	</div>
-	<div class="flex flex-col items-center mb-64">
-		<label class="flex flex-col m-4 text-xl text-center translate-y-32">
-			<input type="range" bind:value min="20" max="400" />
-			<br />
-			{value} ms
-		</label>
 	</div>
 {:else}
 	<GameOver />
