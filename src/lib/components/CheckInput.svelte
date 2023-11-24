@@ -10,7 +10,8 @@
 		everyAccuracy,
 		everyGuess,
 		everyReactionTime,
-		everyTarget
+		everyTarget,
+		isPractice
 	} from '$lib/stores/GameStore';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
@@ -67,15 +68,45 @@
 						$everyGuess.push(...$guesses);
 						$everyTarget.push($targetLetter.split(''));
 
+						const correctGuess = {
+							message: '<font size="+2">Nice work!</font>',
+							timeout: 2000,
+							hideDismiss: true,
+							background: 'bg-green-500',
+							classes: 'p-12 m-8 w-auto h-18 text-center'
+						};
+
+						const wrongGuess = {
+							message: '<font size="+2">Not quite. Keep trying!</font>',
+							timeout: 2000,
+							hideDismiss: true,
+							background: 'bg-red-500',
+							classes: 'p-12 m-8 w-auto h-18 text-center'
+						};
 						if (
 							($targetLetter[0] == $guesses[0] && $targetLetter[1] == $guesses[1]) ||
 							($targetLetter[0] == $guesses[1] && $targetLetter[1] == $guesses[0])
 						) {
 							$everyAccuracy = [...$everyAccuracy, 2];
+							if ($isPractice) toastStore.trigger(correctGuess);
 						} else if ($targetLetter.includes($guesses[0]) || $targetLetter.includes($guesses[1])) {
 							$everyAccuracy = [...$everyAccuracy, 1];
 						} else {
 							$everyAccuracy = [...$everyAccuracy, 0];
+							if ($isPractice) toastStore.trigger(wrongGuess);
+						}
+
+						console.log(
+							{ everyAccuracy: $everyAccuracy },
+							{ everyGuess: $everyGuess },
+							{ everyReactionTime: $everyReactionTime },
+							{ everyTarget: $everyTarget }
+						);
+
+						if ($isPractice) {
+							receivedLetter === $targetLetter
+								? toastStore.trigger(correctGuess)
+								: toastStore.trigger(wrongGuess);
 						}
 
 						console.log(
@@ -132,9 +163,11 @@
 					{ everyTarget: $everyTarget }
 				);
 
-				receivedLetter === $targetLetter
-					? toastStore.trigger(correctGuess)
-					: toastStore.trigger(wrongGuess);
+				if ($isPractice) {
+					receivedLetter === $targetLetter
+						? toastStore.trigger(correctGuess)
+						: toastStore.trigger(wrongGuess);
+				}
 
 				$startTime = 0;
 				$started = false;

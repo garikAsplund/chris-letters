@@ -1,4 +1,4 @@
-export const NUMBER_OF_TRIALS = 10;
+export const NUMBER_OF_TRIALS = 6;
 
 export const LETTERS = [
 	'B',

@@ -69,6 +69,7 @@
 	let guesses = ['A'];
 	let buttonText = 'Start';
 	let clicked = false;
+	let entryButton = true;
 
 	let boxText = 280;
 	let borderWidth = 8;
@@ -123,6 +124,7 @@
 	function onClick() {
 		clicked = true;
 		$started = false;
+		entryButton = false;
 		setTimeout(begin, 400);
 	}
 
@@ -130,9 +132,13 @@
 		if ($started) return;
 		if (!$guessed) return;
 		if (trialIndex === 3) return;
-		if ($currentTrial === NUMBER_OF_TRIALS) {
+		if ($currentTrial > NUMBER_OF_TRIALS) {
 			$currentTrial = 0;
 			trialIndex += 1;
+			$isPractice = true;
+			buttonText = 'Click to practice';
+			clicked = false;
+			return;
 		}
 		if ($isPracticeCount === 8) {
 			$isPractice = false;
@@ -141,11 +147,12 @@
 
 			if (AB || CC || SiB) {
 				$guessed = true;
+				buttonText = 'Click to begin';
 				clicked = false;
 			}
 		}
+		console.log({ $isPractice });
 
-		$isPracticeCount += 1;
 		streamTime = performance.now();
 
 		$currentTrial += 1;
@@ -156,6 +163,8 @@
 		$count = 0;
 
 		if ($isPractice) {
+			$isPracticeCount += 1;
+
 			switch (trialOrder[trialIndex]) {
 				case 'AB':
 					AB = true;
@@ -263,6 +272,7 @@
 					<button
 						on:click={onClick}
 						class="p-6 -translate-y-24 font-sans text-5xl text-gray-800 bg-gray-100 border border-black rounded-sm hover:bg-gray-200"
+						class:translate-y-36={!entryButton}
 					>
 						{buttonText}
 					</button>
