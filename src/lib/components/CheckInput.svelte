@@ -112,7 +112,7 @@
 							{ everyTarget: $everyTarget }
 						);
 
-						$numberOfFlashes = 1;
+						$numberOfFlashes = 0;
 						$started = false;
 						$targetLetter = '';
 						$guesses = [];
@@ -170,7 +170,7 @@
 
 				$startTime = 0;
 				$started = false;
-				$numberOfFlashes = 1;
+				$numberOfFlashes = 0;
 				$targetLetter = '';
 				setTimeout(() => {
 					$guessed = true;

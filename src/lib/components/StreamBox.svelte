@@ -83,6 +83,11 @@
 			console.error('An error occurred:', error);
 		});
 
+	dbController.getSessionNumber($user.uid).then((number) => {
+		$sessionNumber = number;
+		console.log({ $sessionNumber });
+	});
+
 	let AB = false;
 	let CC = false;
 	let SiB = false;
@@ -103,7 +108,7 @@
 	function stream(trialType) {
 		const currentTime = performance.now();
 
-		if ($numberOfFlashes > 32) {
+		if ($numberOfFlashes === 32) {
 			setTimeout(() => {
 				$startTime = Date.now();
 				$inProgress = false;
@@ -119,15 +124,13 @@
 		$count += 1;
 
 		if ($count % Math.floor(value / Math.floor(1000 / $refreshRate)) === 0) {
-			$isOn = !$isOn;
-			$numberOfFlashes += 1;
-
 			if ($isOn) {
-				$currentLetter = trialType.letters[$currentTrial - 1][$numberOfFlashes / 2 - 1];
-				$textColor = trialType.textColors[$currentTrial - 1][$numberOfFlashes / 2 - 1];
-				$isTarget = trialType.targets[$currentTrial - 1][$numberOfFlashes / 2 - 1];
-				if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][$numberOfFlashes / 2 - 1];
-				if (SiB) $displayFace = trialType.surprise[$currentTrial - 1][$numberOfFlashes / 2 - 1];
+				$currentLetter = trialType.letters[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
+				$textColor = trialType.textColors[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
+				$isTarget = trialType.targets[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
+				if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
+				if (SiB)
+					$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 
 				if ($isTarget) {
 					$targetLetter += $currentLetter;
@@ -137,7 +140,8 @@
 				if (SiB)
 					$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes - 1) / 2 - 1];
 			}
-
+			$isOn = !$isOn;
+			$numberOfFlashes += 1;
 			$lastTime = currentTime;
 		}
 

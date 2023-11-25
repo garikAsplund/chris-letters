@@ -92,30 +92,6 @@ export const dbController = {
 		}
 	},
 
-	async writeTrialData(
-		userId,
-		trialType,
-		everyTarget,
-		everyGuess,
-		everyAccuracy,
-		everyReactionTime
-	) {
-		try {
-			const uid = new ShortUniqueId();
-			const trialId = uid();
-
-			await set(child(dbRef, `blocks/${userId}/${trialId}`), {
-				trialType: trialType,
-				targets: everyTarget,
-				guesses: everyGuess,
-				accuracy: everyAccuracy,
-				reactionTime: everyReactionTime
-			});
-		} catch (error) {
-			console.error(error);
-		}
-	},
-
 	async writeAB(userId, everyTarget, everyGuess, everyAccuracy, everyReactionTime, sessionNumber) {
 		try {
 			const updates = {};
