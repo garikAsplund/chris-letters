@@ -29,7 +29,7 @@ export function createSiBTrials(practice = false, second = false) {
 		}
 	}
 
-	console.log({ surpriseTrials });
+	// console.log({ surpriseTrials });
 
 	const targetIndices = Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 7)
 		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 8))

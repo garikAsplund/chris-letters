@@ -171,7 +171,8 @@ export const dbController = {
 		everyReactionTime,
 		blockCount,
 		sessionNumber,
-		RSVP
+		RSVP,
+		surprise
 	) {
 		try {
 			const updates = {};
@@ -182,7 +183,8 @@ export const dbController = {
 					response: everyGuess[i],
 					accuracy: everyAccuracy[i],
 					reactionTime: everyReactionTime[i],
-					RSVP: RSVP[i]
+					RSVP: RSVP[i],
+					surprise: surprise[i].includes(true) ? surprise[i].indexOf(true) : 'None'
 				};
 			}
 

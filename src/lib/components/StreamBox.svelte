@@ -236,7 +236,8 @@
 							$everyReactionTime,
 							blockCount,
 							$sessionNumber,
-							$SiBTrials.letters
+							$SiBTrials.letters,
+							$SiBTrials.surprise
 					  );
 				blockCount += 1;
 				buttonText = 'Click to begin';
@@ -265,7 +266,8 @@
 							$everyReactionTime,
 							blockCount,
 							$sessionNumber,
-							$SiBTrials2.letters
+							$SiBTrials2.letters,
+							$SiBTrials2.surprise
 					  );
 				trialIndex += 1;
 				$isPractice = true;
