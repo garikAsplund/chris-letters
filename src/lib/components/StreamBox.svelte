@@ -334,6 +334,8 @@
 			localStorage.setItem('boxText', boxText.toString());
 			localStorage.setItem('borderWidth', borderWidth.toString());
 		});
+
+	if (trialIndex === 3) dbController.updateSessionNumber($user.uid);
 </script>
 
 {#if trialIndex < 3}
@@ -389,4 +391,9 @@
 	</div>
 {:else}
 	<GameOver />
+{/if}
+{#if $sessionNumber > 2}
+	<div class="flex justify-center text-5xl font-bold translate-y-16" in:blur={{ duration: 1000 }}>
+		<div class="mb-48 space-y-12 text-center">Thank you for participating!</div>
+	</div>
 {/if}

@@ -51,6 +51,7 @@
 				.then((snapshot) => {
 					if (snapshot.exists()) {
 						$sessionNumber = snapshot.val();
+						console.log({ $sessionNumber });
 					} else {
 						console.log('No sessionNumber available');
 					}

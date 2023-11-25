@@ -55,6 +55,30 @@ export const dbController = {
 		}
 	},
 
+	async updateSessionNumber(userId) {
+		try {
+			const index = await runTransaction(
+				child(dbRef, `users/${userId}/sessionNumber`),
+				(currentIndex) => {
+					return currentIndex + 1;
+				}
+			);
+
+			return index.snapshot.val();
+		} catch (error) {
+			console.error(error);
+		}
+	},
+
+	async getSessionNumber(userId) {
+		try {
+			const snapshot = await get(child(dbRef, `users/${userId}/sessionNumber`));
+			return snapshot.val();
+		} catch (error) {
+			console.error(error);
+		}
+	},
+
 	async writeParticipantData(userId, gender, handedness, age, problemDescription) {
 		try {
 			await update(child(dbRef, `users/${userId}`), {

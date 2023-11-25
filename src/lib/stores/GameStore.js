@@ -6,7 +6,7 @@ import { createSiBTrials } from '$lib/logic/SiB';
 export const isAdmin = writable(false);
 export const things = writable({});
 export const isComplete = writable(false);
-export const sessionNumber = writable(0);
+export const sessionNumber = writable(1);
 
 export const correct = writable(0);
 export const incorrect = writable(0);
