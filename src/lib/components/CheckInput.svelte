@@ -116,11 +116,13 @@
 						$started = false;
 						$targetLetter = '';
 						$guesses = [];
-						$guessed = true;
+						setTimeout(() => {
+							$guessed = true;
+						}, 200);
 						setTimeout(() => {
 							$inProgress = true;
+							begin();
 						}, 900);
-						setTimeout(begin, 900);
 					}
 				}
 			}
@@ -170,11 +172,13 @@
 				$started = false;
 				$numberOfFlashes = 1;
 				$targetLetter = '';
-				$guessed = true;
+				setTimeout(() => {
+					$guessed = true;
+				}, 200);
 				setTimeout(() => {
 					$inProgress = true;
+					begin();
 				}, 900);
-				setTimeout(begin, 900);
 			}
 		}
 	}
