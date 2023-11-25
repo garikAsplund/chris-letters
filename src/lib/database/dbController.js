@@ -92,16 +92,31 @@ export const dbController = {
 		}
 	},
 
-	async writeAB(userId, everyTarget, everyGuess, everyAccuracy, everyReactionTime, sessionNumber) {
+	async writeAB(
+		userId,
+		everyTarget,
+		everyGuess,
+		everyAccuracy,
+		everyReactionTime,
+		sessionNumber,
+		RSVP,
+		t1Position,
+		t2Position,
+		targetColor
+	) {
 		try {
 			const updates = {};
 
 			for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
 				updates[`AB/${userId}/session${sessionNumber}/${i + 1}`] = {
-					targets: everyTarget[i],
-					guesses: everyGuess[i],
+					target: everyTarget[i],
+					responses: everyGuess[i],
 					accuracy: everyAccuracy[i],
-					reactionTime: everyReactionTime[i]
+					reaction_time: everyReactionTime[i],
+					RSVP: RSVP[i],
+					t1Position: t1Position[i],
+					t2Position: `+${t2Position[i]}`,
+					target_color: targetColor
 				};
 			}
 

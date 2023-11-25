@@ -204,7 +204,11 @@
 					$everyGuess,
 					$everyAccuracy,
 					$everyReactionTime,
-					$sessionNumber
+					$sessionNumber,
+					$ABTrials.letters,
+					$ABTrials.T1Indices,
+					$ABTrials.targetOffsets,
+					$targetColor
 				);
 				resetDataGathering();
 			}

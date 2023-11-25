@@ -57,6 +57,8 @@ export function createABTrials() {
 	return {
 		letters: ABLetters,
 		targets: ABTargets,
-		textColors: ABTextColors
+		textColors: ABTextColors,
+		targetOffsets,
+		T1Indices
 	};
 }
