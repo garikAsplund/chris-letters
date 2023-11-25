@@ -41,6 +41,17 @@
 	import { dbController } from '$lib/database/dbController';
 	import { user } from '$lib/database/firebase';
 
+	console.log({
+		$ABTrials,
+		$CCTrials,
+		$SiBTrials,
+		$CCTrials2,
+		$SiBTrials2,
+		$ABPractice,
+		$CCPractice,
+		$SiBPractice
+	});
+
 	const targets = ['red', 'green'];
 	dbController
 		.getTargetColor()

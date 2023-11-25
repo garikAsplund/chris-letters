@@ -24,7 +24,7 @@ export function createCCTrials() {
 		.concat(Array.from({ length: NUMBER_OF_TRIALS / 3 }, () => 7))
 		.sort(() => Math.random() - 0.5);
 
-	console.log({ targetOffsets, distractorIndices, distractorColor });
+	// console.log({ targetOffsets, distractorIndices, distractorColor });
 
 	for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
 		const CCLettersTrial = [];
@@ -37,7 +37,7 @@ export function createCCTrials() {
 		let targetIndex = distractorIndex + targetOffset;
 
 		while (CCLettersTrial.length < 16) {
-			let letterToAdd = randomRange(LETTERS.length - 1);
+			let letterToAdd = randomRange(LETTERS.length) - 1;
 
 			if (CCLettersTrial[CCLettersTrial.length - 1] === LETTERS[letterToAdd]) {
 				letterToAdd = (letterToAdd + 1) % LETTERS.length;

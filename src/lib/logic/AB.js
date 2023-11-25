@@ -19,8 +19,6 @@ export function createABTrials() {
 		.concat(Array.from({ length: NUMBER_OF_TRIALS / 3 }, () => 7))
 		.sort(() => Math.random() - 0.5);
 
-	// console.log({target}
-
 	for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
 		const ABLettersTrial = [];
 		const ABTargetsTrial = [];
@@ -32,7 +30,7 @@ export function createABTrials() {
 		let T2Index = T1Index + targetOffset;
 
 		while (ABLettersTrial.length < 16) {
-			let letterToAdd = randomRange(LETTERS.length - 1);
+			let letterToAdd = randomRange(LETTERS.length) - 1;
 
 			if (ABLettersTrial[ABLettersTrial.length - 1] === LETTERS[letterToAdd]) {
 				letterToAdd = (letterToAdd + 1) % LETTERS.length;
@@ -54,7 +52,7 @@ export function createABTrials() {
 		ABTextColors.push(ABTextColorsTrial);
 	}
 
-	console.log({ ABLetters, ABTargets, ABTextColors });
+	// console.log({ABLetters, ABTargets, ABTextColors});
 
 	return {
 		letters: ABLetters,

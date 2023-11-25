@@ -16,7 +16,7 @@ export function createSiBTrials(practice = false) {
 
 	if (!practice) {
 		while (surpriseTrials.length < 6) {
-			let trial = randomRange(60 - 1);
+			let trial = randomRange(60);
 
 			if (
 				surpriseTrials.includes(trial) ||
@@ -30,7 +30,7 @@ export function createSiBTrials(practice = false) {
 		}
 
 		while (surpriseTrials2.length < 6) {
-			let trial = randomRange(60 - 1) + 36;
+			let trial = randomRange(60) + 35;
 
 			if (
 				surpriseTrials2.includes(trial) ||
@@ -69,7 +69,7 @@ export function createSiBTrials(practice = false) {
 		let surpriseIndex = targetIndex - targetOffset;
 
 		while (SiBLettersTrial.length < 16) {
-			let letterToAdd = randomRange(LETTERS.length - 1);
+			let letterToAdd = randomRange(LETTERS.length) - 1;
 
 			if (SiBLettersTrial[SiBLettersTrial.length - 1] === LETTERS[letterToAdd]) {
 				letterToAdd = (letterToAdd + 1) % LETTERS.length;
