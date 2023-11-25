@@ -70,6 +70,9 @@ export function createCCTrials() {
 		letters: CCLetters,
 		targets: CCTargets,
 		textColors: CCTextColors,
-		boxColors: CCBoxColors
+		boxColors: CCBoxColors,
+		targetOffsets,
+		distractorColor,
+		distractorIndices
 	};
 }

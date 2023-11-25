@@ -5,18 +5,17 @@ import {
 	NUMBER_OF_TRIALS
 } from '$lib/logic/ConstantsAndHelpers';
 
-export function createSiBTrials(practice = false) {
+export function createSiBTrials(practice = false, second = false) {
 	const SiBLetters = [];
 	const SiBTargets = [];
 	const SiBTextColors = [];
 	const SiBSurprise = [];
 
 	const surpriseTrials = [];
-	const surpriseTrials2 = [];
 
 	if (!practice) {
 		while (surpriseTrials.length < 6) {
-			let trial = randomRange(60);
+			let trial = second ? randomRange(60) + 35 : randomRange(60);
 
 			if (
 				surpriseTrials.includes(trial) ||
@@ -28,24 +27,9 @@ export function createSiBTrials(practice = false) {
 
 			surpriseTrials.push(trial);
 		}
-
-		while (surpriseTrials2.length < 6) {
-			let trial = randomRange(60) + 35;
-
-			if (
-				surpriseTrials2.includes(trial) ||
-				surpriseTrials2.includes(trial - 1) ||
-				surpriseTrials2.includes(trial + 1)
-			) {
-				continue;
-			}
-
-			surpriseTrials2.push(trial);
-		}
 	}
 
-	// console.log({ surpriseTrials });
-	// console.log({ surpriseTrials2 });
+	console.log({ surpriseTrials });
 
 	const targetIndices = Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 7)
 		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 8))

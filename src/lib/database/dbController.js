@@ -112,11 +112,11 @@ export const dbController = {
 					target: everyTarget[i],
 					responses: everyGuess[i],
 					accuracy: everyAccuracy[i],
-					reaction_time: everyReactionTime[i],
+					reactionTime: everyReactionTime[i],
 					RSVP: RSVP[i],
 					t1Position: t1Position[i],
 					t2Position: `+${t2Position[i]}`,
-					target_color: targetColor
+					targetColor: targetColor
 				};
 			}
 
@@ -133,17 +133,27 @@ export const dbController = {
 		everyAccuracy,
 		everyReactionTime,
 		blockCount,
-		sessionNumber
+		sessionNumber,
+		RSVP,
+		targetPosition,
+		distractorPosition,
+		distractorColor,
+		targetColor
 	) {
 		try {
 			const updates = {};
 
 			for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
 				updates[`CC/${userId}/session${sessionNumber}/block${blockCount}/${i + 1}`] = {
-					targets: everyTarget[i],
-					guesses: everyGuess[i],
+					target: everyTarget[i],
+					response: everyGuess[i],
 					accuracy: everyAccuracy[i],
-					reactionTime: everyReactionTime[i]
+					reactionTime: everyReactionTime[i],
+					RSVP: RSVP[i],
+					targetPosition: targetPosition[i] + distractorPosition[i],
+					distractorPosition: `-${targetPosition[i]}`,
+					distractorColor: distractorColor[i],
+					targetColor: targetColor
 				};
 			}
 
@@ -160,17 +170,19 @@ export const dbController = {
 		everyAccuracy,
 		everyReactionTime,
 		blockCount,
-		sessionNumber
+		sessionNumber,
+		RSVP
 	) {
 		try {
 			const updates = {};
 
 			for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
 				updates[`SiB/${userId}/session${sessionNumber}/block${blockCount}/${i + 1}`] = {
-					targets: everyTarget[i],
-					guesses: everyGuess[i],
+					target: everyTarget[i],
+					response: everyGuess[i],
 					accuracy: everyAccuracy[i],
-					reactionTime: everyReactionTime[i]
+					reactionTime: everyReactionTime[i],
+					RSVP: RSVP[i]
 				};
 			}
 

@@ -221,7 +221,12 @@
 							$everyAccuracy,
 							$everyReactionTime,
 							blockCount,
-							$sessionNumber
+							$sessionNumber,
+							$CCTrials.letters,
+							$CCTrials.targetOffsets,
+							$CCTrials.distractorIndices,
+							$CCTrials.distractorColor,
+							$targetColor
 					  )
 					: dbController.writeSiB(
 							$user.uid,
@@ -230,7 +235,8 @@
 							$everyAccuracy,
 							$everyReactionTime,
 							blockCount,
-							$sessionNumber
+							$sessionNumber,
+							$SiBTrials.letters
 					  );
 				blockCount += 1;
 				buttonText = 'Click to begin';
@@ -244,7 +250,12 @@
 							$everyAccuracy,
 							$everyReactionTime,
 							blockCount,
-							$sessionNumber
+							$sessionNumber,
+							$CCTrials2.letters,
+							$CCTrials2.targetOffsets,
+							$CCTrials2.distractorIndices,
+							$CCTrials2.distractorColor,
+							$targetColor
 					  )
 					: dbController.writeSiB(
 							$user.uid,
@@ -253,7 +264,8 @@
 							$everyAccuracy,
 							$everyReactionTime,
 							blockCount,
-							$sessionNumber
+							$sessionNumber,
+							$SiBTrials2.letters
 					  );
 				trialIndex += 1;
 				$isPractice = true;
