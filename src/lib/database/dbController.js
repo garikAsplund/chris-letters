@@ -5,11 +5,6 @@ import { things } from '$lib/stores/GameStore';
 import { NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
 
 export const dbController = {
-	// update user info
-	// frames per second
-	// screen size
-	// session number
-
 	async getTargetColor() {
 		try {
 			const index = await runTransaction(child(dbRef, 'settings/targetColor'), (currentIndex) => {
@@ -97,60 +92,76 @@ export const dbController = {
 		}
 	},
 
-	async writeAB(userId, everyTarget, everyGuess, everyAccuracy, everyReactionTime) {
-		try {
-		  const updates = {};
-		  
-		  for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
-			updates[`AB/${userId}/${i + 1}`] = {
-			  targets: everyTarget[i],
-			  guesses: everyGuess[i],
-			  accuracy: everyAccuracy[i],
-			  reactionTime: everyReactionTime[i]
-			};
-		  }
-	  
-		  await update(dbRef, updates);
-		} catch (error) {
-		  console.error(error);
-		}
-	  },
-
-	async writeCC(userId, everyTarget, everyGuess, everyAccuracy, everyReactionTime, blockCount) {
+	async writeAB(userId, everyTarget, everyGuess, everyAccuracy, everyReactionTime, sessionNumber) {
 		try {
 			const updates = {};
-			
+
 			for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
-			  updates[`CC/${userId}/block${blockCount}/${i + 1}`] = {
-				targets: everyTarget[i],
-				guesses: everyGuess[i],
-				accuracy: everyAccuracy[i],
-				reactionTime: everyReactionTime[i]
-			  };
+				updates[`AB/${userId}/session${sessionNumber}/${i + 1}`] = {
+					targets: everyTarget[i],
+					guesses: everyGuess[i],
+					accuracy: everyAccuracy[i],
+					reactionTime: everyReactionTime[i]
+				};
 			}
-		
+
 			await update(dbRef, updates);
-		  } catch (error) {
+		} catch (error) {
 			console.error(error);
-		  }
+		}
 	},
 
-	async writeSiB(userId, everyTarget, everyGuess, everyAccuracy, everyReactionTime, blockCount) {
+	async writeCC(
+		userId,
+		everyTarget,
+		everyGuess,
+		everyAccuracy,
+		everyReactionTime,
+		blockCount,
+		sessionNumber
+	) {
 		try {
 			const updates = {};
-			
+
 			for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
-			  updates[`SiB/${userId}/block${blockCount}/${i + 1}`] = {
-				targets: everyTarget[i],
-				guesses: everyGuess[i],
-				accuracy: everyAccuracy[i],
-				reactionTime: everyReactionTime[i]
-			  };
+				updates[`CC/${userId}/session${sessionNumber}/block${blockCount}/${i + 1}`] = {
+					targets: everyTarget[i],
+					guesses: everyGuess[i],
+					accuracy: everyAccuracy[i],
+					reactionTime: everyReactionTime[i]
+				};
 			}
-		
+
 			await update(dbRef, updates);
-		  } catch (error) {
+		} catch (error) {
 			console.error(error);
-		  }
-		},
-}
+		}
+	},
+
+	async writeSiB(
+		userId,
+		everyTarget,
+		everyGuess,
+		everyAccuracy,
+		everyReactionTime,
+		blockCount,
+		sessionNumber
+	) {
+		try {
+			const updates = {};
+
+			for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
+				updates[`SiB/${userId}/session${sessionNumber}/block${blockCount}/${i + 1}`] = {
+					targets: everyTarget[i],
+					guesses: everyGuess[i],
+					accuracy: everyAccuracy[i],
+					reactionTime: everyReactionTime[i]
+				};
+			}
+
+			await update(dbRef, updates);
+		} catch (error) {
+			console.error(error);
+		}
+	}
+};

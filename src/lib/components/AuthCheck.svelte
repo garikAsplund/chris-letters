@@ -5,7 +5,7 @@
 	import ProgressBar from './ProgressBar.svelte';
 	import Admin from './Admin.svelte';
 	import Instructions from './Instructions.svelte';
-	import { currentTrial, isAdmin, isPractice } from '$lib/stores/GameStore';
+	import { currentTrial, isAdmin, isPractice, sessionNumber } from '$lib/stores/GameStore';
 	import { NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
 	import { onMount } from 'svelte';
 
@@ -40,7 +40,19 @@
 					if (snapshot.exists()) {
 						$isAdmin = snapshot.val();
 					} else {
-						console.log('No data available');
+						console.log('No admin status available');
+					}
+				})
+				.catch((error) => {
+					console.error(error);
+				});
+
+			get(child(dbRef, `users/${user.uid}/sessionNumber`))
+				.then((snapshot) => {
+					if (snapshot.exists()) {
+						$sessionNumber = snapshot.val();
+					} else {
+						console.log('No sessionNumber available');
 					}
 				})
 				.catch((error) => {
@@ -78,7 +90,8 @@
 	function writeUserData(userId, displayName) {
 		set(ref(db, `users/${userId}`), {
 			displayName: displayName,
-			admin: false
+			admin: false,
+			sessionNumber: 1
 		});
 	}
 

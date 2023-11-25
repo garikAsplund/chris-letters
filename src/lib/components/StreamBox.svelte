@@ -33,7 +33,8 @@
 		everyTarget,
 		everyReactionTime,
 		everyGuess,
-		targetColor
+		targetColor,
+		sessionNumber
 	} from '$lib/stores/GameStore';
 	import GameOver from './GameOver.svelte';
 	import CheckInput from './CheckInput.svelte';
@@ -182,16 +183,59 @@
 				trialIndex += 1;
 				$isPractice = true;
 				buttonText = 'Click to practice';
-				dbController.writeAB($user.uid, $everyTarget, $everyGuess, $everyAccuracy, $everyReactionTime);
+				dbController.writeAB(
+					$user.uid,
+					$everyTarget,
+					$everyGuess,
+					$everyAccuracy,
+					$everyReactionTime,
+					$sessionNumber
+				);
 				resetDataGathering();
 			}
 			if ((CC || SiB) && blockCount < 2) {
-				CC ? dbController.writeCC($user.uid, $everyTarget, $everyGuess, $everyAccuracy, $everyReactionTime, blockCount) : dbController.writeSiB($user.uid, $everyTarget, $everyGuess, $everyAccuracy, $everyReactionTime, blockCount);
+				CC
+					? dbController.writeCC(
+							$user.uid,
+							$everyTarget,
+							$everyGuess,
+							$everyAccuracy,
+							$everyReactionTime,
+							blockCount,
+							$sessionNumber
+					  )
+					: dbController.writeSiB(
+							$user.uid,
+							$everyTarget,
+							$everyGuess,
+							$everyAccuracy,
+							$everyReactionTime,
+							blockCount,
+							$sessionNumber
+					  );
 				blockCount += 1;
 				buttonText = 'Click to begin';
 				resetDataGathering();
 			} else if (CC || SiB) {
-				CC ? dbController.writeCC($user.uid, $everyTarget, $everyGuess, $everyAccuracy, $everyReactionTime, blockCount) : dbController.writeSiB($user.uid, $everyTarget, $everyGuess, $everyAccuracy, $everyReactionTime, blockCount);
+				CC
+					? dbController.writeCC(
+							$user.uid,
+							$everyTarget,
+							$everyGuess,
+							$everyAccuracy,
+							$everyReactionTime,
+							blockCount,
+							$sessionNumber
+					  )
+					: dbController.writeSiB(
+							$user.uid,
+							$everyTarget,
+							$everyGuess,
+							$everyAccuracy,
+							$everyReactionTime,
+							blockCount,
+							$sessionNumber
+					  );
 				trialIndex += 1;
 				$isPractice = true;
 				blockCount = 1;

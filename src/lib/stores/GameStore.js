@@ -6,6 +6,7 @@ import { createSiBTrials } from '$lib/logic/SiB';
 export const isAdmin = writable(false);
 export const things = writable({});
 export const isComplete = writable(false);
+export const sessionNumber = writable(0);
 
 export const correct = writable(0);
 export const incorrect = writable(0);
@@ -48,4 +49,3 @@ export const everyGuess = writable([]);
 export const everyTarget = writable([]);
 export const everyAccuracy = writable([]);
 export const everyStreamDuration = writable([]);
-

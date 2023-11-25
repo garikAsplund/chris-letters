@@ -54,7 +54,7 @@ export function createABTrials() {
 		ABTextColors.push(ABTextColorsTrial);
 	}
 
-	console.log({ABLetters, ABTargets, ABTextColors});
+	console.log({ ABLetters, ABTargets, ABTextColors });
 
 	return {
 		letters: ABLetters,
