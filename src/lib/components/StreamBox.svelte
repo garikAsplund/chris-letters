@@ -34,7 +34,8 @@
 		everyReactionTime,
 		everyGuess,
 		targetColor,
-		sessionNumber
+		sessionNumber,
+		everyStreamDuration
 	} from '$lib/stores/GameStore';
 	import GameOver from './GameOver.svelte';
 	import CheckInput from './CheckInput.svelte';
@@ -116,7 +117,8 @@
 				$guessed = false;
 			}, 100);
 			$displayFace = false;
-			console.log('Stream length: ', Math.round(performance.now() - streamTime));
+			$everyStreamDuration.push(Math.round(performance.now() - streamTime));
+			console.log('Stream length: ', $everyStreamDuration[$everyStreamDuration.length - 1]);
 			return;
 		}
 
@@ -183,6 +185,7 @@
 		$everyGuess = [];
 		$everyAccuracy = [];
 		$everyReactionTime = [];
+		$everyStreamDuration = [];
 
 		console.log('reset data gathering');
 	}
@@ -235,7 +238,8 @@
 					$ABTrials.letters,
 					$ABTrials.T1Indices,
 					$ABTrials.targetOffsets,
-					$targetColor
+					$targetColor,
+					$everyStreamDuration
 				);
 				resetDataGathering();
 			} else if ((CC || SiB) && blockCount < 2) {
@@ -252,7 +256,8 @@
 							$CCTrials.targetOffsets,
 							$CCTrials.distractorIndices,
 							$CCTrials.distractorColor,
-							$targetColor
+							$targetColor,
+							$everyStreamDuration
 					  )
 					: dbController.writeSiB(
 							$user.uid,
@@ -265,7 +270,8 @@
 							$SiBTrials.letters,
 							$SiBTrials.surprise,
 							$SiBTrials.targetIndices,
-							$targetColor
+							$targetColor,
+							$everyStreamDuration
 					  );
 				blockCount += 1;
 				buttonText = 'Click to begin';
@@ -284,7 +290,8 @@
 							$CCTrials2.targetOffsets,
 							$CCTrials2.distractorIndices,
 							$CCTrials2.distractorColor,
-							$targetColor
+							$targetColor,
+							$everyStreamDuration
 					  )
 					: dbController.writeSiB(
 							$user.uid,
@@ -297,7 +304,8 @@
 							$SiBTrials2.letters,
 							$SiBTrials2.surprise,
 							$SiBTrials2.targetIndices,
-							$targetColor
+							$targetColor,
+							$everyStreamDuration
 					  );
 				trialIndex += 1;
 				$isPractice = true;
@@ -435,41 +443,43 @@
 								{/if}
 								{#if AB}
 									{#if $isPractice}
-										The first stream will be practice. The first half is slowed down and the second
-										half is presented at regular speed.
-										<br />
-										<br />
-										Report the two {$targetColor} letters in each stream when prompted.
-										<br />
-										<br />
-										If you are unsure, please make your best guess.
-										<br />
-										<br />
-										Press any key to begin practice.
+										<div transition:fade={{ delay: 75, duration: 350 }}>
+											Report the two {$targetColor} letters in each stream when prompted.
+											<br />
+											<br />
+											If you are unsure, please make your best guess.
+											<br />
+											<br />
+											Press any key to begin practice.
+										</div>
 									{:else}
-										Press any key to continue with the real experiment.
+										<div transition:fade={{ delay: 75, duration: 350 }}>
+											Press any key to continue with the real experiment.
+										</div>
 									{/if}
 								{/if}
 								{#if CC || SiB}
 									{#if $isPractice}
-										The first stream will be practice with the first half slowed down and the second
-										half presented at regular speed.
-										<br />
-										<br />
-										Report the {$targetColor} letter in each stream when prompted.
-										<br />
-										<br />
-										If you are unsure, please make your best guess.
-										<br />
-										<br />
-										Press any key to begin practice.
+										<div transition:fade={{ delay: 75, duration: 350 }}>
+											Report the {$targetColor} letter in each stream when prompted.
+											<br />
+											<br />
+											If you are unsure, please make your best guess.
+											<br />
+											<br />
+											Press any key to begin practice.
+										</div>
 									{:else if blockCount === 1}
-										Press any key to continue with the real experiment.
+										<div transition:fade={{ delay: 75, duration: 350 }}>
+											Press any key to continue with the real experiment.
+										</div>
 									{:else}
-										Please take a short break.
-										<br />
-										<br />
-										Press any key to continue.
+										<div transition:fade={{ delay: 75, duration: 350 }}>
+											Please take a short break.
+											<br />
+											<br />
+											Press any key to continue.
+										</div>
 									{/if}
 								{/if}
 							</p>
@@ -504,9 +514,4 @@
 	</div>
 {:else}
 	<GameOver />
-{/if}
-{#if $sessionNumber > 2}
-	<div class="flex justify-center text-5xl font-bold translate-y-16" in:blur={{ duration: 1000 }}>
-		<div class="mb-48 space-y-12 text-center">Thank you for participating!</div>
-	</div>
 {/if}

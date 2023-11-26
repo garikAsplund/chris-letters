@@ -113,21 +113,23 @@ export const dbController = {
 		RSVP,
 		t1Position,
 		t2Position,
-		targetColor
+		targetColor,
+		streamDuration
 	) {
 		try {
 			const updates = {};
 
 			for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
 				updates[`AB/${userId}/session${sessionNumber}/${i + 1}`] = {
-					target: everyTarget[i],
+					targets: everyTarget[i],
 					responses: everyGuess[i],
 					accuracy: everyAccuracy[i],
 					reactionTime: everyReactionTime[i],
 					RSVP: RSVP[i],
 					t1Position: t1Position[i],
 					t2Position: `+${t2Position[i]}`,
-					targetColor: targetColor
+					targetColor,
+					streamDuration: streamDuration[i]
 				};
 			}
 
@@ -149,7 +151,8 @@ export const dbController = {
 		targetPosition,
 		distractorPosition,
 		distractorColor,
-		targetColor
+		targetColor,
+		streamDuration
 	) {
 		try {
 			const updates = {};
@@ -164,7 +167,8 @@ export const dbController = {
 					targetPosition: targetPosition[i] + distractorPosition[i],
 					distractorPosition: `-${targetPosition[i]}`,
 					distractorColor: distractorColor[i],
-					targetColor: targetColor
+					targetColor,
+					streamDuration: streamDuration[i]
 				};
 			}
 
@@ -185,7 +189,8 @@ export const dbController = {
 		RSVP,
 		surprise,
 		targetPosition,
-		targetColor
+		targetColor,
+		streamDuration
 	) {
 		try {
 			const updates = {};
@@ -199,11 +204,26 @@ export const dbController = {
 					RSVP: RSVP[i],
 					surprise: surprise[i].includes(true) ? surprise[i].indexOf(true) : 'None',
 					targetPosition: targetPosition[i],
-					targetColor
+					targetColor,
+					streamDuration: streamDuration[i]
 				};
 			}
 
 			await update(dbRef, updates);
+		} catch (error) {
+			console.error(error);
+		}
+	},
+
+	async readData(trialType) {
+		try {
+			const snapshot = await get(child(dbRef, trialType));
+			if (snapshot.exists()) {
+				const data = snapshot.val();
+				return data;
+			} else {
+				console.log('No data available');
+			}
 		} catch (error) {
 			console.error(error);
 		}

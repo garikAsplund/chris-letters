@@ -1,8 +1,7 @@
 <script>
 	import * as ExcelJS from 'exceljs';
-	import { db as database } from '$lib/database/firebase';
-	import { ref, get } from 'firebase/database';
 	import { page } from '$app/stores';
+	import { dbController } from '$lib/database/dbController';
 	import {
 		currentTrial,
 		numberOfFlashes,
@@ -14,67 +13,6 @@
 		guessed
 	} from '$lib/stores/GameStore';
 
-	let excelData = {
-		blocks: {}
-	};
-
-	async function fetchDataFromFirebase() {
-		const dataRef = ref(database, 'blocks');
-		const dataSnapshot = await get(dataRef);
-
-		if (dataSnapshot.exists()) {
-			excelData.blocks = dataSnapshot.val();
-			console.log(excelData.blocks);
-			crunchData();
-		}
-	}
-
-	function crunchData() {
-		const workbook = new ExcelJS.Workbook();
-		const headers = [
-			'User ID',
-			'Trial ID',
-			'Trial Type',
-			'Targets',
-			'Guesses',
-			'Accuracy',
-			'Reaction Time'
-		];
-		const worksheet = workbook.addWorksheet('Worksheet name');
-		worksheet.addRow(headers);
-
-		for (const uid in excelData.blocks) {
-			const block = excelData.blocks[uid];
-
-			console.log(block);
-
-			for (const trial in block) {
-				console.log(trial);
-				const newRow = [
-					uid,
-					block[trial].trialType,
-					block[trial].targets,
-					block[trial].guesses,
-					block[trial].accuracy,
-					block[trial].reactionTime
-				];
-				worksheet.addRow(newRow);
-			}
-		}
-
-		workbook.xlsx.writeBuffer().then((buffer) => {
-			const blob = new Blob([buffer], {
-				type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-			});
-			const excelFilePath = 'blocks_data.xlsx';
-			const a = document.createElement('a');
-			a.href = URL.createObjectURL(blob);
-			a.download = excelFilePath;
-			a.click();
-			URL.revokeObjectURL(a.href);
-		});
-	}
-
 	function onGoToGameClicked() {
 		$currentTrial = 0;
 		$numberOfFlashes = 0;
@@ -85,15 +23,233 @@
 		$guessed = true;
 		$currentLetter = '';
 	}
+
+	let excelData = {
+		AB: {},
+		CC: {},
+		SiB: {}
+	};
+
+	async function fetchDataFromFirebase() {
+		const dataAB = await dbController.readData('AB');
+		const dataCC = await dbController.readData('CC');
+		const dataSiB = await dbController.readData('SiB');
+
+		excelData.AB = dataAB || {};
+		excelData.CC = dataCC || {};
+		excelData.SiB = dataSiB || {};
+
+		console.log(excelData);
+		crunchData();
+	}
+
+	function crunchData() {
+		const workbook = new ExcelJS.Workbook();
+
+		const setHeaderStyling = (worksheet) => {
+			const headerRow = worksheet.getRow(1);
+			headerRow.height = 20;
+			headerRow.eachCell((cell) => {
+				cell.font = { bold: true };
+				cell.alignment = { vertical: 'middle', horizontal: 'left', padding: { top: 3, bottom: 3 } };
+				cell.fill = {
+					type: 'pattern',
+					pattern: 'solid',
+					fgColor: { argb: 'FFDDDDDD' }
+				};
+				cell.border = {
+					bottom: { style: 'thin', color: { argb: 'FF000000' } }
+				};
+			});
+		};
+
+		const addRowsForAB = (worksheet, data) => {
+			for (const uid in data) {
+				const sessions = data[uid];
+
+				for (const session in sessions) {
+					const trials = sessions[session];
+
+					for (const trial in trials) {
+						const newRow = [
+							uid,
+							session,
+							trial,
+							'AB',
+							trials[trial].RSVP,
+							trials[trial].t1Position,
+							trials[trial].t2Position,
+							trials[trial].targetColor,
+							trials[trial].targets,
+							trials[trial].responses,
+							trials[trial].accuracy,
+							trials[trial].reactionTime,
+							trials[trial].streamDuration
+						];
+						worksheet.addRow(newRow);
+					}
+				}
+			}
+		};
+
+		const worksheetAB = workbook.addWorksheet('AB');
+		const headersAB = [
+			'User ID',
+			'Session Number',
+			'Trial ID',
+			'Task',
+			'RSVP',
+			'T1 Position',
+			'T2 Position',
+			'Target color',
+			'Targets',
+			'Responses',
+			'Accuracy',
+			'Reaction Time',
+			'Stream Duration'
+		];
+		worksheetAB.addRow(headersAB);
+		addRowsForAB(worksheetAB, excelData.AB);
+		setHeaderStyling(worksheetAB);
+
+		const addRowsForCC = (worksheet, data) => {
+			for (const uid in data) {
+				const sessions = data[uid];
+
+				for (const session in sessions) {
+					const blocks = sessions[session];
+
+					for (const block in blocks) {
+						const trials = blocks[block];
+
+						for (const trialID in trials) {
+							const trial = trials[trialID];
+
+							const newRow = [
+								uid,
+								session,
+								block,
+								trialID,
+								'CC',
+								trial.RSVP,
+								trial.targetPosition,
+								trial.distractorPosition,
+								trial.distractorColor,
+								trial.targetColor,
+								trial.target,
+								trial.response,
+								trial.accuracy,
+								trial.reactionTime,
+								trial.streamDuration
+							];
+							worksheet.addRow(newRow);
+						}
+					}
+				}
+			}
+		};
+
+		const worksheetCC = workbook.addWorksheet('CC');
+		const headersCC = [
+			'User ID',
+			'Session Number',
+			'Block Count',
+			'Trial ID',
+			'Task',
+			'RSVP',
+			'Target Position',
+			'Distractor Position',
+			'Distractor Color',
+			'Target Color',
+			'Target',
+			'Response',
+			'Accuracy',
+			'Reaction Time',
+			'Stream Duration'
+		];
+		worksheetCC.addRow(headersCC);
+		addRowsForCC(worksheetCC, excelData.CC);
+		setHeaderStyling(worksheetCC);
+
+		const addRowsForSiB = (worksheet, data) => {
+			for (const uid in data) {
+				const sessions = data[uid];
+
+				for (const session in sessions) {
+					const blocks = sessions[session];
+
+					for (const block in blocks) {
+						const trials = blocks[block];
+
+						for (const trialID in trials) {
+							const trial = trials[trialID];
+
+							const newRow = [
+								uid,
+								session,
+								block,
+								trialID,
+								'SiB',
+								trial.RSVP,
+								trial.surprise,
+								trial.targetPosition,
+								trial.targetColor,
+								trial.target,
+								trial.response,
+								trial.accuracy,
+								trial.reactionTime,
+								trial.streamDuration
+							];
+
+							worksheet.addRow(newRow);
+						}
+					}
+				}
+			}
+		};
+
+		const worksheetSiB = workbook.addWorksheet('SiB');
+		const headersSiB = [
+			'User ID',
+			'Session Number',
+			'Block Count',
+			'Trial ID',
+			'Task',
+			'RSVP',
+			'Surprise',
+			'Target Position',
+			'Target Color',
+			'Target',
+			'Response',
+			'Accuracy',
+			'Reaction Time',
+			'Stream Duration'
+		];
+		worksheetSiB.addRow(headersSiB);
+		addRowsForSiB(worksheetSiB, excelData.SiB);
+		setHeaderStyling(worksheetSiB);
+
+		workbook.xlsx.writeBuffer().then((buffer) => {
+			const blob = new Blob([buffer], {
+				type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+			});
+			const excelFilePath = 'trial_data.xlsx';
+			const a = document.createElement('a');
+			a.href = URL.createObjectURL(blob);
+			a.download = excelFilePath;
+			a.click();
+			URL.revokeObjectURL(a.href);
+		});
+	}
 </script>
 
-<button class=" hover:text-gray-400" on:click={fetchDataFromFirebase}> Export data </button>
+<button class="hover:text-gray-400" on:click={fetchDataFromFirebase}>Export data</button>
 {#if $page.data.route.id !== '/admin'}
-	<button class=" hover:text-gray-400">
+	<button class="hover:text-gray-400">
 		<a href="/admin">Go to admin panel</a>
 	</button>
 {:else}
-	<button class=" hover:text-gray-400" on:click={onGoToGameClicked}>
+	<button class="hover:text-gray-400" on:click={onGoToGameClicked}>
 		<a href="/">Go to game</a>
 	</button>
 {/if}
