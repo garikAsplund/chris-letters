@@ -176,7 +176,6 @@
 				SiB = true;
 				break;
 		}
-		console.log({ AB, CC, SiB });
 	}
 
 	function resetDataGathering() {
@@ -222,6 +221,9 @@
 			if (AB) {
 				trialIndex += 1;
 				$isPractice = true;
+				AB = false;
+				CC = trialOrder[trialIndex] === 'CC';
+				SiB = trialOrder[trialIndex] === 'SiB';
 				buttonText = 'Click to practice';
 				dbController.writeAB(
 					$user.uid,
@@ -236,8 +238,7 @@
 					$targetColor
 				);
 				resetDataGathering();
-			}
-			if ((CC || SiB) && blockCount < 2) {
+			} else if ((CC || SiB) && blockCount < 2) {
 				CC
 					? dbController.writeCC(
 							$user.uid,
@@ -426,42 +427,52 @@
 					{/if}
 					{#if resizedCard}
 						<div transition:fade={{ delay: 75, duration: 350 }}>
-							{#if !AB && !CC && !SiB}
-								<p class="text-3xl -translate-y-24 font-sans">Great! Press any key to proceed.</p>
-							{/if}
-							{#if AB}
-								{#if $isPractice}
-									<p class="text-3xl translate-y-36 font-sans">
-										AB! Press any key to proceed to practice.
-									</p>
-								{:else}
-									<p class="text-3xl translate-y-36 font-sans">
-										ABNicely done! Press any key to proceed to the real deal.
-									</p>
+							<p
+								class="flex justify-center text-center items-center font-thin text-3xl translate-y-36 font-sans mx-12"
+							>
+								{#if !AB && !CC && !SiB}
+									<p class="-translate-y-64">Great! Press any key to proceed.</p>
 								{/if}
-							{/if}
-							{#if CC}
-								{#if $isPractice}
-									<p class="text-3xl translate-y-36 font-sans">
-										CC! Press any key to proceed to practice.
-									</p>
-								{:else}
-									<p class="text-3xl translate-y-36 font-sans">
-										CCNicely done! Press any key to proceed to the real deal.
-									</p>
+								{#if AB}
+									{#if $isPractice}
+										The first stream will be practice. The first half is slowed down and the second
+										half is presented at regular speed.
+										<br />
+										<br />
+										Report the two {$targetColor} letters in each stream when prompted.
+										<br />
+										<br />
+										If you are unsure, please make your best guess.
+										<br />
+										<br />
+										Press any key to begin practice.
+									{:else}
+										Press any key to continue with the real experiment.
+									{/if}
 								{/if}
-							{/if}
-							{#if SiB}
-								{#if $isPractice}
-									<p class="text-3xl translate-y-36 font-sans">
-										SIB! Press any key to proceed to practice.
-									</p>
-								{:else}
-									<p class="text-3xl translate-y-36 font-sans">
-										SIBNicely done! Press any key to proceed to the real deal.
-									</p>
+								{#if CC || SiB}
+									{#if $isPractice}
+										The first stream will be practice with the first half slowed down and the second
+										half presented at regular speed.
+										<br />
+										<br />
+										Report the {$targetColor} letter in each stream when prompted.
+										<br />
+										<br />
+										If you are unsure, please make your best guess.
+										<br />
+										<br />
+										Press any key to begin practice.
+									{:else if blockCount === 1}
+										Press any key to continue with the real experiment.
+									{:else}
+										Please take a short break.
+										<br />
+										<br />
+										Press any key to continue.
+									{/if}
 								{/if}
-							{/if}
+							</p>
 						</div>
 					{/if}
 				</div>

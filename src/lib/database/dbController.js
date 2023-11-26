@@ -1,6 +1,5 @@
 import { dbRef } from './firebase';
 import { child, get, set, update, runTransaction } from 'firebase/database';
-import ShortUniqueId from 'short-unique-id';
 import { things } from '$lib/stores/GameStore';
 import { NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
 
@@ -49,6 +48,18 @@ export const dbController = {
 			things.update((users) => {
 				users[userId].admin = !adminStatus;
 				return users;
+			});
+		} catch (error) {
+			console.error(error);
+		}
+	},
+
+	async setScreenParams(userId, refreshRate, innerWidth, innerHeight) {
+		try {
+			await update(child(dbRef, `users/${userId}`), {
+				refreshRate: refreshRate,
+				innerWidth: innerWidth,
+				innerHeight: innerHeight
 			});
 		} catch (error) {
 			console.error(error);

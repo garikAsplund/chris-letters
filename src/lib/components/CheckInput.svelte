@@ -201,7 +201,7 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <div transition:fade={{ delay: 75, duration: 350 }} class="-translate-y-24">
-	<div class="m-12 text-4xl font-sans font-thin text-gray-200">Please enter your guess</div>
+	<div class="m-12 text-4xl font-sans font-thin text-gray-200">{isAB ? 'Targets?' : 'Target?'}</div>
 	<div class="flex justify-center nospaces">
 		{#each codeFields as value, i (i)}
 			<input
