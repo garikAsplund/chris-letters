@@ -42,22 +42,22 @@
 	import { user } from '$lib/database/firebase';
 	import { fade } from 'svelte/transition';
 
-	console.log({
-		$ABTrials,
-		$CCTrials,
-		$SiBTrials,
-		$CCTrials2,
-		$SiBTrials2,
-		$ABPractice,
-		$CCPractice,
-		$SiBPractice
-	});
+	// console.log({
+	// 	$ABTrials,
+	// 	$CCTrials,
+	// 	$SiBTrials,
+	// 	$CCTrials2,
+	// 	$SiBTrials2,
+	// 	$ABPractice,
+	// 	$CCPractice,
+	// 	$SiBPractice
+	// });
 
 	const targets = ['red', 'green'];
 	dbController
 		.getTargetColor()
 		.then((index) => {
-			console.log(targets[index]);
+			// console.log(targets[index]);
 			$targetColor = targets[index];
 		})
 		.catch((error) => {
@@ -86,7 +86,7 @@
 
 	dbController.getSessionNumber($user.uid).then((number) => {
 		$sessionNumber = number;
-		console.log({ $sessionNumber });
+		// console.log({ $sessionNumber });
 	});
 
 	let AB = false;
@@ -117,7 +117,7 @@
 				$guessed = false;
 			}, 100);
 			$displayFace = false;
-			console.log('Stream length: ', performance.now() - streamTime);
+			console.log('Stream length: ', Math.round(performance.now() - streamTime));
 			return;
 		}
 
@@ -180,6 +180,7 @@
 			if (AB || CC || SiB) {
 				$guessed = true;
 				buttonText = 'Click to begin';
+				$inProgress = false;
 				clicked = false;
 			}
 			return;
@@ -283,6 +284,7 @@
 			}
 			if (trialIndex === 3) dbController.updateSessionNumber($user.uid);
 			clicked = false;
+			$inProgress = false;
 			return;
 		}
 
@@ -407,33 +409,33 @@
 							{#if AB}
 								{#if $isPractice}
 									<p class="text-3xl translate-y-36 font-sans">
-										! Press spacebar to proceed to the next trial.
+										! Press any key to proceed to practice.
 									</p>
 								{:else}
 									<p class="text-3xl translate-y-36 font-sans">
-										Nicely done! Press spacebar to proceed to practice.
+										Nicely done! Press any key to proceed to the real deal.
 									</p>
 								{/if}
 							{/if}
 							{#if CC}
 								{#if $isPractice}
 									<p class="text-3xl translate-y-36 font-sans">
-										! Press spacebar to proceed to the next trial.
+										! Press any key to proceed to practice.
 									</p>
 								{:else}
 									<p class="text-3xl translate-y-36 font-sans">
-										Nicely done! Press spacebar to proceed to practice.
+										Nicely done! Press any key to proceed to the real deal.
 									</p>
 								{/if}
 							{/if}
 							{#if SiB}
 								{#if $isPractice}
 									<p class="text-3xl translate-y-36 font-sans">
-										! Press spacebar to proceed to the next trial.
+										! Press any key to proceed to practice.
 									</p>
 								{:else}
 									<p class="text-3xl translate-y-36 font-sans">
-										Nicely done! Press spacebar to proceed to practice.
+										Nicely done! Press any key to proceed to the real deal.
 									</p>
 								{/if}
 							{/if}

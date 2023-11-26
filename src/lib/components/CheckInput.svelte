@@ -58,7 +58,7 @@
 						reactionTime = Date.now() - $startTime;
 						if (event.key !== 'Backspace' && event.key !== ' ') {
 							$guesses = [...$guesses, event.key.toUpperCase()];
-							console.log('guesses: ' + $guesses);
+							// console.log('guesses: ' + $guesses);
 						}
 					}
 					if ($guesses.length === 2) {
