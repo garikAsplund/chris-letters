@@ -5,7 +5,7 @@ import {
 	NUMBER_OF_TRIALS
 } from '$lib/logic/ConstantsAndHelpers';
 
-export function createCCTrials() {
+export function createCCTrials(practice = false) {
 	const CCLetters = [];
 	const CCTargets = [];
 	const CCTextColors = [];
@@ -51,7 +51,7 @@ export function createCCTrials() {
 				CCTextColorsTrial.push(DISTRACTORS[randomRange(6) - 1]);
 			}
 
-			if (CCTargetsTrial.length === distractorIndex) {
+			if (CCTargetsTrial.length === distractorIndex && !practice) {
 				CCBoxColorsTrial.push(distractorColor[i]);
 			} else {
 				CCBoxColorsTrial.push('white');
