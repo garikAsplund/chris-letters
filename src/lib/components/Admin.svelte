@@ -246,6 +246,59 @@
 		autoFitColumns(worksheetCC);
 		autoFitColumns(worksheetSiB);
 
+		const setStyling = (worksheet) => {
+			const sessionColors = ['FFE4E1F3', 'FFD2CDEB', 'FFBFB8E3', 'FFADA4DA'];
+			let currentSession = null;
+			let currentBlock = null;
+			let sessionColorIndex = 0;
+
+			if (worksheet.getRow(1).getCell(3).value === 'Trial ID') {
+				worksheet.eachRow({ includeEmpty: false }, (row) => {
+					const session = row.getCell(2).value;
+
+					if (session !== currentSession) {
+						currentSession = session;
+						sessionColorIndex = (sessionColorIndex + 1) % sessionColors.length;
+					}
+
+					row.fill = {
+						type: 'pattern',
+						pattern: 'solid',
+						fgColor: { argb: sessionColors[sessionColorIndex] }
+					};
+
+					row.border = {
+						bottom: { style: 'thin', color: { argb: 'FF000000' } }
+					};
+				});
+			} else {
+				worksheet.eachRow({ includeEmpty: false }, (row) => {
+					const session = row.getCell(2).value;
+					const block = row.getCell(3).value;
+
+					if (session !== currentSession || block !== currentBlock) {
+						currentSession = session;
+						currentBlock = block;
+						sessionColorIndex = (sessionColorIndex + 1) % sessionColors.length;
+					}
+
+					row.fill = {
+						type: 'pattern',
+						pattern: 'solid',
+						fgColor: { argb: sessionColors[sessionColorIndex] }
+					};
+
+					row.border = {
+						bottom: { style: 'thin', color: { argb: 'FF000000' } }
+					};
+				});
+			}
+		};
+
+		setStyling(worksheetAB);
+		setStyling(worksheetCC);
+		setStyling(worksheetSiB);
+
 		workbook.xlsx.writeBuffer().then((buffer) => {
 			const blob = new Blob([buffer], {
 				type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'

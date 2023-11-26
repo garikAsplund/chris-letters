@@ -97,7 +97,6 @@
 	let blockCount = 1;
 
 	let guesses = ['A'];
-	let buttonText = 'Start';
 	let clicked = false;
 
 	let boxText = 280;
@@ -203,7 +202,6 @@
 
 			if (AB || CC || SiB) {
 				$guessed = true;
-				buttonText = 'Click to begin';
 				$inProgress = false;
 				clicked = false;
 			}
@@ -227,7 +225,6 @@
 				AB = false;
 				CC = trialOrder[trialIndex] === 'CC';
 				SiB = trialOrder[trialIndex] === 'SiB';
-				buttonText = 'Click to practice';
 				dbController.writeAB(
 					$user.uid,
 					$everyTarget,
@@ -274,7 +271,6 @@
 							$everyStreamDuration
 					  );
 				blockCount += 1;
-				buttonText = 'Click to begin';
 				resetDataGathering();
 			} else if (CC || SiB) {
 				CC
@@ -310,7 +306,6 @@
 				trialIndex += 1;
 				$isPractice = true;
 				blockCount = 1;
-				buttonText = 'Click to practice';
 				AB = trialOrder[trialIndex] === 'AB';
 				CC = trialOrder[trialIndex] === 'CC';
 				SiB = trialOrder[trialIndex] === 'SiB';
