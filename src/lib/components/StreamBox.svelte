@@ -311,6 +311,9 @@
 				$isPractice = true;
 				blockCount = 1;
 				buttonText = 'Click to practice';
+				AB = trialOrder[trialIndex] === 'AB';
+				CC = trialOrder[trialIndex] === 'CC';
+				SiB = trialOrder[trialIndex] === 'SiB';
 				resetDataGathering();
 			}
 			if (trialIndex === 3) dbController.updateSessionNumber($user.uid);

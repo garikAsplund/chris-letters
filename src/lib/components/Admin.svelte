@@ -229,6 +229,23 @@
 		addRowsForSiB(worksheetSiB, excelData.SiB);
 		setHeaderStyling(worksheetSiB);
 
+		const autoFitColumns = (worksheet) => {
+			worksheet.columns.forEach((column) => {
+				let maxColumnLength = 0;
+
+				column.eachCell({ includeEmpty: true }, (cell) => {
+					const textLength = cell.value ? String(cell.value).length : 0;
+					maxColumnLength = Math.max(maxColumnLength, textLength);
+				});
+
+				column.width = maxColumnLength;
+			});
+		};
+
+		autoFitColumns(worksheetAB);
+		autoFitColumns(worksheetCC);
+		autoFitColumns(worksheetSiB);
+
 		workbook.xlsx.writeBuffer().then((buffer) => {
 			const blob = new Blob([buffer], {
 				type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
