@@ -98,7 +98,6 @@
 	let guesses = ['A'];
 	let buttonText = 'Start';
 	let clicked = false;
-	let entryButton = true;
 
 	let boxText = 280;
 	let borderWidth = 8;
@@ -139,8 +138,9 @@
 				}
 			} else {
 				$currentLetter = ' ';
+				if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes + 1) / 2 - 1];
 				if (SiB)
-					$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes - 1) / 2 - 1];
+					$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes + 1) / 2 - 1];
 			}
 			$isOn = !$isOn;
 			$numberOfFlashes += 1;
@@ -153,8 +153,30 @@
 	function onClick() {
 		clicked = true;
 		$started = false;
-		entryButton = false;
 		setTimeout(begin, 400);
+	}
+
+	function onEntry() {
+		clicked = false;
+		$started = false;
+		switch (trialOrder[trialIndex]) {
+			case 'AB':
+				AB = true;
+				CC = false;
+				SiB = false;
+				break;
+			case 'CC':
+				AB = false;
+				CC = true;
+				SiB = false;
+				break;
+			case 'SiB':
+				AB = false;
+				CC = false;
+				SiB = true;
+				break;
+		}
+		console.log({ AB, CC, SiB });
 	}
 
 	function resetDataGathering() {
@@ -381,7 +403,8 @@
 
 <svelte:window
 	on:keydown={() => {
-		if ($guessed && !$inProgress) onClick();
+		if (!AB && !CC && !SiB && resizedCard) onEntry();
+		else if ($guessed && !$inProgress && resizedCard) onClick();
 	}}
 />
 {#if trialIndex < 3}
@@ -409,33 +432,33 @@
 							{#if AB}
 								{#if $isPractice}
 									<p class="text-3xl translate-y-36 font-sans">
-										! Press any key to proceed to practice.
+										AB! Press any key to proceed to practice.
 									</p>
 								{:else}
 									<p class="text-3xl translate-y-36 font-sans">
-										Nicely done! Press any key to proceed to the real deal.
+										ABNicely done! Press any key to proceed to the real deal.
 									</p>
 								{/if}
 							{/if}
 							{#if CC}
 								{#if $isPractice}
 									<p class="text-3xl translate-y-36 font-sans">
-										! Press any key to proceed to practice.
+										CC! Press any key to proceed to practice.
 									</p>
 								{:else}
 									<p class="text-3xl translate-y-36 font-sans">
-										Nicely done! Press any key to proceed to the real deal.
+										CCNicely done! Press any key to proceed to the real deal.
 									</p>
 								{/if}
 							{/if}
 							{#if SiB}
 								{#if $isPractice}
 									<p class="text-3xl translate-y-36 font-sans">
-										! Press any key to proceed to practice.
+										SIB! Press any key to proceed to practice.
 									</p>
 								{:else}
 									<p class="text-3xl translate-y-36 font-sans">
-										Nicely done! Press any key to proceed to the real deal.
+										SIBNicely done! Press any key to proceed to the real deal.
 									</p>
 								{/if}
 							{/if}
