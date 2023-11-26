@@ -89,6 +89,7 @@ export function createSiBTrials(practice = false, second = false) {
 		letters: SiBLetters,
 		targets: SiBTargets,
 		textColors: SiBTextColors,
-		surprise: SiBSurprise
+		surprise: SiBSurprise,
+		targetIndices
 	};
 }

@@ -40,6 +40,7 @@
 	import CheckInput from './CheckInput.svelte';
 	import { dbController } from '$lib/database/dbController';
 	import { user } from '$lib/database/firebase';
+	import { fade } from 'svelte/transition';
 
 	console.log({
 		$ABTrials,
@@ -104,6 +105,7 @@
 
 	let value = 50;
 	let streamTime;
+	let resizedCard = false;
 
 	function stream(trialType) {
 		const currentTime = performance.now();
@@ -113,7 +115,7 @@
 				$startTime = Date.now();
 				$inProgress = false;
 				$guessed = false;
-			}, 600);
+			}, 100);
 			$displayFace = false;
 			console.log('Stream length: ', performance.now() - streamTime);
 			return;
@@ -237,7 +239,9 @@
 							blockCount,
 							$sessionNumber,
 							$SiBTrials.letters,
-							$SiBTrials.surprise
+							$SiBTrials.surprise,
+							$SiBTrials.targetIndices,
+							$targetColor
 					  );
 				blockCount += 1;
 				buttonText = 'Click to begin';
@@ -267,7 +271,9 @@
 							blockCount,
 							$sessionNumber,
 							$SiBTrials2.letters,
-							$SiBTrials2.surprise
+							$SiBTrials2.surprise,
+							$SiBTrials2.targetIndices,
+							$targetColor
 					  );
 				trialIndex += 1;
 				$isPractice = true;
@@ -275,6 +281,7 @@
 				buttonText = 'Click to practice';
 				resetDataGathering();
 			}
+			if (trialIndex === 3) dbController.updateSessionNumber($user.uid);
 			clicked = false;
 			return;
 		}
@@ -349,6 +356,7 @@
 			]
 		})
 		.on('resizemove', (event) => {
+			resizedCard = true;
 			const target = event.target;
 			const x = parseFloat(target.getAttribute('data-x')) || 0;
 			const y = parseFloat(target.getAttribute('data-y')) || 0;
@@ -367,10 +375,13 @@
 			localStorage.setItem('boxText', boxText.toString());
 			localStorage.setItem('borderWidth', borderWidth.toString());
 		});
-
-	if (trialIndex === 3) dbController.updateSessionNumber($user.uid);
 </script>
 
+<svelte:window
+	on:keydown={() => {
+		if ($guessed && !$inProgress) onClick();
+	}}
+/>
 {#if trialIndex < 3}
 	<div class="flex justify-center h-view w-view mx-4 space-x-4">
 		<div class="translate-y-64">
@@ -388,13 +399,46 @@
 							/>
 						</div>
 					{/if}
-					<button
-						on:click={onClick}
-						class="p-6 -translate-y-24 font-sans text-5xl text-gray-800 bg-gray-100 border border-black rounded-sm hover:bg-gray-200"
-						class:translate-y-36={!entryButton}
-					>
-						{buttonText}
-					</button>
+					{#if resizedCard}
+						<div transition:fade={{ delay: 75, duration: 350 }}>
+							{#if !AB && !CC && !SiB}
+								<p class="text-3xl -translate-y-24 font-sans">Great! Press any key to proceed.</p>
+							{/if}
+							{#if AB}
+								{#if $isPractice}
+									<p class="text-3xl translate-y-36 font-sans">
+										! Press spacebar to proceed to the next trial.
+									</p>
+								{:else}
+									<p class="text-3xl translate-y-36 font-sans">
+										Nicely done! Press spacebar to proceed to practice.
+									</p>
+								{/if}
+							{/if}
+							{#if CC}
+								{#if $isPractice}
+									<p class="text-3xl translate-y-36 font-sans">
+										! Press spacebar to proceed to the next trial.
+									</p>
+								{:else}
+									<p class="text-3xl translate-y-36 font-sans">
+										Nicely done! Press spacebar to proceed to practice.
+									</p>
+								{/if}
+							{/if}
+							{#if SiB}
+								{#if $isPractice}
+									<p class="text-3xl translate-y-36 font-sans">
+										! Press spacebar to proceed to the next trial.
+									</p>
+								{:else}
+									<p class="text-3xl translate-y-36 font-sans">
+										Nicely done! Press spacebar to proceed to practice.
+									</p>
+								{/if}
+							{/if}
+						</div>
+					{/if}
 				</div>
 			{/if}
 			{#if $inProgress && clicked}
@@ -416,9 +460,9 @@
 			{/if}
 
 			{#if AB && !$guessed}
-				<CheckInput {begin} isAB={true} textSize={boxText / 11} />
+				<CheckInput {begin} isAB={true} />
 			{:else if (CC || SiB) && !$guessed}
-				<CheckInput {begin} isAB={false} textSize={boxText / 11} />
+				<CheckInput {begin} isAB={false} />
 			{/if}
 		</div>
 	</div>

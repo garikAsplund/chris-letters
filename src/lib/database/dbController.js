@@ -172,7 +172,9 @@ export const dbController = {
 		blockCount,
 		sessionNumber,
 		RSVP,
-		surprise
+		surprise,
+		targetPosition,
+		targetColor
 	) {
 		try {
 			const updates = {};
@@ -184,7 +186,9 @@ export const dbController = {
 					accuracy: everyAccuracy[i],
 					reactionTime: everyReactionTime[i],
 					RSVP: RSVP[i],
-					surprise: surprise[i].includes(true) ? surprise[i].indexOf(true) : 'None'
+					surprise: surprise[i].includes(true) ? surprise[i].indexOf(true) : 'None',
+					targetPosition: targetPosition[i],
+					targetColor
 				};
 			}
 

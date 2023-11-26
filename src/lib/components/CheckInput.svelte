@@ -21,7 +21,6 @@
 
 	export let begin;
 	export let isAB;
-	export let textSize;
 
 	let receivedLetter = '';
 
@@ -105,12 +104,12 @@
 							if ($isPractice) toastStore.trigger(wrongGuess);
 						}
 
-						console.log(
-							{ everyAccuracy: $everyAccuracy },
-							{ everyGuess: $everyGuess },
-							{ everyReactionTime: $everyReactionTime },
-							{ everyTarget: $everyTarget }
-						);
+						// console.log(
+						// 	{ everyAccuracy: $everyAccuracy },
+						// 	{ everyGuess: $everyGuess },
+						// 	{ everyReactionTime: $everyReactionTime },
+						// 	{ everyTarget: $everyTarget }
+						// );
 
 						$numberOfFlashes = 0;
 						$started = false;
@@ -122,12 +121,12 @@
 						setTimeout(() => {
 							$inProgress = true;
 							begin();
-						}, 900);
+						}, 1200);
 					}
 				}
 			}
 		} else if (!$inProgress) {
-			if (event.key && event.key.length === 1) {
+			if (event.key && event.key.length === 1 && receivedLetter.length < 1) {
 				receivedLetter = event.key.toUpperCase();
 
 				reactionTime = Date.now() - $startTime;
@@ -155,12 +154,12 @@
 					classes: 'p-12 m-8 w-auto h-18 text-center'
 				};
 
-				console.log(
-					{ everyAccuracy: $everyAccuracy },
-					{ everyGuess: $everyGuess },
-					{ everyReactionTime: $everyReactionTime },
-					{ everyTarget: $everyTarget }
-				);
+				// console.log(
+				// 	{ everyAccuracy: $everyAccuracy },
+				// 	{ everyGuess: $everyGuess },
+				// 	{ everyReactionTime: $everyReactionTime },
+				// 	{ everyTarget: $everyTarget }
+				// );
 
 				if ($isPractice) {
 					receivedLetter === $targetLetter
@@ -178,7 +177,7 @@
 				setTimeout(() => {
 					$inProgress = true;
 					begin();
-				}, 900);
+				}, 1200);
 			}
 		}
 	}
@@ -201,7 +200,7 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
-<div transition:fade={{ delay: 75, duration: 250 }} class="-translate-y-24">
+<div transition:fade={{ delay: 75, duration: 350 }} class="-translate-y-24">
 	<div class="m-12 text-4xl font-sans font-thin text-gray-200">Please enter your guess</div>
 	<div class="flex justify-center nospaces">
 		{#each codeFields as value, i (i)}
