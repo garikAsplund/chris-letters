@@ -389,16 +389,11 @@
 		.on('resizemove', (event) => {
 			resizedCard = true;
 			const target = event.target;
-			const x = parseFloat(target.getAttribute('data-x')) || 0;
-			const y = parseFloat(target.getAttribute('data-y')) || 0;
 
 			target.style.width = event.rect.width + 'px';
 			target.style.height = event.rect.height + 'px';
 
-			target.style.transform = `translate(${x}px, ${y}px)`;
-
-			target.setAttribute('data-x', x);
-			target.setAttribute('data-y', y);
+			// target.style.transform = `translate(0px, ${event.rect.height / 44}px)`;
 
 			boxText = Math.floor(event.rect.width / 8);
 			borderWidth = Math.floor((event.rect.width / 8) * 0.03);
@@ -420,11 +415,11 @@
 			{#if !clicked}
 				<div class="flex flex-col items-center justify-center space-y-16">
 					{#if !AB && !CC && !SiB}
-						<p class="p-2 font-sans text-3xl text-gray-200">
+						<p class="p-2 font-sans text-3xl text-gray-200 absolute -translate-y-72">
 							Resize this card to be the size of a real life credit card
 						</p>
 
-						<div id="resizable-div" class="resize-handle justify-center w-96 h-96">
+						<div id="resizable-div" class="resize-handle justify-center items-center w-96 h-96 absolute">
 							<img
 								src="https://creditkarma-cms.imgix.net/wp-content/uploads/2023/07/CapitalBank01.png?fm=webp"
 								alt="Credit Card"
@@ -437,7 +432,7 @@
 								class="flex justify-center text-center items-center font-thin text-3xl font-sans mx-12"
 							>
 								{#if !AB && !CC && !SiB}
-									<p class="-translate-y-32">Great! Press any key to proceed.</p>
+									<p class="translate-y-32">Great! Press any key to proceed.</p>
 								{/if}
 								{#if AB}
 									{#if $isPractice}
