@@ -400,8 +400,8 @@
 			target.setAttribute('data-x', x);
 			target.setAttribute('data-y', y);
 
-			boxText = Math.floor(event.rect.width / 7);
-			borderWidth = Math.floor((event.rect.width / 7) * 0.03);
+			boxText = Math.floor(event.rect.width / 8);
+			borderWidth = Math.floor((event.rect.width / 8) * 0.03);
 
 			localStorage.setItem('boxText', boxText.toString());
 			localStorage.setItem('borderWidth', borderWidth.toString());
