@@ -415,10 +415,10 @@
 	}}
 />
 {#if trialIndex < 3}
-	<div class="flex justify-center h-view w-view mx-4 space-x-4">
-		<div class="translate-y-64">
+<div class="flex flex-col justify-center items-center h-view w-view space-x-4 text-white h-screen">
+	<div class="flex justify-center align- h-view w-view space-x-4 text-white">
 			{#if !clicked}
-				<div class="flex flex-col items-center justify-center -translate-y-32 space-y-16">
+				<div class="flex flex-col items-center justify-center space-y-16">
 					{#if !AB && !CC && !SiB}
 						<p class="p-2 font-sans text-3xl text-gray-200">
 							Resize this card to be the size of a real life credit card
@@ -434,10 +434,10 @@
 					{#if resizedCard}
 						<div transition:fade={{ delay: 75, duration: 350 }}>
 							<p
-								class="flex justify-center text-center items-center font-thin text-3xl translate-y-36 font-sans mx-12"
+								class="flex justify-center text-center items-center font-thin text-3xl font-sans mx-12"
 							>
 								{#if !AB && !CC && !SiB}
-									<p class="-translate-y-64">Great! Press any key to proceed.</p>
+									<p class="-translate-y-32">Great! Press any key to proceed.</p>
 								{/if}
 								{#if AB}
 									{#if $isPractice}
@@ -487,7 +487,7 @@
 			{/if}
 			{#if $inProgress && clicked}
 				<div
-					class={`flex justify-center`}
+					class="flex justify-center"
 					style="border-width: {borderWidth}px; width: {boxText}px; height: {boxText}px; border-color: {$boxColor}"
 				>
 					<p
@@ -509,7 +509,7 @@
 				<CheckInput {begin} isAB={false} />
 			{/if}
 		</div>
-	</div>
+</div>
 {:else}
 	<GameOver />
 {/if}

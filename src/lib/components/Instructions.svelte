@@ -20,7 +20,7 @@
 </script>
 
 {#if !isMobile}
-	<div class="flex justify-center translate-y-8">
+	<div class="flex justify-center translate-y-8 mt-32">
 		<div class="w-3/5 p-4 text-lg mb-36 card text-token">
 			<Stepper
 				class="m-5 "

@@ -20,7 +20,7 @@
 	}, 1000);
 </script>
 
-<Toast position="t" />
+<Toast position="r" />
 <AuthCheck>
 	<StreamBox />
 </AuthCheck>

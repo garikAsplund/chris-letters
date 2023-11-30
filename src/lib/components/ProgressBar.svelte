@@ -6,7 +6,7 @@
 </script>
 
 <div class="w-full h-8">
-	<div class="h-8 bg-teal-500 progress-inner" style="width: {progress}%" />
+	<div class="h-8 bg-gray-300 progress-inner" style="width: {progress}%" />
 </div>
 
 <style>

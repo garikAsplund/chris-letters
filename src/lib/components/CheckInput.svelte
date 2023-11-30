@@ -139,11 +139,11 @@
 					: ($everyAccuracy = [...$everyAccuracy, 0]);
 
 				const correctGuess = {
-					message: '<font size="+2">Nice work!</font>',
+					message: '<font size="+2"">Nice work!</font>',
 					timeout: 2000,
 					hideDismiss: true,
 					background: 'bg-green-500',
-					classes: 'p-12 m-8 w-auto h-18 text-center'
+					classes: 'p-12 m-8 w-auto h-18 text-center',
 				};
 
 				const wrongGuess = {
@@ -200,7 +200,7 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
-<div transition:fade={{ delay: 75, duration: 350 }} class="-translate-y-24">
+<div transition:fade={{ delay: 75, duration: 350 }} class="-translate-y-12">
 	<div class="m-12 text-4xl font-sans font-thin text-gray-200">{isAB ? 'Targets?' : 'Target?'}</div>
 	<div class="flex justify-center nospaces">
 		{#each codeFields as value, i (i)}
