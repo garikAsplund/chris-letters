@@ -117,7 +117,7 @@
 			}, 100);
 			$displayFace = false;
 			$everyStreamDuration.push(Math.round(performance.now() - streamTime));
-			console.log('Stream length: ', $everyStreamDuration[$everyStreamDuration.length - 1]);
+			// console.log('Stream length: ', $everyStreamDuration[$everyStreamDuration.length - 1]);
 			return;
 		}
 
