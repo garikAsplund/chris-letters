@@ -2,6 +2,7 @@ import { writable } from 'svelte/store';
 import { createABTrials } from '$lib/logic/AB';
 import { createCCTrials } from '$lib/logic/CC';
 import { createSiBTrials } from '$lib/logic/SiB';
+import { createVABTrials } from '$lib/logic/VAB';
 
 export const isAdmin = writable(false);
 export const things = writable({});
@@ -49,3 +50,5 @@ export const everyGuess = writable([]);
 export const everyTarget = writable([]);
 export const everyAccuracy = writable([]);
 export const everyStreamDuration = writable([]);
+
+export const VABTrials = writable(createVABTrials());
