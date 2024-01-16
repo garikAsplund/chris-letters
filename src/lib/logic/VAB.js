@@ -1,6 +1,7 @@
-import { randomRange } from '$lib/logic/ConstantsAndHelpers';
+import { randomRange, shuffle } from '$lib/logic/ConstantsAndHelpers';
 
-const NUMBER_OF_TRIALS = 60;
+const NUMBER_OF_TRIALS = 28;
+const GCD = 30;
 const DISTRACTORS = ['blue', 'green', 'yellow', 'purple', 'orange', 'pink'];
 const LETTERS = [
 	'A',
@@ -33,60 +34,62 @@ const LETTERS = [
 const TARGETS = ['D', 'F'];
 const PROBE = 'X';
 
-function shuffle(array) {
-	let currentIndex = array.length,
-		randomIndex;
-
-	while (currentIndex > 0) {
-		randomIndex = Math.floor(Math.random() * currentIndex);
-		currentIndex--;
-
-		[array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-	}
-
-	return array;
-}
-
 export function createVABTrials() {
 	const VABLetters = [];
 	const VABTargets = [];
 	const VABTextColors = [];
+    const VABSurprise = [];
 
-	const targetOffsets = Array.from({ length: NUMBER_OF_TRIALS / 6 }, () => 1)
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 6 }, () => 2))
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 6 }, () => 3))
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 6 }, () => 5))
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 6 }, () => 7))
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 6 }, () => 9))
-		.sort(() => Math.random() - 0.5);
+	const targetOffsets = shuffle(Array.from({ length: GCD / 6 }, () => 1)
+		.concat(Array.from({ length: GCD / 6 }, () => 2))
+		.concat(Array.from({ length: GCD / 6 }, () => 3))
+		.concat(Array.from({ length: GCD / 6 }, () => 5))
+		.concat(Array.from({ length: GCD / 6 }, () => 7))
+		.concat(Array.from({ length: GCD / 6 }, () => 9))
+        .slice(0, NUMBER_OF_TRIALS));
+        
+	const T1Indices = shuffle(Array.from({ length: GCD / 3 }, () => 2)
+		.concat(Array.from({ length: GCD / 3 }, () => 3))
+		.concat(Array.from({ length: GCD / 3 }, () => 4))
+        .slice(0, NUMBER_OF_TRIALS));
 
-	const T1Indices = Array.from({ length: NUMBER_OF_TRIALS / 3 }, () => 2)
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 3 }, () => 3))
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 3 }, () => 4))
-		.sort(() => Math.random() - 0.5);
+	const targets = shuffle(Array.from({ length: GCD / 2 }, () => 'F')
+		.concat(Array.from({ length: GCD / 2 }, () => 'D'))
+        .slice(0, NUMBER_OF_TRIALS));
 
-	const targets = Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 'F')
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 'D'))
-		.sort(() => Math.random() - 0.5);
+    const probes = shuffle(Array.from({ length: NUMBER_OF_TRIALS * 3 / 4 }, () => true)
+		.concat(Array.from({ length: NUMBER_OF_TRIALS / 4 }, () => false))
+        .slice(0, NUMBER_OF_TRIALS));
+
+    const surprise = shuffle(Array.from({ length: 24 }, () => true)
+        .concat(Array.from({ length: NUMBER_OF_TRIALS * 6 - 24 }, () => false)));
+
+    const surpriseOffsets = shuffle(Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 2)
+		.concat(Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 6)));
+
+    console.log({targetOffsets, T1Indices, targets, probes, surprise});
 
 	for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
 		const VABLettersTrial = [];
 		const VABTargetsTrial = [];
 		const VABTextColorsTrial = [];
+        const VABSurpriseTrial = [];
 		const shuffledLetters = shuffle(LETTERS);
 
 		console.log({ shuffledLetters });
 		let targetOffset = targetOffsets[i];
+        let surpriseOffset = surpriseOffsets[i];
 
 		let T1Index = T1Indices[i];
 		let probeIndex = T1Index + targetOffset;
+        let surpriseIndex = T1Index + surpriseOffset;
 
 		while (VABLettersTrial.length < 16) {
 			if (VABTargetsTrial.length === T1Index) {
 				VABTargetsTrial.push(true);
 				VABTextColorsTrial.push('red');
 				VABLettersTrial.push(targets[i]);
-			} else if (VABTargetsTrial.length === probeIndex) {
+			} else if (probes[i] && VABTargetsTrial.length === probeIndex) {
 				VABTargetsTrial.push(false);
 				VABTextColorsTrial.push('white');
 				VABLettersTrial.push(PROBE);
@@ -95,11 +98,18 @@ export function createVABTrials() {
 				VABTextColorsTrial.push('white');
 				VABLettersTrial.push(shuffledLetters[VABLettersTrial.length]);
 			}
+
+            if (VABSurpriseTrial.length === surpriseIndex) {
+                VABSurpriseTrial.push(true);
+            } else {
+                VABSurpriseTrial.push(false);
+            }
 		}
 
 		VABLetters.push(VABLettersTrial);
 		VABTargets.push(VABTargetsTrial);
 		VABTextColors.push(VABTextColorsTrial);
+        VABSurprise.push(VABSurpriseTrial);
 	}
 
 	console.log({ VABLetters, VABTargets, VABTextColors, targetOffsets, T1Indices });
@@ -109,6 +119,8 @@ export function createVABTrials() {
 		targets: VABTargets,
 		textColors: VABTextColors,
 		targetOffsets,
-		T1Indices
+		T1Indices,
+        surprise,
+        surpriseTrial: VABSurprise
 	};
 }

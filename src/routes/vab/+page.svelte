@@ -27,8 +27,7 @@ excluded from the following analyses and are not reported further -->
 
 <!-- 
 	Integrate with resize/instructions
-
-
+	Surprise on 14%
 	Tie into database
  -->
 
@@ -87,19 +86,23 @@ excluded from the following analyses and are not reported further -->
 		const currentTime = performance.now();
 
 		if ($numberOfFlashes === 32) {
-            $currentLetter = '';
+			setTimeout(() => {
+	          $currentLetter = '';
+			}, value);
+
 			setTimeout(() => {
 				$startTime = Date.now();
 				$inProgress = false;
 				$guessed = false;
-			}, 100);
+			}, 233);
+
 			$displayFace = false;
 			$everyStreamDuration.push(Math.round(performance.now() - streamTime));
 			// console.log('Stream length: ', $everyStreamDuration[$everyStreamDuration.length - 1]);
 			return;
 		}
 
-		// $isPractice && $isPracticeCount <= 4 ? (value = 100) : (value = 100);
+		$isPractice && $isPracticeCount <= 4 ? (value = value * 2) : (value = 117);
 
 		$count += 1;
 
@@ -126,7 +129,8 @@ excluded from the following analyses and are not reported further -->
 				$isTarget = trialType.targets[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 				// if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 				// if (SiB)
-				// 	$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
+				$displayFace = trialType.surprise[$currentTrial - 1] && trialType.surpriseTrial[$currentTrial - 1][($numberOfFlashes  + 2) / 2 - 1];
+				console.log({$displayFace});
 
 				if ($isTarget) {
 					$targetLetter += $currentLetter;
@@ -274,7 +278,11 @@ excluded from the following analyses and are not reported further -->
                     class={`self-center font-thin text-center font-courier-new`}
                     style="color: {$textColor}; font-size: {boxTextClone}px"
                 >
-                        {$currentLetter}
+				{#if $displayFace}
+							<img src="garik_bw.jpg" alt="Garik!!!" />
+						{:else}
+							{$currentLetter}
+						{/if}
                 </p>
             </div>
         {/if}
