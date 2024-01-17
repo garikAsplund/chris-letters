@@ -15,6 +15,7 @@ export const incorrect = writable(0);
 export const ABTrials = writable(createABTrials());
 export const CCTrials = writable(createCCTrials());
 export const SiBTrials = writable(createSiBTrials());
+export const VABTrials = writable(createVABTrials());
 
 export const CCTrials2 = writable(createCCTrials());
 export const SiBTrials2 = writable(createSiBTrials(false, true));
@@ -22,6 +23,7 @@ export const SiBTrials2 = writable(createSiBTrials(false, true));
 export const ABPractice = writable(createABTrials());
 export const CCPractice = writable(createCCTrials(true));
 export const SiBPractice = writable(createSiBTrials(true));
+export const VABPractice = writable(createVABTrials());
 
 export const numberOfFlashes = writable(0);
 export const startTime = writable(Date.now());
@@ -51,4 +53,3 @@ export const everyTarget = writable([]);
 export const everyAccuracy = writable([]);
 export const everyStreamDuration = writable([]);
 
-export const VABTrials = writable(createVABTrials());

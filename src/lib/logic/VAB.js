@@ -1,6 +1,6 @@
 import { randomRange, shuffle } from '$lib/logic/ConstantsAndHelpers';
 
-const NUMBER_OF_TRIALS = 28;
+let NUMBER_OF_TRIALS = 28;
 const GCD = 30;
 const DISTRACTORS = ['blue', 'green', 'yellow', 'purple', 'orange', 'pink'];
 const LETTERS = [
@@ -34,12 +34,19 @@ const LETTERS = [
 const TARGETS = ['D', 'F'];
 const PROBE = 'X';
 
-export function createVABTrials() {
+// 3 practice blocks of 8 trials each. 
+// The first block contained targets but no probes; 
+// the second block contained probes but no targets; 
+// and the third block contained both.
+
+export function createVABTrials(practice = false) {
 	const VABLetters = [];
 	const VABTargets = [];
 	const VABTextColors = [];
     const VABSurprise = [];
 
+    practice ? NUMBER_OF_TRIALS = 8 : NUMBER_OF_TRIALS = 28;
+    
 	const targetOffsets = shuffle(Array.from({ length: GCD / 6 }, () => 1)
 		.concat(Array.from({ length: GCD / 6 }, () => 2))
 		.concat(Array.from({ length: GCD / 6 }, () => 3))

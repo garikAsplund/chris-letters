@@ -8,9 +8,11 @@
 		SiBTrials,
 		CCTrials2,
 		SiBTrials2,
+		VABTrials
 		ABPractice,
 		CCPractice,
 		SiBPractice,
+		VABPractice
 		numberOfFlashes,
 		startTime,
 		inProgress,
@@ -38,7 +40,7 @@
 		everyStreamDuration
 	} from '$lib/stores/GameStore';
 	import GameOver from './GameOver.svelte';
-	import CheckInput from './CheckInput.svelte';
+	import VABCheckInput from './VABCheckInput.svelte';
 	import { dbController } from '$lib/database/dbController';
 	import { user } from '$lib/database/firebase';
 	import { fade } from 'svelte/transition';
@@ -54,55 +56,57 @@
 	// 	$SiBPractice
 	// });
 
-	const targets = ['red', 'green'];
-	dbController
-		.getTargetColor()
-		.then((index) => {
-			// console.log(targets[index]);
-			$targetColor = targets[index];
-		})
-		.catch((error) => {
-			console.error('An error occurred:', error);
-		});
+	// const targets = ['red', 'green'];
+	// dbController
+	// 	.getTargetColor()
+	// 	.then((index) => {
+	// 		// console.log(targets[index]);
+	// 		$targetColor = targets[index];
+	// 	})
+	// 	.catch((error) => {
+	// 		console.error('An error occurred:', error);
+	// 	});
 
-	const trialOrders = [
-		['AB', 'CC', 'SiB'],
-		['AB', 'SiB', 'CC'],
-		['CC', 'AB', 'SiB'],
-		['CC', 'SiB', 'AB'],
-		['SiB', 'AB', 'CC'],
-		['SiB', 'CC', 'AB']
-	];
-	let trialOrder;
+	// const trialOrders = [
+	// 	['AB', 'CC', 'SiB'],
+	// 	['AB', 'SiB', 'CC'],
+	// 	['CC', 'AB', 'SiB'],
+	// 	['CC', 'SiB', 'AB'],
+	// 	['SiB', 'AB', 'CC'],
+	// 	['SiB', 'CC', 'AB']
+	// ];
+	// let trialOrder;
 	let trialIndex = 0;
 
-	dbController
-		.getTrialOrder()
-		.then((index) => {
-			trialOrder = trialOrders[index];
-		})
-		.catch((error) => {
-			console.error('An error occurred:', error);
-		});
+	// dbController
+	// 	.getTrialOrder()
+	// 	.then((index) => {
+	// 		trialOrder = trialOrders[index];
+	// 	})
+	// 	.catch((error) => {
+	// 		console.error('An error occurred:', error);
+	// 	});
 
-	dbController.getSessionNumber($user.uid).then((number) => {
-		$sessionNumber = number;
-		// console.log({ $sessionNumber });
-	});
+	// dbController.getSessionNumber($user.uid).then((number) => {
+	// 	$sessionNumber = number;
+	// 	// console.log({ $sessionNumber });
+	// });
 
 	let AB = false;
 	let CC = false;
 	let SiB = false;
+	let VAB = false;
 
-	let blockCount = 1;
+	// let blockCount = 1;
 
 	let guesses = ['A'];
 	let clicked = false;
 
 	let boxText = 280;
+    let boxTextClone = boxText;
 	let borderWidth = 8;
 
-	let value = 50;
+	let value = 117;
 	let streamTime;
 	let resizedCard = false;
 
@@ -111,72 +115,92 @@
 
 		if ($numberOfFlashes === 32) {
 			setTimeout(() => {
+	          $currentLetter = '';
+			}, value);
+
+			setTimeout(() => {
 				$startTime = Date.now();
 				$inProgress = false;
 				$guessed = false;
-			}, 100);
+			}, 233);
+
 			$displayFace = false;
 			$everyStreamDuration.push(Math.round(performance.now() - streamTime));
 			// console.log('Stream length: ', $everyStreamDuration[$everyStreamDuration.length - 1]);
 			return;
 		}
 
-		$isPractice && $isPracticeCount <= 4 ? (value = 100) : (value = 50);
+		$isPractice && $isPracticeCount <= 4 ? (value = value * 2) : (value = 117);
 
 		$count += 1;
 
+        if ($count === 1) {
+            $currentLetter = '+';
+            setTimeout(() => {
+                boxTextClone = 1.1 * boxText;
+                $textColor = 'yellow';
+                setTimeout(() => {
+                    boxTextClone = boxText;
+                    $textColor = 'white';
+                    stream(trialType);
+                }, 750);
+            }, 500);
+        }
+
+		console.log('count modulo:', Math.floor(value / Math.floor(1000 / $refreshRate)))
+		
 		if ($count % Math.floor(value / Math.floor(1000 / $refreshRate)) === 0) {
 			if ($isOn) {
 				$currentLetter = trialType.letters[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
+                console.log({$currentLetter});
 				$textColor = trialType.textColors[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 				$isTarget = trialType.targets[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
-				if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
-				if (SiB)
-					$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
+				// if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
+				// if (SiB)
+				$displayFace = trialType.surprise[$currentTrial - 1] && trialType.surpriseTrial[$currentTrial - 1][($numberOfFlashes  + 2) / 2 - 1];
+				console.log({$displayFace});
 
 				if ($isTarget) {
 					$targetLetter += $currentLetter;
 				}
-			} else {
-				$currentLetter = ' ';
-				if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes + 1) / 2 - 1];
-				if (SiB)
-					$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes + 1) / 2 - 1];
 			}
-			$isOn = !$isOn;
-			$numberOfFlashes += 2;
-			$lastTime = currentTime;
+			$numberOfFlashes += 2;			
+			console.log(performance.now() - $lastTime);
+
+			$lastTime = currentTime;		
+
 		}
 
-		requestAnimationFrame(() => stream(trialType));
+		if ($count !== 1) requestAnimationFrame(() => stream(trialType));
 	}
 
 	function onClick() {
 		clicked = true;
 		$started = false;
+		VAB = true;
 		setTimeout(begin, 400);
 	}
 
 	function onEntry() {
 		clicked = false;
 		$started = false;
-		switch (trialOrder[trialIndex]) {
-			case 'AB':
-				AB = true;
-				CC = false;
-				SiB = false;
-				break;
-			case 'CC':
-				AB = false;
-				CC = true;
-				SiB = false;
-				break;
-			case 'SiB':
-				AB = false;
-				CC = false;
-				SiB = true;
-				break;
-		}
+		// switch (trialOrder[trialIndex]) {
+		// 	case 'AB':
+		// 		AB = true;
+		// 		CC = false;
+		// 		SiB = false;
+		// 		break;
+		// 	case 'CC':
+		// 		AB = false;
+		// 		CC = true;
+		// 		SiB = false;
+		// 		break;
+		// 	case 'SiB':
+		// 		AB = false;
+		// 		CC = false;
+		// 		SiB = true;
+		// 		break;
+		// }
 	}
 
 	function resetDataGathering() {
@@ -192,7 +216,7 @@
 	function begin() {
 		if ($started) return;
 		if (!$guessed) return;
-		if (trialIndex === 3) return;
+		if (trialIndex === 6) return;
 
 		if ($isPracticeCount === 8) {
 			$isPractice = false;
@@ -200,7 +224,7 @@
 			$currentTrial = 0;
 			resetDataGathering();
 
-			if (AB || CC || SiB) {
+			if (AB || CC || SiB || VAB) {
 				$guessed = true;
 				$inProgress = false;
 				clicked = false;
@@ -305,10 +329,10 @@
 					  );
 				trialIndex += 1;
 				$isPractice = true;
-				blockCount = 1;
-				AB = trialOrder[trialIndex] === 'AB';
-				CC = trialOrder[trialIndex] === 'CC';
-				SiB = trialOrder[trialIndex] === 'SiB';
+				// blockCount = 1;
+				// AB = trialOrder[trialIndex] === 'AB';
+				// CC = trialOrder[trialIndex] === 'CC';
+				// SiB = trialOrder[trialIndex] === 'SiB';
 				resetDataGathering();
 			}
 			if (trialIndex === 3) dbController.updateSessionNumber($user.uid);
@@ -320,49 +344,52 @@
 		if ($isPractice) {
 			$isPracticeCount += 1;
 
-			switch (trialOrder[trialIndex]) {
-				case 'AB':
-					AB = true;
-					CC = false;
-					SiB = false;
-					stream($ABPractice);
-					break;
-				case 'CC':
-					AB = false;
-					CC = true;
-					SiB = false;
-					stream($CCPractice);
-					break;
-				case 'SiB':
-					AB = false;
-					CC = false;
-					SiB = true;
-					stream($SiBPractice);
-					break;
-			}
+			// switch (trialOrder[trialIndex]) {
+			// 	case 'AB':
+			// 		AB = true;
+			// 		CC = false;
+			// 		SiB = false;
+			// 		stream($ABPractice);
+			// 		break;
+			// 	case 'CC':
+			// 		AB = false;
+			// 		CC = true;
+			// 		SiB = false;
+			// 		stream($CCPractice);
+			// 		break;
+			// 	case 'SiB':
+			// 		AB = false;
+			// 		CC = false;
+			// 		SiB = true;
+			// 		stream($SiBPractice);
+			// 		break;
+			// }
+			stream($VABPractice);
+			// need to make 3 so $VABPractice[i] or something
 		}
 
 		if (!$isPractice && clicked) {
-			switch (trialOrder[trialIndex]) {
-				case 'AB':
-					AB = true;
-					CC = false;
-					SiB = false;
-					stream($ABTrials);
-					break;
-				case 'CC':
-					AB = false;
-					CC = true;
-					SiB = false;
-					blockCount === 1 ? stream($CCTrials) : stream($CCTrials2);
-					break;
-				case 'SiB':
-					AB = false;
-					CC = false;
-					SiB = true;
-					blockCount === 1 ? stream($SiBTrials) : stream($SiBTrials2);
-					break;
-			}
+			// switch (trialOrder[trialIndex]) {
+			// 	case 'AB':
+			// 		AB = true;
+			// 		CC = false;
+			// 		SiB = false;
+			// 		stream($ABTrials);
+			// 		break;
+			// 	case 'CC':
+			// 		AB = false;
+			// 		CC = true;
+			// 		SiB = false;
+			// 		blockCount === 1 ? stream($CCTrials) : stream($CCTrials2);
+			// 		break;
+			// 	case 'SiB':
+			// 		AB = false;
+			// 		CC = false;
+			// 		SiB = true;
+			// 		blockCount === 1 ? stream($SiBTrials) : stream($SiBTrials2);
+			// 		break;
+			// }
+			stream($VABTrials);
 		}
 	}
 
@@ -371,6 +398,7 @@
 		const storedBorderWidth = localStorage.getItem('borderWidth');
 		if (storedBoxText && storedBorderWidth) {
 			boxText = parseInt(storedBoxText, 10);
+            boxTextClone = boxText;
 			borderWidth = parseInt(storedBorderWidth, 10);
 		}
 	});
@@ -431,10 +459,10 @@
 							<p
 								class="flex justify-center text-center items-center font-thin text-3xl font-sans mx-12"
 							>
-								{#if !AB && !CC && !SiB}
+								{#if !VAB}
 									<p class="translate-y-32">Great! Press any key to proceed.</p>
 								{/if}
-								{#if AB}
+								{#if VAB}
 									{#if $isPractice}
 										<div transition:fade={{ delay: 75, duration: 350 }}>
 											Report the two {$targetColor} letters in each stream when prompted.
@@ -451,7 +479,7 @@
 										</div>
 									{/if}
 								{/if}
-								{#if CC || SiB}
+								<!-- {#if CC || SiB}
 									{#if $isPractice}
 										<div transition:fade={{ delay: 75, duration: 350 }}>
 											Report the {$targetColor} letter in each stream when prompted.
@@ -474,36 +502,34 @@
 											Press any key to continue.
 										</div>
 									{/if}
-								{/if}
+								{/if} -->
 							</p>
 						</div>
 					{/if}
 				</div>
 			{/if}
 			{#if $inProgress && clicked}
-				<div
-					class="flex justify-center"
-					style="border-width: {borderWidth}px; width: {boxText}px; height: {boxText}px; border-color: {$boxColor}"
-				>
-					<p
-						class={`self-center font-thin text-center font-courier-new`}
-						style="color: {$isTarget ? $targetColor : $textColor}; font-size: {boxText}px"
-					>
-						{#if $displayFace}
+            <div
+                class="flex justify-center"
+                style="border-width: {borderWidth}px; width: {boxText}px; height: {boxText}px; border-color: {$boxColor}"
+            >
+                <p
+                    class={`self-center font-thin text-center font-courier-new`}
+                    style="color: {$textColor}; font-size: {boxTextClone}px"
+                >
+				{#if $displayFace}
 							<img src="garik_bw.jpg" alt="Garik!!!" />
 						{:else}
 							{$currentLetter}
 						{/if}
-					</p>
-				</div>
-			{/if}
+                </p>
+            </div>
+        {/if}
 
-			{#if AB && !$guessed}
-				<CheckInput {begin} isAB={true} />
-			{:else if (CC || SiB) && !$guessed}
-				<CheckInput {begin} isAB={false} />
-			{/if}
-		</div>
+        {#if !$guessed}
+            <VABCheckInput {begin} />
+        {/if}
+</div>
 </div>
 {:else}
 	<GameOver />

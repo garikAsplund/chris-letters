@@ -39,6 +39,7 @@ excluded from the following analyses and are not reported further -->
     import VABCheckInput from '$lib/components/VABCheckInput.svelte';
 	import {
 		VABTrials,
+		VABPractice,
 		numberOfFlashes,
 		startTime,
 		inProgress,
@@ -65,11 +66,9 @@ excluded from the following analyses and are not reported further -->
 		everyStreamDuration
 	} from '$lib/stores/GameStore';
 	import ProgressBar from '$lib/components/ProgressBar.svelte';
-	
 
 	let VAB = false;
     $isPractice = false;
-
 
 	let guesses = ['A'];
 	let clicked = false;
@@ -296,4 +295,6 @@ excluded from the following analyses and are not reported further -->
 		<ProgressBar current={$currentTrial} total={$isPractice ? 8 : NUMBER_OF_TRIALS} />
 	</div>
 </div>
+
+
 
