@@ -8,11 +8,13 @@
 		SiBTrials,
 		CCTrials2,
 		SiBTrials2,
-		VABTrials
+		VABTrials,
 		ABPractice,
 		CCPractice,
 		SiBPractice,
-		VABPractice
+		VABPractice1,
+		VABPractice2,
+		VABPractice3,
 		numberOfFlashes,
 		startTime,
 		inProgress,
@@ -92,12 +94,13 @@
 	// 	// console.log({ $sessionNumber });
 	// });
 
-	let AB = false;
-	let CC = false;
-	let SiB = false;
+	// let AB = false;
+	// let CC = false;
+	// let SiB = false;
 	let VAB = false;
 
 	// let blockCount = 1;
+	let practiceBlock = 1;
 
 	let guesses = ['A'];
 	let clicked = false;
@@ -130,7 +133,8 @@
 			return;
 		}
 
-		$isPractice && $isPracticeCount <= 4 ? (value = value * 2) : (value = 117);
+		// $isPractice && $isPracticeCount <= 4 ? (value = 234) : (value = 117);
+		// is this half speed for VAB practice?
 
 		$count += 1;
 
@@ -184,6 +188,7 @@
 	function onEntry() {
 		clicked = false;
 		$started = false;
+		VAB = true;
 		// switch (trialOrder[trialIndex]) {
 		// 	case 'AB':
 		// 		AB = true;
@@ -219,12 +224,13 @@
 		if (trialIndex === 6) return;
 
 		if ($isPracticeCount === 8) {
-			$isPractice = false;
+			practiceBlock += 1;
+			practiceBlock < 4 ? $isPractice = true : $isPractice = false;
 			$isPracticeCount = 0;
 			$currentTrial = 0;
 			resetDataGathering();
 
-			if (AB || CC || SiB || VAB) {
+			if (VAB) {
 				$guessed = true;
 				$inProgress = false;
 				clicked = false;
@@ -240,101 +246,103 @@
 		$guessed = true;
 		guesses = [];
 		$count = 0;
+		$numberOfFlashes = 0;
 
 		if ($currentTrial > NUMBER_OF_TRIALS) {
 			$currentTrial = 0;
-			if (AB) {
+			if (VAB) {
 				trialIndex += 1;
 				$isPractice = true;
-				AB = false;
-				CC = trialOrder[trialIndex] === 'CC';
-				SiB = trialOrder[trialIndex] === 'SiB';
-				dbController.writeAB(
-					$user.uid,
-					$everyTarget,
-					$everyGuess,
-					$everyAccuracy,
-					$everyReactionTime,
-					$sessionNumber,
-					$ABTrials.letters,
-					$ABTrials.T1Indices,
-					$ABTrials.targetOffsets,
-					$targetColor,
-					$everyStreamDuration
-				);
-				resetDataGathering();
-			} else if ((CC || SiB) && blockCount < 2) {
-				CC
-					? dbController.writeCC(
-							$user.uid,
-							$everyTarget,
-							$everyGuess,
-							$everyAccuracy,
-							$everyReactionTime,
-							blockCount,
-							$sessionNumber,
-							$CCTrials.letters,
-							$CCTrials.targetOffsets,
-							$CCTrials.distractorIndices,
-							$CCTrials.distractorColor,
-							$targetColor,
-							$everyStreamDuration
-					  )
-					: dbController.writeSiB(
-							$user.uid,
-							$everyTarget,
-							$everyGuess,
-							$everyAccuracy,
-							$everyReactionTime,
-							blockCount,
-							$sessionNumber,
-							$SiBTrials.letters,
-							$SiBTrials.surprise,
-							$SiBTrials.targetIndices,
-							$targetColor,
-							$everyStreamDuration
-					  );
-				blockCount += 1;
-				resetDataGathering();
-			} else if (CC || SiB) {
-				CC
-					? dbController.writeCC(
-							$user.uid,
-							$everyTarget,
-							$everyGuess,
-							$everyAccuracy,
-							$everyReactionTime,
-							blockCount,
-							$sessionNumber,
-							$CCTrials2.letters,
-							$CCTrials2.targetOffsets,
-							$CCTrials2.distractorIndices,
-							$CCTrials2.distractorColor,
-							$targetColor,
-							$everyStreamDuration
-					  )
-					: dbController.writeSiB(
-							$user.uid,
-							$everyTarget,
-							$everyGuess,
-							$everyAccuracy,
-							$everyReactionTime,
-							blockCount,
-							$sessionNumber,
-							$SiBTrials2.letters,
-							$SiBTrials2.surprise,
-							$SiBTrials2.targetIndices,
-							$targetColor,
-							$everyStreamDuration
-					  );
-				trialIndex += 1;
-				$isPractice = true;
-				// blockCount = 1;
-				// AB = trialOrder[trialIndex] === 'AB';
+				// AB = false;
 				// CC = trialOrder[trialIndex] === 'CC';
 				// SiB = trialOrder[trialIndex] === 'SiB';
+				// dbController.writeAB(
+				// 	$user.uid,
+				// 	$everyTarget,
+				// 	$everyGuess,
+				// 	$everyAccuracy,
+				// 	$everyReactionTime,
+				// 	$sessionNumber,
+				// 	$ABTrials.letters,
+				// 	$ABTrials.T1Indices,
+				// 	$ABTrials.targetOffsets,
+				// 	$targetColor,
+				// 	$everyStreamDuration
+				// );
 				resetDataGathering();
-			}
+			} 
+			// else if ((CC || SiB) && blockCount < 2) {
+			// 	CC
+			// 		? dbController.writeCC(
+			// 				$user.uid,
+			// 				$everyTarget,
+			// 				$everyGuess,
+			// 				$everyAccuracy,
+			// 				$everyReactionTime,
+			// 				blockCount,
+			// 				$sessionNumber,
+			// 				$CCTrials.letters,
+			// 				$CCTrials.targetOffsets,
+			// 				$CCTrials.distractorIndices,
+			// 				$CCTrials.distractorColor,
+			// 				$targetColor,
+			// 				$everyStreamDuration
+			// 		  )
+			// 		: dbController.writeSiB(
+			// 				$user.uid,
+			// 				$everyTarget,
+			// 				$everyGuess,
+			// 				$everyAccuracy,
+			// 				$everyReactionTime,
+			// 				blockCount,
+			// 				$sessionNumber,
+			// 				$SiBTrials.letters,
+			// 				$SiBTrials.surprise,
+			// 				$SiBTrials.targetIndices,
+			// 				$targetColor,
+			// 				$everyStreamDuration
+			// 		  );
+			// 	blockCount += 1;
+			// 	resetDataGathering();
+			// } else if (CC || SiB) {
+			// 	CC
+			// 		? dbController.writeCC(
+			// 				$user.uid,
+			// 				$everyTarget,
+			// 				$everyGuess,
+			// 				$everyAccuracy,
+			// 				$everyReactionTime,
+			// 				blockCount,
+			// 				$sessionNumber,
+			// 				$CCTrials2.letters,
+			// 				$CCTrials2.targetOffsets,
+			// 				$CCTrials2.distractorIndices,
+			// 				$CCTrials2.distractorColor,
+			// 				$targetColor,
+			// 				$everyStreamDuration
+			// 		  )
+			// 		: dbController.writeSiB(
+			// 				$user.uid,
+			// 				$everyTarget,
+			// 				$everyGuess,
+			// 				$everyAccuracy,
+			// 				$everyReactionTime,
+			// 				blockCount,
+			// 				$sessionNumber,
+			// 				$SiBTrials2.letters,
+			// 				$SiBTrials2.surprise,
+			// 				$SiBTrials2.targetIndices,
+			// 				$targetColor,
+			// 				$everyStreamDuration
+			// 		  );
+			// 	trialIndex += 1;
+			// 	$isPractice = true;
+			// 	// blockCount = 1;
+			// 	// AB = trialOrder[trialIndex] === 'AB';
+			// 	// CC = trialOrder[trialIndex] === 'CC';
+			// 	// SiB = trialOrder[trialIndex] === 'SiB';
+			// 	resetDataGathering();
+			// }
 			if (trialIndex === 3) dbController.updateSessionNumber($user.uid);
 			clicked = false;
 			$inProgress = false;
@@ -364,7 +372,11 @@
 			// 		stream($SiBPractice);
 			// 		break;
 			// }
-			stream($VABPractice);
+			// console.log(`$VABPractice${practiceBlock}`);
+			// stream(`$VABPractice${practiceBlock}`);
+			if (practiceBlock === 1) stream($VABPractice1);
+			else if (practiceBlock === 2) stream($VABPractice2);
+			else if (practiceBlock === 3) stream($VABPractice3);
 			// need to make 3 so $VABPractice[i] or something
 		}
 
@@ -433,16 +445,16 @@
 
 <svelte:window
 	on:keydown={() => {
-		if (!AB && !CC && !SiB && resizedCard) onEntry();
+		if (!VAB && resizedCard) onEntry();
 		else if ($guessed && !$inProgress && resizedCard) onClick();
 	}}
 />
-{#if trialIndex < 3}
+{#if trialIndex < 6}
 <div class="flex flex-col justify-center items-center h-view w-view space-x-4 text-white h-screen">
 	<div class="flex justify-center align- h-view w-view space-x-4 text-white">
 			{#if !clicked}
 				<div class="flex flex-col items-center justify-center space-y-16">
-					{#if !AB && !CC && !SiB}
+					{#if !VAB}
 						<p class="p-2 font-sans text-3xl text-gray-200 absolute -translate-y-72">
 							Resize this card to be the size of a real life credit card
 						</p>
@@ -463,9 +475,29 @@
 									<p class="translate-y-32">Great! Press any key to proceed.</p>
 								{/if}
 								{#if VAB}
-									{#if $isPractice}
+									{#if $isPractice && practiceBlock === 1}
 										<div transition:fade={{ delay: 75, duration: 350 }}>
-											Report the two {$targetColor} letters in each stream when prompted.
+											Report the red letter in each stream when prompted.
+											<br />
+											<br />
+											If you are unsure, please make your best guess.
+											<br />
+											<br />
+											Press any key to begin practice.
+										</div>
+									{:else if $isPractice && practiceBlock === 2}
+										<div transition:fade={{ delay: 75, duration: 350 }}>
+											Report whether the letter 'X' is present in each stream when prompted.
+											<br />
+											<br />
+											If you are unsure, please make your best guess.
+											<br />
+											<br />
+											Press any key to begin practice.
+										</div>
+									{:else if $isPractice && practiceBlock === 3}
+										<div transition:fade={{ delay: 75, duration: 350 }}>
+											Report the red letter in each stream and if there is the letter 'X' when prompted.
 											<br />
 											<br />
 											If you are unsure, please make your best guess.

@@ -23,7 +23,9 @@ export const SiBTrials2 = writable(createSiBTrials(false, true));
 export const ABPractice = writable(createABTrials());
 export const CCPractice = writable(createCCTrials(true));
 export const SiBPractice = writable(createSiBTrials(true));
-export const VABPractice = writable(createVABTrials());
+export const VABPractice1 = writable(createVABTrials(true, 1));
+export const VABPractice2 = writable(createVABTrials(true, 2));
+export const VABPractice3 = writable(createVABTrials(true, 3));
 
 export const numberOfFlashes = writable(0);
 export const startTime = writable(Date.now());

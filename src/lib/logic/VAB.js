@@ -39,7 +39,7 @@ const PROBE = 'X';
 // the second block contained probes but no targets; 
 // and the third block contained both.
 
-export function createVABTrials(practice = false) {
+export function createVABTrials(practice = false, round = 0) {
 	const VABLetters = [];
 	const VABTargets = [];
 	const VABTextColors = [];
@@ -83,7 +83,7 @@ export function createVABTrials(practice = false) {
         const VABSurpriseTrial = [];
 		const shuffledLetters = shuffle(LETTERS);
 
-		console.log({ shuffledLetters });
+		// console.log({ shuffledLetters });
 		let targetOffset = targetOffsets[i];
         let surpriseOffset = surpriseOffsets[i];
 
@@ -92,11 +92,11 @@ export function createVABTrials(practice = false) {
         let surpriseIndex = T1Index + surpriseOffset;
 
 		while (VABLettersTrial.length < 16) {
-			if (VABTargetsTrial.length === T1Index) {
+			if (VABTargetsTrial.length === T1Index && round !== 2) {
 				VABTargetsTrial.push(true);
 				VABTextColorsTrial.push('red');
 				VABLettersTrial.push(targets[i]);
-			} else if (probes[i] && VABTargetsTrial.length === probeIndex) {
+			} else if (probes[i] && VABTargetsTrial.length === probeIndex && round !== 1) {
 				VABTargetsTrial.push(false);
 				VABTextColorsTrial.push('white');
 				VABLettersTrial.push(PROBE);
@@ -106,7 +106,7 @@ export function createVABTrials(practice = false) {
 				VABLettersTrial.push(shuffledLetters[VABLettersTrial.length]);
 			}
 
-            if (VABSurpriseTrial.length === surpriseIndex) {
+            if (VABSurpriseTrial.length === surpriseIndex && !practice) {
                 VABSurpriseTrial.push(true);
             } else {
                 VABSurpriseTrial.push(false);
