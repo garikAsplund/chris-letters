@@ -20,7 +20,7 @@
 	// const toastStore = getToastStore();
 
 	export let begin;
-	export let isAB = false;
+	export let practiceBlock = 0;
 
 	let receivedLetter = '';
     let target = true;
@@ -127,27 +127,44 @@
 		});
 	});
 
-    setTimeout(() => {
-        target = false;
-        setTimeout(() => {
-                        $guessed = true;
-                        $startTime = 0;
+    if (!$isPractice || practiceBlock === 3) {
+		setTimeout(() => {
+			target = false;
+			setTimeout(() => {
+				$guessed = true;
+				$startTime = 0;
 				$started = false;
 				$numberOfFlashes = 0;
 				$targetLetter = '';
-                    }, 2000);
-                    setTimeout(() => {
-                        $inProgress = true;
-                        begin();
-                    }, 2500);
-    }, 2000);
+					}, 2000);
+			setTimeout(() => {
+				$inProgress = true;
+				begin();
+			}, 2500);
+		}, 2000);
+	} else {
+		if (practiceBlock === 2) target = false;
+		setTimeout(() => {
+				$guessed = true;
+				$startTime = 0;
+				$started = false;
+				$numberOfFlashes = 0;
+				$targetLetter = '';
+					}, 2000);
+			setTimeout(() => {
+				$inProgress = true;
+				begin();
+			}, 2500);
+	}
+
+
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
 
 
 <div transition:fade={{ delay: 75, duration: 350 }} class="-translate-y-12">
-	{#if target}
+	{#if target && practiceBlock !== 2}
     <div class="m-12 text-4xl font-sans font-thin text-gray-200">Target?</div>
 	<div class="flex justify-center nospaces">
 		{#each codeFields as value, i (i)}
@@ -158,14 +175,13 @@
 				class="flex items-center w-12 h-16 mx-2 text-4xl text-center text-gray-200 uppercase bg-transparent border rounded-lg"
 				maxlength="1"
 				name="codefield"
-
 				inputmode="text"
 			/>
 		{/each}
 	</div>
     {/if}
 </div>
-{#if !target}
+{#if !target && practiceBlock !== 1}
 <div transition:fade={{ delay: 75, duration: 350 }} class="-translate-y-12">
 	<div class="m-12 text-4xl font-sans font-thin text-gray-200">Probe?</div>
 	<div class="flex justify-center nospaces">

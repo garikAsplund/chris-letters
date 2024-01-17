@@ -52,21 +52,21 @@ export function createVABTrials(practice = false, round = 0) {
 		.concat(Array.from({ length: GCD / 6 }, () => 3))
 		.concat(Array.from({ length: GCD / 6 }, () => 5))
 		.concat(Array.from({ length: GCD / 6 }, () => 7))
-		.concat(Array.from({ length: GCD / 6 }, () => 9))
-        .slice(0, NUMBER_OF_TRIALS));
+		.concat(Array.from({ length: GCD / 6 }, () => 9)))
+        .slice(0, NUMBER_OF_TRIALS);
         
 	const T1Indices = shuffle(Array.from({ length: GCD / 3 }, () => 2)
 		.concat(Array.from({ length: GCD / 3 }, () => 3))
-		.concat(Array.from({ length: GCD / 3 }, () => 4))
-        .slice(0, NUMBER_OF_TRIALS));
+		.concat(Array.from({ length: GCD / 3 }, () => 4)))
+        .slice(0, NUMBER_OF_TRIALS);
 
 	const targets = shuffle(Array.from({ length: GCD / 2 }, () => 'F')
-		.concat(Array.from({ length: GCD / 2 }, () => 'D'))
-        .slice(0, NUMBER_OF_TRIALS));
+		.concat(Array.from({ length: GCD / 2 }, () => 'D')))
+        .slice(0, NUMBER_OF_TRIALS);
 
     const probes = shuffle(Array.from({ length: NUMBER_OF_TRIALS * 3 / 4 }, () => true)
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 4 }, () => false))
-        .slice(0, NUMBER_OF_TRIALS));
+		.concat(Array.from({ length: NUMBER_OF_TRIALS / 4 }, () => false)))
+        .slice(0, NUMBER_OF_TRIALS);
 
     const surprise = shuffle(Array.from({ length: 24 }, () => true)
         .concat(Array.from({ length: NUMBER_OF_TRIALS * 6 - 24 }, () => false)));

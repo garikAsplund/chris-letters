@@ -550,16 +550,15 @@
                     style="color: {$textColor}; font-size: {boxTextClone}px"
                 >
 				{#if $displayFace}
-							<img src="garik_bw.jpg" alt="Garik!!!" />
-						{:else}
-							{$currentLetter}
-						{/if}
+					<img src="garik_bw.jpg" alt="Garik!!!" />
+				{:else}
+					{$currentLetter}
+				{/if}
                 </p>
             </div>
         {/if}
-
         {#if !$guessed}
-            <VABCheckInput {begin} />
+            <VABCheckInput {begin} {practiceBlock} />
         {/if}
 </div>
 </div>
