@@ -12,7 +12,9 @@
 		everyReactionTime,
 		everyTarget,
 		isPractice,
-		probe
+		probe,
+		everyProbeAccuracy,
+		everyProbeGuess
 	} from '$lib/stores/GameStore';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
@@ -55,13 +57,23 @@
 				receivedLetter = event.key.toUpperCase();
 
 				reactionTime = Date.now() - $startTime;
-				$everyReactionTime = [...$everyReactionTime, reactionTime];
-				$everyGuess = [...$everyGuess, receivedLetter];
-				$everyTarget = [...$everyTarget, $targetLetter];
 
-				receivedLetter === $targetLetter
-					? ($everyAccuracy = [...$everyAccuracy, 1])
-					: ($everyAccuracy = [...$everyAccuracy, 0]);
+				
+
+				if (target) {
+					$everyReactionTime = [...$everyReactionTime, reactionTime];
+					$everyGuess = [...$everyGuess, receivedLetter];
+					$everyTarget = [...$everyTarget, $targetLetter];
+
+					receivedLetter === $targetLetter
+						? ($everyAccuracy = [...$everyAccuracy, 1])
+						: ($everyAccuracy = [...$everyAccuracy, 0]);
+				} else {
+					$everyProbeGuess = [...$everyProbeGuess, receivedLetter];
+					receivedLetter === $probe
+						? ($everyProbeAccuracy = [...$everyProbeAccuracy, 1])
+						: ($everyProbeAccuracy = [...$everyProbeAccuracy, 0]);
+				}
 
 				const correctGuess = {
 					message: '<font size="+2"">Nice work!</font>',

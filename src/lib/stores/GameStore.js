@@ -56,4 +56,6 @@ export const everyAccuracy = writable([]);
 export const everyStreamDuration = writable([]);
 
 export const probe = writable('');
+export const everyProbeGuess = writable([]);
+export const everyProbeAccuracy = writable([]);
 

@@ -21,6 +21,6 @@
 </script>
 
 <Toast position="r" />
-<AuthCheck>
+<AuthCheck isVAB={true}>
 	<VABStreamBox />
 </AuthCheck>

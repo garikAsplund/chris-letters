@@ -9,6 +9,11 @@
 	import { NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
 	import { onMount } from 'svelte';
 
+	export let isVAB = false;
+	let numberOfTrials;
+
+	isVAB ? numberOfTrials = 28 : numberOfTrials = NUMBER_OF_TRIALS;
+
 	const dbRef = ref(getDatabase());
 
 	const googleProvider = new GoogleAuthProvider();
@@ -147,7 +152,7 @@
 				<button class="hover:text-gray-400" on:click={handleSignOut}> Sign out </button>
 			</div>
 		{/if}
-		<ProgressBar current={$currentTrial} total={$isPractice ? 8 : NUMBER_OF_TRIALS} />
+		<ProgressBar current={$currentTrial} total={$isPractice ? 8 : numberOfTrials} />
 	</div>
 {/if}
 

@@ -1,7 +1,7 @@
 <script>
 	import interact from 'interactjs';
 	import { onMount } from 'svelte';
-	import { NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
+	// import { NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
 	import {
 		ABTrials,
 		CCTrials,
@@ -41,6 +41,8 @@
 		sessionNumber,
 		everyStreamDuration,
 		probe,
+		everyProbeGuess,
+		everyProbeAccuracy,
 	} from '$lib/stores/GameStore';
 	import GameOver from './GameOver.svelte';
 	import VABCheckInput from './VABCheckInput.svelte';
@@ -113,6 +115,8 @@
 	let value = 117;
 	let streamTime;
 	let resizedCard = false;
+
+	const NUMBER_OF_TRIALS = 28;
 
 	function stream(trialType) {
 		const currentTime = performance.now();
@@ -260,19 +264,21 @@
 				// AB = false;
 				// CC = trialOrder[trialIndex] === 'CC';
 				// SiB = trialOrder[trialIndex] === 'SiB';
-				// dbController.writeAB(
-				// 	$user.uid,
-				// 	$everyTarget,
-				// 	$everyGuess,
-				// 	$everyAccuracy,
-				// 	$everyReactionTime,
-				// 	$sessionNumber,
-				// 	$ABTrials.letters,
-				// 	$ABTrials.T1Indices,
-				// 	$ABTrials.targetOffsets,
-				// 	$targetColor,
-				// 	$everyStreamDuration
-				// );
+				dbController.writeVAB(
+					$user.uid,
+					$everyTarget,
+					$everyGuess,
+					$everyAccuracy,
+					$everyReactionTime,
+					$sessionNumber,
+					$VABTrials.letters,
+					$VABTrials.surprise,
+					$VABTrials.T1Indices,
+					$everyStreamDuration,
+					NUMBER_OF_TRIALS,
+					$everyProbeGuess,
+					$everyProbeAccuracy,
+				);
 				resetDataGathering();
 			} 
 			// else if ((CC || SiB) && blockCount < 2) {

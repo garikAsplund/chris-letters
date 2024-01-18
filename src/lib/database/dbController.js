@@ -198,13 +198,53 @@ export const dbController = {
 			for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
 				updates[`SiB/${userId}/session${sessionNumber}/block${blockCount}/${i + 1}`] = {
 					target: everyTarget[i],
-					response: everyGuess[i],
+					targetResponse: everyGuess[i],
 					accuracy: everyAccuracy[i],
 					reactionTime: everyReactionTime[i],
 					RSVP: RSVP[i],
 					surprise: surprise[i].includes(true) ? surprise[i].indexOf(true) : 'None',
 					targetPosition: targetPosition[i],
 					targetColor,
+					streamDuration: streamDuration[i]
+				};
+			}
+
+			await update(dbRef, updates);
+		} catch (error) {
+			console.error(error);
+		}
+	},
+
+	async writeVAB(
+		userId,
+		everyTarget,
+		everyGuess,
+		everyAccuracy,
+		everyReactionTime,
+		sessionNumber,
+		RSVP,
+		surprise,
+		targetPosition,
+		streamDuration,
+		numberOfTrials,
+		everyProbeGuess,
+		everyProbeAccuracy
+	) {
+		try {
+			const updates = {};
+
+			for (let i = 0; i < numberOfTrials; i++) {
+				updates[`VAB/${userId}/session${sessionNumber}/${i + 1}`] = {
+					target: everyTarget[i],
+					targetResponse: everyGuess[i],
+					probe: RSVP[i].includes('X') ? true : false,
+					probeResponse: everyProbeGuess[i],
+					targetAccuracy: everyAccuracy[i],
+					probeAccuracy: everyProbeAccuracy[i],
+					reactionTime: everyReactionTime[i],
+					RSVP: RSVP[i],
+					surprise: surprise[i].includes(true) ? surprise[i].indexOf(true) : 'None',
+					targetPosition: targetPosition[i],
 					streamDuration: streamDuration[i]
 				};
 			}
