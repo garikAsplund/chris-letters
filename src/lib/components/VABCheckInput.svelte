@@ -47,11 +47,11 @@
 	function handleKeydown(event) {
 		let reactionTime;
 
-        console.log($inProgress);
+        // console.log($inProgress);
 		if (!$inProgress) {
-            console.log(event.key)
+            // console.log(event.key)
 			if (event.key && event.key.length === 1) {
-                console.log('hi');
+                // console.log('hi');
 				receivedLetter = event.key.toUpperCase();
 
 				reactionTime = Date.now() - $startTime;
@@ -104,15 +104,18 @@
 				$numberOfFlashes = 0;
 				$targetLetter = '';
 				if (target) setTimeout(() => target = false, 400);
-                console.log(event.key.toUpperCase());
+                // console.log(event.key.toUpperCase());
                 if (event.key.toUpperCase() === 'N' || event.key.toUpperCase() === 'Y') {
-                    setTimeout(() => {
+					// clearTimeout(probeGuess);
+					// clearTimeout(probeGuessed);
+
+					setTimeout(() => {
                         $guessed = true;
                     }, 200);
-                    setTimeout(() => {
-                        $inProgress = true;
-                        begin();
-                    }, 1200);
+                    // setTimeout(() => {
+                    //     $inProgress = true;
+                    //     begin();
+                    // }, 1200);
                 }
 			}
 		}
@@ -157,10 +160,10 @@
 				$numberOfFlashes = 0;
 				$targetLetter = '';
 					}, 2000);
-			setTimeout(() => {
-				$inProgress = true;
-				begin();
-			}, 2500);
+		setTimeout(() => {
+			$inProgress = true;
+			begin();
+		}, 2500);
 	}
 
 

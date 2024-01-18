@@ -170,7 +170,7 @@
 					console.log($targetLetter);
 				}
 
-				$currentLetter === 'X' ? $probe = 'Y' : $probe = 'N';
+				trialType.letters[$currentTrial - 1].includes('X') ? $probe = 'Y' : $probe = 'N';
 			}
 			$numberOfFlashes += 2;			
 			console.log(performance.now() - $lastTime);
