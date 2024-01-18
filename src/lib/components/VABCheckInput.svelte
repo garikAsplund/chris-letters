@@ -91,12 +91,14 @@
 					classes: 'p-12 m-8 w-auto h-18 text-center'
 				};
 
-				// console.log(
-				// 	{ everyAccuracy: $everyAccuracy },
-				// 	{ everyGuess: $everyGuess },
-				// 	{ everyReactionTime: $everyReactionTime },
-				// 	{ everyTarget: $everyTarget }
-				// );
+				console.log(
+					{ everyAccuracy: $everyAccuracy },
+					{ everyGuess: $everyGuess },
+					{ everyReactionTime: $everyReactionTime },
+					{ everyTarget: $everyTarget },
+					{ everyProbeAccuracy: $everyProbeAccuracy },
+					{ everyProbeGuess: $everyProbeGuess }
+				);
 
 				if ($isPractice) {
 					if (target) {

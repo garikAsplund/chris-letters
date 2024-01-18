@@ -171,13 +171,13 @@
 
 				if ($isTarget) {
 					$targetLetter += $currentLetter;
-					console.log($targetLetter);
+					// console.log($targetLetter);
 				}
 
 				trialType.letters[$currentTrial - 1].includes('X') ? $probe = 'Y' : $probe = 'N';
 			}
 			$numberOfFlashes += 2;			
-			console.log(performance.now() - $lastTime);
+			// console.log(performance.now() - $lastTime);
 
 			$lastTime = currentTime;		
 
@@ -222,6 +222,9 @@
 		$everyAccuracy = [];
 		$everyReactionTime = [];
 		$everyStreamDuration = [];
+
+		$everyProbeAccuracy = [];
+		$everyProbeGuess = [];
 
 		console.log('reset data gathering');
 	}
@@ -278,7 +281,7 @@
 					NUMBER_OF_TRIALS,
 					$everyProbeGuess,
 					$everyProbeAccuracy,
-										
+
 				);
 				resetDataGathering();
 			} 
