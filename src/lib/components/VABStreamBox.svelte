@@ -39,7 +39,8 @@
 		everyGuess,
 		targetColor,
 		sessionNumber,
-		everyStreamDuration
+		everyStreamDuration,
+		probe,
 	} from '$lib/stores/GameStore';
 	import GameOver from './GameOver.svelte';
 	import VABCheckInput from './VABCheckInput.svelte';
@@ -151,22 +152,25 @@
             }, 500);
         }
 
-		console.log('count modulo:', Math.floor(value / Math.floor(1000 / $refreshRate)))
+		// console.log('count modulo:', Math.floor(value / Math.floor(1000 / $refreshRate)))
 		
 		if ($count % Math.floor(value / Math.floor(1000 / $refreshRate)) === 0) {
 			if ($isOn) {
 				$currentLetter = trialType.letters[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
-                console.log({$currentLetter});
+                // console.log({$currentLetter});
 				$textColor = trialType.textColors[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 				$isTarget = trialType.targets[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 				// if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 				// if (SiB)
 				$displayFace = trialType.surprise[$currentTrial - 1] && trialType.surpriseTrial[$currentTrial - 1][($numberOfFlashes  + 2) / 2 - 1];
-				console.log({$displayFace});
+				// console.log({$displayFace});
 
 				if ($isTarget) {
 					$targetLetter += $currentLetter;
+					console.log($targetLetter);
 				}
+
+				$currentLetter === 'X' ? $probe = 'Y' : $probe = 'N';
 			}
 			$numberOfFlashes += 2;			
 			console.log(performance.now() - $lastTime);

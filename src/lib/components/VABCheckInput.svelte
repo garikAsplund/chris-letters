@@ -11,13 +11,14 @@
 		everyGuess,
 		everyReactionTime,
 		everyTarget,
-		isPractice
+		isPractice,
+		probe
 	} from '$lib/stores/GameStore';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	// import { getToastStore } from '@skeletonlabs/skeleton';
+	import { getToastStore } from '@skeletonlabs/skeleton';
 
-	// const toastStore = getToastStore();
+	const toastStore = getToastStore();
 
 	export let begin;
 	export let practiceBlock = 0;
@@ -28,8 +29,6 @@
 	let pinlength = 1;
 	let codeFields = Array(pinlength).fill('');
 	let probeFields = Array(pinlength).fill('');
-
-	
 
 	const stepBack = (i) => {
 		codeFields[i] = '';
@@ -87,11 +86,18 @@
 				// 	{ everyTarget: $everyTarget }
 				// );
 
-				// if ($isPractice) {
-				// 	receivedLetter === $targetLetter
-				// 		? toastStore.trigger(correctGuess)
-				// 		: toastStore.trigger(wrongGuess);
-				// }
+				if ($isPractice) {
+					if (target) {
+						receivedLetter === $targetLetter
+							? toastStore.trigger(correctGuess)
+							: toastStore.trigger(wrongGuess);	
+					} else {
+						receivedLetter === $probe
+							? toastStore.trigger(correctGuess)
+							: toastStore.trigger(wrongGuess);
+					}
+					
+				}
 
 				$startTime = 0;
 				$started = false;

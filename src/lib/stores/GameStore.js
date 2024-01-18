@@ -55,3 +55,5 @@ export const everyTarget = writable([]);
 export const everyAccuracy = writable([]);
 export const everyStreamDuration = writable([]);
 
+export const probe = writable('');
+
