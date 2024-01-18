@@ -228,7 +228,7 @@ export const dbController = {
 		streamDuration,
 		numberOfTrials,
 		everyProbeGuess,
-		everyProbeAccuracy
+		everyProbeAccuracy,
 	) {
 		try {
 			const updates = {};
@@ -245,6 +245,7 @@ export const dbController = {
 					RSVP: RSVP[i],
 					surprise: surprise[i].includes(true) ? surprise[i].indexOf(true) : 'None',
 					targetPosition: targetPosition[i],
+					probePosition: RSVP[i].includes('X') ? RSVP[i].indexOf('X') : 'None',
 					streamDuration: streamDuration[i]
 				};
 			}

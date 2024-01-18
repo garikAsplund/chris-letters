@@ -119,7 +119,7 @@ export function createVABTrials(practice = false, round = 0) {
         VABSurprise.push(VABSurpriseTrial);
 	}
 
-	console.log({ VABLetters, VABTargets, VABTextColors, targetOffsets, T1Indices });
+	console.log({ VABLetters, VABTargets, VABTextColors, targetOffsets, T1Indices, surprise, VABSurprise });
 
 	return {
 		letters: VABLetters,

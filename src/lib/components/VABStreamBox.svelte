@@ -272,12 +272,13 @@
 					$everyReactionTime,
 					$sessionNumber,
 					$VABTrials.letters,
-					$VABTrials.surprise,
+					$VABTrials.surpriseTrial,
 					$VABTrials.T1Indices,
 					$everyStreamDuration,
 					NUMBER_OF_TRIALS,
 					$everyProbeGuess,
 					$everyProbeAccuracy,
+										
 				);
 				resetDataGathering();
 			} 
