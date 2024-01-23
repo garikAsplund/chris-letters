@@ -470,7 +470,7 @@
 				<div class="flex flex-col items-center justify-center space-y-16">
 					{#if !VAB}
 						<p class="p-2 font-sans text-3xl text-gray-200 absolute -translate-y-72">
-							Resize this card to be the size of a real life credit card
+							Drag the edge of this card to be the size of a real life credit card
 						</p>
 
 						<div id="resizable-div" class="resize-handle justify-center items-center w-96 h-96 absolute">
@@ -502,6 +502,9 @@
 									{:else if $isPractice && practiceBlock === 2}
 										<div transition:fade={{ delay: 75, duration: 350 }}>
 											Report whether the letter 'X' is present in each stream when prompted.
+											<br />
+											<br />
+											If present, press 'Y'. Otherwise, press 'N'.
 											<br />
 											<br />
 											If you are unsure, please make your best guess.
@@ -557,7 +560,7 @@
 			{#if $inProgress && clicked}
             <div
                 class="flex justify-center"
-                style="border-width: {borderWidth}px; width: {boxText}px; height: {boxText}px; border-color: {$boxColor}"
+                style="width: {boxText}px; height: {boxText}px;" 
             >
                 <p
                     class={`self-center font-thin text-center font-courier-new`}
