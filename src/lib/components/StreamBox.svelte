@@ -344,7 +344,8 @@
 					AB = false;
 					CC = false;
 					SiB = true;
-					blockCount === 1 ? stream($SiBTrials) : stream($SiBTrials2);
+					// blockCount === 1 ? stream($SiBTrials) : stream($SiBTrials2);
+					stream($SiBTrials);
 					break;
 			}
 		}
