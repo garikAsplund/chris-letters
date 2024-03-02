@@ -449,8 +449,8 @@
 
 			// target.style.transform = `translate(0px, ${event.rect.height / 44}px)`;
 
-			boxText = Math.floor(event.rect.width / 8);
-			borderWidth = Math.floor((event.rect.width / 8) * 0.03);
+			boxText = Math.floor(event.rect.width / 6);
+			borderWidth = Math.floor((event.rect.width / 6) * 0.03);
 
 			localStorage.setItem('boxText', boxText.toString());
 			localStorage.setItem('borderWidth', borderWidth.toString());
@@ -470,7 +470,9 @@
 				<div class="flex flex-col items-center justify-center space-y-16">
 					{#if !VAB}
 						<p class="p-2 font-sans text-3xl text-gray-200 absolute -translate-y-72">
-							Drag the edge of this card to be the size of a real life credit card
+							Please re-size this card to be the size of a real-life credit card.
+							<br /><br />
+							Click on the edge of the card and drag towards/away from the card to re-size it.
 						</p>
 
 						<div id="resizable-div" class="resize-handle justify-center items-center w-96 h-96 absolute">
