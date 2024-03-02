@@ -14,8 +14,9 @@ export function createSiBTrials(practice = false, second = false) {
 	const surpriseTrials = [];
 
 	if (!practice) {
-		while (surpriseTrials.length < 6) {
-			const trial = second ? randomRange(60) + 35 : randomRange(60);
+		while (surpriseTrials.length < 12) {
+			// const trial = second ? randomRange(60) + 35 : randomRange(60);
+			const trial = randomRange(95);
 
 			if (
 				surpriseTrials.includes(trial) ||
@@ -29,7 +30,7 @@ export function createSiBTrials(practice = false, second = false) {
 		}
 	}
 
-	// console.log({ surpriseTrials });
+	console.log({ surpriseTrials });
 
 	const targetIndices = Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 7)
 		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 8))
