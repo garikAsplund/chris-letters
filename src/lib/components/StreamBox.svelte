@@ -7,7 +7,7 @@
 		CCTrials,
 		SiBTrials,
 		CCTrials2,
-		SiBTrials2,
+		// SiBTrials2,
 		ABPractice,
 		CCPractice,
 		SiBPractice,
@@ -219,40 +219,23 @@
 
 		if ($currentTrial > NUMBER_OF_TRIALS) {
 			$currentTrial = 0;
-			if (AB) {
+			if (AB || SiB) {
 				trialIndex += 1;
 				$isPractice = true;
-				AB = false;
+				AB = trialOrder[trialIndex] === 'AB';
 				CC = trialOrder[trialIndex] === 'CC';
 				SiB = trialOrder[trialIndex] === 'SiB';
-				dbController.writeAB(
-					$user.uid,
-					$everyTarget,
-					$everyGuess,
-					$everyAccuracy,
-					$everyReactionTime,
-					$sessionNumber,
-					$ABTrials.letters,
-					$ABTrials.T1Indices,
-					$ABTrials.targetOffsets,
-					$targetColor,
-					$everyStreamDuration
-				);
-				resetDataGathering();
-			} else if ((CC || SiB) && blockCount < 2) {
-				CC
-					? dbController.writeCC(
+				AB
+					? dbController.writeAB(
 							$user.uid,
 							$everyTarget,
 							$everyGuess,
 							$everyAccuracy,
 							$everyReactionTime,
-							blockCount,
 							$sessionNumber,
-							$CCTrials.letters,
-							$CCTrials.targetOffsets,
-							$CCTrials.distractorIndices,
-							$CCTrials.distractorColor,
+							$ABTrials.letters,
+							$ABTrials.T1Indices,
+							$ABTrials.targetOffsets,
 							$targetColor,
 							$everyStreamDuration
 					  )
@@ -262,7 +245,6 @@
 							$everyGuess,
 							$everyAccuracy,
 							$everyReactionTime,
-							blockCount,
 							$sessionNumber,
 							$SiBTrials.letters,
 							$SiBTrials.surprise,
@@ -270,39 +252,41 @@
 							$targetColor,
 							$everyStreamDuration
 					  );
+				resetDataGathering();
+			} else if (CC && blockCount < 2) {
+				dbController.writeCC(
+					$user.uid,
+					$everyTarget,
+					$everyGuess,
+					$everyAccuracy,
+					$everyReactionTime,
+					blockCount,
+					$sessionNumber,
+					$CCTrials.letters,
+					$CCTrials.targetOffsets,
+					$CCTrials.distractorIndices,
+					$CCTrials.distractorColor,
+					$targetColor,
+					$everyStreamDuration
+				);
 				blockCount += 1;
 				resetDataGathering();
-			} else if (CC || SiB) {
-				CC
-					? dbController.writeCC(
-							$user.uid,
-							$everyTarget,
-							$everyGuess,
-							$everyAccuracy,
-							$everyReactionTime,
-							blockCount,
-							$sessionNumber,
-							$CCTrials2.letters,
-							$CCTrials2.targetOffsets,
-							$CCTrials2.distractorIndices,
-							$CCTrials2.distractorColor,
-							$targetColor,
-							$everyStreamDuration
-					  )
-					: dbController.writeSiB(
-							$user.uid,
-							$everyTarget,
-							$everyGuess,
-							$everyAccuracy,
-							$everyReactionTime,
-							blockCount,
-							$sessionNumber,
-							$SiBTrials2.letters,
-							$SiBTrials2.surprise,
-							$SiBTrials2.targetIndices,
-							$targetColor,
-							$everyStreamDuration
-					  );
+			} else if (CC) {
+				dbController.writeCC(
+					$user.uid,
+					$everyTarget,
+					$everyGuess,
+					$everyAccuracy,
+					$everyReactionTime,
+					blockCount,
+					$sessionNumber,
+					$CCTrials2.letters,
+					$CCTrials2.targetOffsets,
+					$CCTrials2.distractorIndices,
+					$CCTrials2.distractorColor,
+					$targetColor,
+					$everyStreamDuration
+				);
 				trialIndex += 1;
 				$isPractice = true;
 				blockCount = 1;

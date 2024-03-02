@@ -198,7 +198,6 @@ export const dbController = {
 		everyGuess,
 		everyAccuracy,
 		everyReactionTime,
-		blockCount,
 		sessionNumber,
 		RSVP,
 		surprise,
@@ -211,7 +210,7 @@ export const dbController = {
 
 			for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
 				updates[
-					`SiB/${userId}/session${sessionNumber}/block${blockCount}/${i + 1}`
+					`SiB/${userId}/session${sessionNumber}/${i + 1}`
 				] = {
 					target: everyTarget[i],
 					targetResponse: everyGuess[i],

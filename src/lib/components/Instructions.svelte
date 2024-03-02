@@ -83,7 +83,14 @@
 									>What is the purpose of this research?</svelte:fragment
 								>
 								<svelte:fragment slot="content">
-									<p>Add something here to say. Something profound.</p>
+									<p>
+										You are invited to participate in a research study that investigates the effects
+										of various manipulations (instruction, sequential learning, or distraction) on
+										working memory and attention in young, healthy individuals. The long-term goal
+										of the research is to better understand cognitive limitations and flexibility in
+										the domains of visual working memory and attention. This information sheet
+										provides you with information about the research.
+									</p>
 								</svelte:fragment>
 							</AccordionItem>
 							<AccordionItem>
