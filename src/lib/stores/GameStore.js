@@ -1,8 +1,8 @@
-import { writable } from 'svelte/store';
-import { createABTrials } from '$lib/logic/AB';
-import { createCCTrials } from '$lib/logic/CC';
-import { createSiBTrials } from '$lib/logic/SiB';
-import { createVABTrials } from '$lib/logic/VAB';
+import { createABTrials } from "$lib/logic/AB";
+import { createCCTrials } from "$lib/logic/CC";
+import { createSiBTrials } from "$lib/logic/SiB";
+import { createVABTrials } from "$lib/logic/VAB";
+import { writable } from "svelte/store";
 
 export const isAdmin = writable(false);
 export const things = writable({});
@@ -34,16 +34,16 @@ export const count = writable(0);
 export const refreshRate = writable(60);
 export const isOn = writable(true);
 export const lastTime = writable(performance.now());
-export const currentLetter = writable(' ');
+export const currentLetter = writable(" ");
 export const textColor = writable();
 export const isTarget = writable(false);
-export const targetLetter = writable('');
-export const boxColor = writable('white');
+export const targetLetter = writable("");
+export const boxColor = writable("white");
 export const displayFace = writable(false);
 export const currentTrial = writable(0);
 export const isPractice = writable(true);
 export const isPracticeCount = writable(0);
-export const targetColor = writable('');
+export const targetColor = writable("");
 
 export const started = writable(false);
 export const guessed = writable(true);
@@ -55,7 +55,6 @@ export const everyTarget = writable([]);
 export const everyAccuracy = writable([]);
 export const everyStreamDuration = writable([]);
 
-export const probe = writable('');
+export const probe = writable("");
 export const everyProbeGuess = writable([]);
 export const everyProbeAccuracy = writable([]);
-

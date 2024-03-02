@@ -395,8 +395,8 @@
 
 			// target.style.transform = `translate(0px, ${event.rect.height / 44}px)`;
 
-			boxText = Math.floor(event.rect.width / 8);
-			borderWidth = Math.floor((event.rect.width / 8) * 0.03);
+			boxText = Math.floor(event.rect.width / 6);
+			borderWidth = Math.floor((event.rect.width / 6) * 0.03);
 
 			localStorage.setItem('boxText', boxText.toString());
 			localStorage.setItem('borderWidth', borderWidth.toString());
@@ -410,16 +410,23 @@
 	}}
 />
 {#if trialIndex < 3}
-<div class="flex flex-col justify-center items-center h-view w-view space-x-4 text-white h-screen">
-	<div class="flex justify-center align- h-view w-view space-x-4 text-white">
+	<div
+		class="flex flex-col justify-center items-center h-view w-view space-x-4 text-white h-screen"
+	>
+		<div class="flex justify-center align- h-view w-view space-x-4 text-white">
 			{#if !clicked}
 				<div class="flex flex-col items-center justify-center space-y-16">
 					{#if !AB && !CC && !SiB}
-						<p class="p-2 font-sans text-3xl text-gray-200 absolute -translate-y-72">
-							Resize this card to be the size of a real life credit card
+						<p class="p-2 font-sans text-3xl text-gray-200 absolute -translate-y-72 w-1/2">
+							Please re-size this card to be the size of a real-life credit card.
+							<br /><br />
+							Click on the edge of the card and drag towards/away from the card to re-size it.
 						</p>
 
-						<div id="resizable-div" class="resize-handle justify-center items-center w-96 h-96 absolute">
+						<div
+							id="resizable-div"
+							class="resize-handle justify-center items-center w-96 h-96 absolute"
+						>
 							<img
 								src="https://creditkarma-cms.imgix.net/wp-content/uploads/2023/07/CapitalBank01.png?fm=webp"
 								alt="Credit Card"
@@ -504,7 +511,7 @@
 				<CheckInput {begin} isAB={false} />
 			{/if}
 		</div>
-</div>
+	</div>
 {:else}
 	<GameOver />
 {/if}

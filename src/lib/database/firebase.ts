@@ -1,7 +1,7 @@
-import { initializeApp } from 'firebase/app';
-import { getDatabase, ref } from 'firebase/database';
-import { getAuth, onAuthStateChanged, type User } from 'firebase/auth';
-import { writable } from 'svelte/store';
+import { initializeApp } from "firebase/app";
+import { type User, getAuth, onAuthStateChanged } from "firebase/auth";
+import { getDatabase, ref } from "firebase/database";
+import { writable } from "svelte/store";
 
 const {
 	VITE_FIREBASE_API_KEY,
@@ -11,7 +11,7 @@ const {
 	VITE_FIREBASE_STORAGE_BUCKET,
 	VITE_FIREBASE_MESSAGING_SENDER_ID,
 	VITE_FIREBASE_APP_ID,
-	VITE_FIREBASE_MEASUREMENT_ID
+	VITE_FIREBASE_MEASUREMENT_ID,
 } = import.meta.env;
 
 const firebaseConfig = {
@@ -22,7 +22,7 @@ const firebaseConfig = {
 	storageBucket: VITE_FIREBASE_STORAGE_BUCKET,
 	messagingSenderId: VITE_FIREBASE_MESSAGING_SENDER_ID,
 	appId: VITE_FIREBASE_APP_ID,
-	measurementId: VITE_FIREBASE_MEASUREMENT_ID
+	measurementId: VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 export const app = initializeApp(firebaseConfig);
@@ -37,10 +37,10 @@ function userStore() {
 	let unsubscribe: () => void;
 
 	if (!auth || !globalThis.window) {
-		console.warn('Auth is not initialized or not in browser');
+		console.warn("Auth is not initialized or not in browser");
 		const { subscribe } = writable<User | null>(null);
 		return {
-			subscribe
+			subscribe,
 		};
 	}
 
@@ -53,7 +53,7 @@ function userStore() {
 	});
 
 	return {
-		subscribe
+		subscribe,
 	};
 }
 

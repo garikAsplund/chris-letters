@@ -8,14 +8,14 @@ export function getScreenRefreshRate(callback, runIndefinitely) {
 			window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
 	}
 
-	let DOMHighResTimeStampCollection = [];
+	const DOMHighResTimeStampCollection = [];
 
-	let triggerAnimation = function (DOMHighResTimeStamp) {
+	const triggerAnimation = (DOMHighResTimeStamp) => {
 		DOMHighResTimeStampCollection.unshift(DOMHighResTimeStamp);
 
 		if (DOMHighResTimeStampCollection.length > 10) {
-			let t0 = DOMHighResTimeStampCollection.pop();
-			let fps = Math.floor((1000 * 10) / (DOMHighResTimeStamp - t0));
+			const t0 = DOMHighResTimeStampCollection.pop();
+			const fps = Math.floor((1000 * 10) / (DOMHighResTimeStamp - t0));
 
 			if (!callbackTriggered) {
 				callback.call(undefined, fps, DOMHighResTimeStampCollection);
@@ -34,7 +34,7 @@ export function getScreenRefreshRate(callback, runIndefinitely) {
 	window.requestAnimationFrame(triggerAnimation);
 
 	if (!runIndefinitely) {
-		window.setTimeout(function () {
+		window.setTimeout(() => {
 			window.cancelAnimationFrame(requestId);
 			requestId = null;
 		}, 1500);

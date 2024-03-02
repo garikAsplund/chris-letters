@@ -58,8 +58,6 @@
 
 				reactionTime = Date.now() - $startTime;
 
-				
-
 				if (target) {
 					$everyReactionTime = [...$everyReactionTime, reactionTime];
 					$everyGuess = [...$everyGuess, receivedLetter];
@@ -91,14 +89,14 @@
 					classes: 'p-12 m-8 w-auto h-18 text-center'
 				};
 
-				console.log(
-					{ everyAccuracy: $everyAccuracy },
-					{ everyGuess: $everyGuess },
-					{ everyReactionTime: $everyReactionTime },
-					{ everyTarget: $everyTarget },
-					{ everyProbeAccuracy: $everyProbeAccuracy },
-					{ everyProbeGuess: $everyProbeGuess }
-				);
+				// console.log(
+				// 	{ everyAccuracy: $everyAccuracy },
+				// 	{ everyGuess: $everyGuess },
+				// 	{ everyReactionTime: $everyReactionTime },
+				// 	{ everyTarget: $everyTarget },
+				// 	{ everyProbeAccuracy: $everyProbeAccuracy },
+				// 	{ everyProbeGuess: $everyProbeGuess }
+				// );
 
 				if ($isPractice) {
 					if (target) {
@@ -117,20 +115,36 @@
 				$started = false;
 				$numberOfFlashes = 0;
 				$targetLetter = '';
-				if (target) setTimeout(() => target = false, 400);
-                // console.log(event.key.toUpperCase());
-                if (event.key.toUpperCase() === 'N' || event.key.toUpperCase() === 'Y') {
-					// clearTimeout(probeGuess);
-					// clearTimeout(probeGuessed);
 
-					setTimeout(() => {
-                        $guessed = true;
-                    }, 200);
-                    // setTimeout(() => {
-                    //     $inProgress = true;
-                    //     begin();
-                    // }, 1200);
-                }
+				if (target) {
+					if (!$isPractice || practiceBlock === 3) {
+						setTimeout(() => {
+							target = false
+						}, 400);
+						
+					} else {
+						setTimeout(() => {
+							target = false
+							$guessed = true;
+						}, 400);
+						
+						setTimeout(() => {
+							$inProgress = true;
+							begin();
+						}, 1000);
+					}
+				} else {
+					// console.log(event.key.toUpperCase());
+					if (event.key.toUpperCase() === 'N' || event.key.toUpperCase() === 'Y') {
+						setTimeout(() => {
+							$guessed = true;
+						}, 200);
+						setTimeout(() => {
+						    $inProgress = true;
+						    begin();
+						}, 1200);
+					}
+				}
 			}
 		}
 	}
@@ -150,37 +164,36 @@
 		});
 	});
 
-    if (!$isPractice || practiceBlock === 3) {
-		setTimeout(() => {
-			target = false;
-			setTimeout(() => {
-				$guessed = true;
-				$startTime = 0;
-				$started = false;
-				$numberOfFlashes = 0;
-				$targetLetter = '';
-					}, 2000);
-			setTimeout(() => {
-				$inProgress = true;
-				begin();
-			}, 2500);
-		}, 2000);
-	} else {
-		if (practiceBlock === 2) target = false;
-		setTimeout(() => {
-				$guessed = true;
-				$startTime = 0;
-				$started = false;
-				$numberOfFlashes = 0;
-				$targetLetter = '';
-					}, 2000);
-		setTimeout(() => {
-			$inProgress = true;
-			begin();
-		}, 2500);
-	}
-
-
+    // if (!$isPractice || practiceBlock === 3) {
+	// 	setTimeout(() => {
+	// 		target = false;
+	// 		setTimeout(() => {
+	// 			$guessed = true;
+	// 			$startTime = 0;
+	// 			$started = false;
+	// 			$numberOfFlashes = 0;
+	// 			$targetLetter = '';
+	// 				}, 2000);
+	// 		setTimeout(() => {
+	// 			$inProgress = true;
+	// 			begin();
+	// 		}, 2500);
+	// 	}, 2000);
+	// } else {
+	// 	if (practiceBlock === 2) target = false;
+	// 	setTimeout(() => {
+	// 			$guessed = true;
+	// 			$startTime = 0;
+	// 			$started = false;
+	// 			$numberOfFlashes = 0;
+	// 			$targetLetter = '';
+	// 				}, 2000);
+	// 	setTimeout(() => {
+	// 		$inProgress = true;
+	// 		begin();
+	// 	}, 2500);				
+	
+	if (practiceBlock === 2) target = false;
 </script>
 
 <svelte:window on:keydown={handleKeydown} />

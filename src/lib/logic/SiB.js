@@ -1,9 +1,9 @@
 import {
-	randomRange,
 	DISTRACTORS,
 	LETTERS,
-	NUMBER_OF_TRIALS
-} from '$lib/logic/ConstantsAndHelpers';
+	NUMBER_OF_TRIALS,
+	randomRange,
+} from "$lib/logic/ConstantsAndHelpers";
 
 export function createSiBTrials(practice = false, second = false) {
 	const SiBLetters = [];
@@ -15,7 +15,7 @@ export function createSiBTrials(practice = false, second = false) {
 
 	if (!practice) {
 		while (surpriseTrials.length < 6) {
-			let trial = second ? randomRange(60) + 35 : randomRange(60);
+			const trial = second ? randomRange(60) + 35 : randomRange(60);
 
 			if (
 				surpriseTrials.includes(trial) ||
@@ -47,21 +47,23 @@ export function createSiBTrials(practice = false, second = false) {
 		const SiBTextColorsTrial = [];
 		const SiBSurpriseTrial = [];
 
-		let targetOffset = 3;
+		const targetOffset = 3;
 
-		let targetIndex = targetIndices[i];
-		let surpriseIndex = targetIndex - targetOffset;
+		const targetIndex = targetIndices[i];
+		const surpriseIndex = targetIndex - targetOffset;
 
 		while (SiBLettersTrial.length < 16) {
 			let letterToAdd = randomRange(LETTERS.length) - 1;
 
-			if (SiBLettersTrial[SiBLettersTrial.length - 1] === LETTERS[letterToAdd]) {
+			if (
+				SiBLettersTrial[SiBLettersTrial.length - 1] === LETTERS[letterToAdd]
+			) {
 				letterToAdd = (letterToAdd + 1) % LETTERS.length;
 			}
 
 			if (SiBTargetsTrial.length === targetIndex) {
 				SiBTargetsTrial.push(true);
-				SiBTextColorsTrial.push('red');
+				SiBTextColorsTrial.push("red");
 			} else {
 				SiBTargetsTrial.push(false);
 				SiBTextColorsTrial.push(DISTRACTORS[randomRange(6) - 1]);
@@ -90,6 +92,6 @@ export function createSiBTrials(practice = false, second = false) {
 		targets: SiBTargets,
 		textColors: SiBTextColors,
 		surprise: SiBSurprise,
-		targetIndices
+		targetIndices,
 	};
 }

@@ -1,9 +1,9 @@
 import {
-	randomRange,
 	DISTRACTORS,
 	LETTERS,
-	NUMBER_OF_TRIALS
-} from '$lib/logic/ConstantsAndHelpers';
+	NUMBER_OF_TRIALS,
+	randomRange,
+} from "$lib/logic/ConstantsAndHelpers";
 
 export function createABTrials() {
 	const ABLetters = [];
@@ -24,10 +24,10 @@ export function createABTrials() {
 		const ABTargetsTrial = [];
 		const ABTextColorsTrial = [];
 
-		let targetOffset = targetOffsets[i];
+		const targetOffset = targetOffsets[i];
 
-		let T1Index = T1Indices[i];
-		let T2Index = T1Index + targetOffset;
+		const T1Index = T1Indices[i];
+		const T2Index = T1Index + targetOffset;
 
 		while (ABLettersTrial.length < 16) {
 			let letterToAdd = randomRange(LETTERS.length) - 1;
@@ -36,9 +36,12 @@ export function createABTrials() {
 				letterToAdd = (letterToAdd + 1) % LETTERS.length;
 			}
 
-			if (ABTargetsTrial.length === T1Index || ABTargetsTrial.length === T2Index) {
+			if (
+				ABTargetsTrial.length === T1Index ||
+				ABTargetsTrial.length === T2Index
+			) {
 				ABTargetsTrial.push(true);
-				ABTextColorsTrial.push('red');
+				ABTextColorsTrial.push("red");
 			} else {
 				ABTargetsTrial.push(false);
 				ABTextColorsTrial.push(DISTRACTORS[randomRange(6) - 1]);
@@ -59,6 +62,6 @@ export function createABTrials() {
 		targets: ABTargets,
 		textColors: ABTextColors,
 		targetOffsets,
-		T1Indices
+		T1Indices,
 	};
 }
