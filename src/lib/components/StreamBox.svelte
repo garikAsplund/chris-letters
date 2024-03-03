@@ -75,6 +75,7 @@
 	];
 	let trialOrder;
 	let trialIndex: number = 0;
+	let surpriseCount: number = 0;
 
 	dbController
 		.getTrialOrder()
@@ -86,7 +87,9 @@
 		});
 
 	dbController.getSessionNumber($user.uid).then((number) => {
-		$sessionNumber = number;
+		$sessionNumber = number;	
+		surpriseCount = (number - 1) * 12;
+
 		// console.log({ $sessionNumber });
 	});
 
@@ -107,7 +110,7 @@
 	let resizedCard: boolean = false;
 
 	let surprisePath: string = `surprises/face_1.jpg`;
-	let surpriseCount: number = 0;
+	setTimeout(() => console.log({surpriseCount}), 1000);
 
 	function stream(trialType) {
 		const currentTime = performance.now();
