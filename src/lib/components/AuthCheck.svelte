@@ -131,7 +131,7 @@
 		<div class="invisible lg:visible background">
 			<img
 				class="halcyon"
-				src="/lilhalcyon.svg"
+				src="lilhalcyon.svg"
 				height="300"
 				width="300"
 				alt="Halcyon!"
@@ -175,7 +175,7 @@
 			left: 110;
 			width: 100%;
 			height: 100%;
-			background-image: url('path/to/halcyon.svg');
+			background-image: url('path/to/lilhalcyon.svg');
 			background-repeat: no-repeat;
 			background-size: cover;
 			z-index: -1;

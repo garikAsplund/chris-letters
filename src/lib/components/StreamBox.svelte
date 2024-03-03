@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import interact from 'interactjs';
 	import { onMount } from 'svelte';
 	import { NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
@@ -74,7 +74,7 @@
 		['SiB', 'CC', 'AB']
 	];
 	let trialOrder;
-	let trialIndex = 0;
+	let trialIndex: number = 0;
 
 	dbController
 		.getTrialOrder()
@@ -90,21 +90,24 @@
 		// console.log({ $sessionNumber });
 	});
 
-	let AB = false;
-	let CC = false;
-	let SiB = false;
+	let AB: boolean = false;
+	let CC: boolean = false;
+	let SiB: boolean = false;
 
-	let blockCount = 1;
+	let blockCount: number = 1;
 
 	let guesses = ['A'];
-	let clicked = false;
+	let clicked: boolean = false;
 
-	let boxText = 280;
-	let borderWidth = 8;
+	let boxText: number = 280;
+	let borderWidth: number = 8;
 
-	let value = 50;
+	let value: number = 50;
 	let streamTime;
-	let resizedCard = false;
+	let resizedCard: boolean = false;
+
+	let surprisePath: string = `surprises/face_1.jpg`;
+	let surpriseCount: number = 0;
 
 	function stream(trialType) {
 		const currentTime = performance.now();
@@ -133,7 +136,10 @@
 				if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 				if (SiB)
 					$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
-
+					if ($displayFace) {
+						surprisePath = `/surprises/${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${Math.floor(surpriseCount++ / 2) + 1}.jpg`;
+						console.log(surprisePath);
+					}
 				if ($isTarget) {
 					$targetLetter += $currentLetter;
 				}
@@ -482,7 +488,7 @@
 						style="color: {$isTarget ? $targetColor : $textColor}; font-size: {boxText}px"
 					>
 						{#if $displayFace}
-							<img src="garik_bw.jpg" alt="Garik!!!" />
+							<img src={surprisePath} alt="Surprise!!!" />
 						{:else}
 							{$currentLetter}
 						{/if}
