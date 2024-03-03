@@ -27,17 +27,20 @@
 	let excelData = {
 		AB: {},
 		CC: {},
-		SiB: {}
+		SiB: {},
+		VAB: {}
 	};
 
 	async function fetchDataFromFirebase() {
 		const dataAB = await dbController.readData('AB');
 		const dataCC = await dbController.readData('CC');
 		const dataSiB = await dbController.readData('SiB');
+		const dataVAB = await dbController.readData('VAB');
 
 		excelData.AB = dataAB || {};
 		excelData.CC = dataCC || {};
 		excelData.SiB = dataSiB || {};
+		excelData.VAB = dataVAB || {};
 
 		console.log(excelData);
 		crunchData();
@@ -176,33 +179,29 @@
 				const sessions = data[uid];
 
 				for (const session in sessions) {
-					const blocks = sessions[session];
+					const trials = sessions[session];
 
-					for (const block in blocks) {
-						const trials = blocks[block];
+					for (const trialID in trials) {
+						const trial = trials[trialID];
 
-						for (const trialID in trials) {
-							const trial = trials[trialID];
+						const newRow = [
+							uid,
+							session,
+							// block,
+							trial,
+							'SiB',
+							trials.RSVP,
+							trial.surprise,
+							trial.targetPosition,
+							trial.targetColor,
+							trial.target,
+							trial.response,
+							trial.accuracy,
+							trial.reactionTime,
+							trial.streamDuration
+						];
 
-							const newRow = [
-								uid,
-								session,
-								block,
-								trialID,
-								'SiB',
-								trial.RSVP,
-								trial.surprise,
-								trial.targetPosition,
-								trial.targetColor,
-								trial.target,
-								trial.response,
-								trial.accuracy,
-								trial.reactionTime,
-								trial.streamDuration
-							];
-
-							worksheet.addRow(newRow);
-						}
+						worksheet.addRow(newRow);
 					}
 				}
 			}
@@ -212,7 +211,7 @@
 		const headersSiB = [
 			'User ID',
 			'Session Number',
-			'Block Count',
+			// 'Block Count',
 			'Trial ID',
 			'Task',
 			'RSVP',
@@ -228,6 +227,70 @@
 		worksheetSiB.addRow(headersSiB);
 		addRowsForSiB(worksheetSiB, excelData.SiB);
 		setHeaderStyling(worksheetSiB);
+
+		const addRowsForVAB = (worksheet, data) => {
+			for (const uid in data) {
+				const sessions = data[uid];
+
+				for (const session in sessions) {
+					const trials = sessions[session];
+
+					for (const trialID in trials) {
+						if (trialID === 'time') {
+							continue;
+						}
+						
+						const trial = trials[trialID];
+
+						const newRow = [
+							uid,
+							session,
+							trial.time,
+							trialID,
+							'VAB',
+							trial.RSVP,
+							trial.probe,
+							trial.probeAccuracy,
+							trial.probePosition,
+							trial.probeResponse,
+							trial.reactionTime,
+							trial.streamDuration,
+							trial.surprise,
+							trial.target,
+							trial.targetAccuracy,
+							trial.targetPosition,
+							trial.targetResponse
+						];
+
+						worksheet.addRow(newRow);
+					}
+				}
+			}
+		};
+
+		const worksheetVAB = workbook.addWorksheet('VAB');
+		const headersVAB = [
+			'User ID',
+			'Session Number',
+			'Date',
+			'Trial ID',
+			'Task',
+			'RSVP',
+			'Probe',
+			'Probe Accuracy',
+			'Probe Position',
+			'Probe Response',
+			'Reaction Time',
+			'Stream Duration',
+			'Surprise',
+			'Target',
+			'Target Accuracy',
+			'Target Position',
+			'Target Response'
+		];
+		worksheetVAB.addRow(headersVAB);
+		addRowsForVAB(worksheetVAB, excelData.VAB);
+		setHeaderStyling(worksheetVAB);
 
 		const autoFitColumns = (worksheet) => {
 			worksheet.columns.forEach((column) => {
@@ -245,6 +308,7 @@
 		autoFitColumns(worksheetAB);
 		autoFitColumns(worksheetCC);
 		autoFitColumns(worksheetSiB);
+		autoFitColumns(worksheetVAB);
 
 		const setStyling = (worksheet) => {
 			const sessionColors = ['FFE4E1F3', 'FFD2CDEB', 'FFBFB8E3', 'FFADA4DA'];
@@ -298,6 +362,7 @@
 		setStyling(worksheetAB);
 		setStyling(worksheetCC);
 		setStyling(worksheetSiB);
+		setStyling(worksheetVAB);
 
 		workbook.xlsx.writeBuffer().then((buffer) => {
 			const blob = new Blob([buffer], {

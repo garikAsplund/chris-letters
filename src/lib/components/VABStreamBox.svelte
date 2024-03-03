@@ -7,7 +7,7 @@
 		CCTrials,
 		SiBTrials,
 		CCTrials2,
-		SiBTrials2,
+		// SiBTrials2,
 		VABTrials,
 		ABPractice,
 		CCPractice,
@@ -42,7 +42,7 @@
 		everyStreamDuration,
 		probe,
 		everyProbeGuess,
-		everyProbeAccuracy,
+		everyProbeAccuracy
 	} from '$lib/stores/GameStore';
 	import GameOver from './GameOver.svelte';
 	import VABCheckInput from './VABCheckInput.svelte';
@@ -92,10 +92,10 @@
 	// 		console.error('An error occurred:', error);
 	// 	});
 
-	// dbController.getSessionNumber($user.uid).then((number) => {
-	// 	$sessionNumber = number;
-	// 	// console.log({ $sessionNumber });
-	// });
+	dbController.getSessionNumber($user.uid).then((number) => {
+		$sessionNumber = number;
+		// console.log({ $sessionNumber });
+	});
 
 	// let AB = false;
 	// let CC = false;
@@ -109,7 +109,7 @@
 	let clicked = false;
 
 	let boxText = 280;
-    let boxTextClone = boxText;
+	let boxTextClone = boxText;
 	let borderWidth = 8;
 
 	let value = 117;
@@ -123,7 +123,7 @@
 
 		if ($numberOfFlashes === 32) {
 			setTimeout(() => {
-	          $currentLetter = '';
+				$currentLetter = '';
 			}, value);
 
 			setTimeout(() => {
@@ -143,30 +143,32 @@
 
 		$count += 1;
 
-        if ($count === 1) {
-            $currentLetter = '+';
-            setTimeout(() => {
-                boxTextClone = 1.1 * boxText;
-                $textColor = 'yellow';
-                setTimeout(() => {
-                    boxTextClone = boxText;
-                    $textColor = 'white';
-                    stream(trialType);
-                }, 750);
-            }, 500);
-        }
+		if ($count === 1) {
+			$currentLetter = '+';
+			setTimeout(() => {
+				boxTextClone = 1.1 * boxText;
+				$textColor = 'yellow';
+				setTimeout(() => {
+					boxTextClone = boxText;
+					$textColor = 'white';
+					stream(trialType);
+				}, 750);
+			}, 500);
+		}
 
 		// console.log('count modulo:', Math.floor(value / Math.floor(1000 / $refreshRate)))
-		
+
 		if ($count % Math.floor(value / Math.floor(1000 / $refreshRate)) === 0) {
 			if ($isOn) {
 				$currentLetter = trialType.letters[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
-                // console.log({$currentLetter});
+				// console.log({$currentLetter});
 				$textColor = trialType.textColors[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 				$isTarget = trialType.targets[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 				// if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 				// if (SiB)
-				$displayFace = trialType.surprise[$currentTrial - 1] && trialType.surpriseTrial[$currentTrial - 1][($numberOfFlashes  + 2) / 2 - 1];
+				$displayFace =
+					trialType.surprise[$currentTrial - 1] &&
+					trialType.surpriseTrial[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 				// console.log({$displayFace});
 
 				if ($isTarget) {
@@ -174,19 +176,19 @@
 					// console.log($targetLetter);
 				}
 
-				trialType.letters[$currentTrial - 1].includes('X') ? $probe = 'Y' : $probe = 'N';
+				trialType.letters[$currentTrial - 1].includes('X') ? ($probe = 'Y') : ($probe = 'N');
 			}
-			$numberOfFlashes += 2;			
+			$numberOfFlashes += 2;
 			// console.log(performance.now() - $lastTime);
 
-			$lastTime = currentTime;		
-
+			$lastTime = currentTime;
 		}
 
 		if ($count !== 1) requestAnimationFrame(() => stream(trialType));
 	}
 
 	function onClick() {
+		if (practiceBlock === 5) practiceBlock = 1;
 		clicked = true;
 		$started = false;
 		VAB = true;
@@ -232,11 +234,11 @@
 	function begin() {
 		if ($started) return;
 		if (!$guessed) return;
-		if (trialIndex === 6) return;
+		if ($sessionNumber === 6) return;
 
 		if ($isPracticeCount === 8) {
 			practiceBlock += 1;
-			practiceBlock < 4 ? $isPractice = true : $isPractice = false;
+			practiceBlock < 4 ? ($isPractice = true) : ($isPractice = false);
 			$isPracticeCount = 0;
 			$currentTrial = 0;
 			resetDataGathering();
@@ -280,11 +282,10 @@
 					$everyStreamDuration,
 					NUMBER_OF_TRIALS,
 					$everyProbeGuess,
-					$everyProbeAccuracy,
-
+					$everyProbeAccuracy
 				);
 				resetDataGathering();
-			} 
+			}
 			// else if ((CC || SiB) && blockCount < 2) {
 			// 	CC
 			// 		? dbController.writeCC(
@@ -357,9 +358,11 @@
 			// 	// SiB = trialOrder[trialIndex] === 'SiB';
 			// 	resetDataGathering();
 			// }
-			if (trialIndex === 3) dbController.updateSessionNumber($user.uid);
+			if (trialIndex === 1) dbController.updateSessionNumber($user.uid);
 			clicked = false;
 			$inProgress = false;
+			$isPractice = false;
+			practiceBlock = 5;
 			return;
 		}
 
@@ -424,7 +427,7 @@
 		const storedBorderWidth = localStorage.getItem('borderWidth');
 		if (storedBoxText && storedBorderWidth) {
 			boxText = parseInt(storedBoxText, 10);
-            boxTextClone = boxText;
+			boxTextClone = boxText;
 			borderWidth = parseInt(storedBorderWidth, 10);
 		}
 	});
@@ -464,8 +467,10 @@
 	}}
 />
 {#if trialIndex < 6}
-<div class="flex flex-col justify-center items-center h-view w-view space-x-4 text-white h-screen">
-	<div class="flex justify-center align- h-view w-view space-x-4 text-white">
+	<div
+		class="flex flex-col justify-center items-center h-view w-view space-x-4 text-white h-screen"
+	>
+		<div class="flex justify-center align- h-view w-view space-x-4 text-white">
 			{#if !clicked}
 				<div class="flex flex-col items-center justify-center space-y-16">
 					{#if !VAB}
@@ -475,7 +480,10 @@
 							Click on the edge of the card and drag towards/away from the card to re-size it.
 						</p>
 
-						<div id="resizable-div" class="resize-handle justify-center items-center w-96 h-96 absolute">
+						<div
+							id="resizable-div"
+							class="resize-handle justify-center items-center w-96 h-96 absolute"
+						>
 							<img
 								src="https://creditkarma-cms.imgix.net/wp-content/uploads/2023/07/CapitalBank01.png?fm=webp"
 								alt="Credit Card"
@@ -516,7 +524,8 @@
 										</div>
 									{:else if $isPractice && practiceBlock === 3}
 										<div transition:fade={{ delay: 75, duration: 350 }}>
-											Report the red letter in each stream and if there is the letter 'X' when prompted.
+											Report the red letter in each stream and if there is the letter 'X' when
+											prompted.
 											<br />
 											<br />
 											If you are unsure, please make your best guess.
@@ -524,9 +533,19 @@
 											<br />
 											Press any key to begin practice.
 										</div>
-									{:else}
+									{:else if practiceBlock === 4}
 										<div transition:fade={{ delay: 75, duration: 350 }}>
 											Press any key to continue with the real experiment.
+										</div>
+									{:else if practiceBlock === 5}
+										<div transition:fade={{ delay: 75, duration: 350 }}>
+											You are 1/6 done with the experiment.
+											<br />
+											<br /> 
+											You may opt to take a break now. 
+											<br />
+											<br />
+											When you are ready to continue with the experiment, please press any key.
 										</div>
 									{/if}
 								{/if}
@@ -560,27 +579,24 @@
 				</div>
 			{/if}
 			{#if $inProgress && clicked}
-            <div
-                class="flex justify-center"
-                style="width: {boxText}px; height: {boxText}px;" 
-            >
-                <p
-                    class={`self-center font-thin text-center font-courier-new`}
-                    style="color: {$textColor}; font-size: {boxTextClone}px"
-                >
-				{#if $displayFace}
-					<img src="garik_bw.jpg" alt="Garik!!!" />
-				{:else}
-					{$currentLetter}
-				{/if}
-                </p>
-            </div>
-        {/if}
-        {#if !$guessed}
-            <VABCheckInput {begin} {practiceBlock} />
-        {/if}
-</div>
-</div>
+				<div class="flex justify-center" style="width: {boxText}px; height: {boxText}px;">
+					<p
+						class={`self-center font-thin text-center font-courier-new`}
+						style="color: {$textColor}; font-size: {boxTextClone}px"
+					>
+						{#if $displayFace}
+							<img src="garik_bw.jpg" alt="Garik!!!" />
+						{:else}
+							{$currentLetter}
+						{/if}
+					</p>
+				</div>
+			{/if}
+			{#if !$guessed}
+				<VABCheckInput {begin} {practiceBlock} />
+			{/if}
+		</div>
+	</div>
 {:else}
 	<GameOver />
 {/if}

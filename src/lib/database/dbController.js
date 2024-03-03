@@ -1,17 +1,14 @@
-import { NUMBER_OF_TRIALS } from "$lib/logic/ConstantsAndHelpers";
-import { things } from "$lib/stores/GameStore";
-import { child, get, runTransaction, set, update } from "firebase/database";
-import { dbRef } from "./firebase";
+import { NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
+import { things } from '$lib/stores/GameStore';
+import { child, get, runTransaction, set, update } from 'firebase/database';
+import { dbRef } from './firebase';
 
 export const dbController = {
 	async getTargetColor() {
 		try {
-			const index = await runTransaction(
-				child(dbRef, "settings/targetColor"),
-				(currentIndex) => {
-					return currentIndex === 1 ? 0 : 1;
-				},
-			);
+			const index = await runTransaction(child(dbRef, 'settings/targetColor'), (currentIndex) => {
+				return currentIndex === 1 ? 0 : 1;
+			});
 
 			return index.snapshot.val();
 		} catch (error) {
@@ -21,12 +18,9 @@ export const dbController = {
 
 	async getTrialOrder() {
 		try {
-			const index = await runTransaction(
-				child(dbRef, "settings/trialOrder"),
-				(currentIndex) => {
-					return (currentIndex + 1) % 6;
-				},
-			);
+			const index = await runTransaction(child(dbRef, 'settings/trialOrder'), (currentIndex) => {
+				return (currentIndex + 1) % 6;
+			});
 
 			return index.snapshot.val();
 		} catch (error) {
@@ -36,12 +30,12 @@ export const dbController = {
 
 	async getAllUsers() {
 		try {
-			const snapshot = await get(child(dbRef, "users"));
+			const snapshot = await get(child(dbRef, 'users'));
 			if (snapshot.exists()) {
 				const data = snapshot.val();
 				things.set(data);
 			} else {
-				console.log("No data available");
+				console.log('No data available');
 			}
 		} catch (error) {
 			console.error(error);
@@ -65,7 +59,7 @@ export const dbController = {
 			await update(child(dbRef, `users/${userId}`), {
 				refreshRate: refreshRate,
 				innerWidth: innerWidth,
-				innerHeight: innerHeight,
+				innerHeight: innerHeight
 			});
 		} catch (error) {
 			console.error(error);
@@ -78,7 +72,7 @@ export const dbController = {
 				child(dbRef, `users/${userId}/sessionNumber`),
 				(currentIndex) => {
 					return currentIndex + 1;
-				},
+				}
 			);
 
 			return index.snapshot.val();
@@ -96,19 +90,13 @@ export const dbController = {
 		}
 	},
 
-	async writeParticipantData(
-		userId,
-		gender,
-		handedness,
-		age,
-		problemDescription,
-	) {
+	async writeParticipantData(userId, gender, handedness, age, problemDescription) {
 		try {
 			await update(child(dbRef, `users/${userId}`), {
 				gender: gender,
 				age: age,
 				handedness: handedness,
-				problemDescription: problemDescription,
+				problemDescription: problemDescription
 			});
 		} catch (error) {
 			console.error(error);
@@ -126,10 +114,12 @@ export const dbController = {
 		t1Position,
 		t2Position,
 		targetColor,
-		streamDuration,
+		streamDuration
 	) {
 		try {
 			const updates = {};
+
+			updates[`AB/${userId}/session${sessionNumber}/time`] = Date.now();
 
 			for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
 				updates[`AB/${userId}/session${sessionNumber}/${i + 1}`] = {
@@ -141,7 +131,7 @@ export const dbController = {
 					t1Position: t1Position[i],
 					t2Position: `+${t2Position[i]}`,
 					targetColor,
-					streamDuration: streamDuration[i],
+					streamDuration: streamDuration[i]
 				};
 			}
 
@@ -164,15 +154,15 @@ export const dbController = {
 		distractorPosition,
 		distractorColor,
 		targetColor,
-		streamDuration,
+		streamDuration
 	) {
 		try {
 			const updates = {};
 
+			updates[`CC/${userId}/session${sessionNumber}/time`] = Date.now();
+
 			for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
-				updates[
-					`CC/${userId}/session${sessionNumber}/block${blockCount}/${i + 1}`
-				] = {
+				updates[`CC/${userId}/session${sessionNumber}/block${blockCount}/${i + 1}`] = {
 					target: everyTarget[i],
 					response: everyGuess[i],
 					accuracy: everyAccuracy[i],
@@ -182,7 +172,7 @@ export const dbController = {
 					distractorPosition: `-${targetPosition[i]}`,
 					distractorColor: distractorColor[i],
 					targetColor,
-					streamDuration: streamDuration[i],
+					streamDuration: streamDuration[i]
 				};
 			}
 
@@ -203,26 +193,24 @@ export const dbController = {
 		surprise,
 		targetPosition,
 		targetColor,
-		streamDuration,
+		streamDuration
 	) {
 		try {
 			const updates = {};
 
+			updates[`SiB/${userId}/session${sessionNumber}/time`] = Date.now();
+
 			for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
-				updates[
-					`SiB/${userId}/session${sessionNumber}/${i + 1}`
-				] = {
+				updates[`SiB/${userId}/session${sessionNumber}/${i + 1}`] = {
 					target: everyTarget[i],
 					targetResponse: everyGuess[i],
 					accuracy: everyAccuracy[i],
 					reactionTime: everyReactionTime[i],
 					RSVP: RSVP[i],
-					surprise: surprise[i].includes(true)
-						? surprise[i].indexOf(true)
-						: "None",
+					surprise: surprise[i].includes(true) ? surprise[i].indexOf(true) : 'None',
 					targetPosition: targetPosition[i],
 					targetColor,
-					streamDuration: streamDuration[i],
+					streamDuration: streamDuration[i]
 				};
 			}
 
@@ -245,27 +233,27 @@ export const dbController = {
 		streamDuration,
 		numberOfTrials,
 		everyProbeGuess,
-		everyProbeAccuracy,
+		everyProbeAccuracy
 	) {
 		try {
 			const updates = {};
+
+			updates[`VAB/${userId}/session${sessionNumber}/time`] = Date.now();
 
 			for (let i = 0; i < numberOfTrials; i++) {
 				updates[`VAB/${userId}/session${sessionNumber}/${i + 1}`] = {
 					target: everyTarget[i],
 					targetResponse: everyGuess[i],
-					probe: RSVP[i].includes("X") ? true : false,
+					probe: RSVP[i].includes('X') ? true : false,
 					probeResponse: everyProbeGuess[i],
 					targetAccuracy: everyAccuracy[i],
 					probeAccuracy: everyProbeAccuracy[i],
 					reactionTime: everyReactionTime[i],
 					RSVP: RSVP[i],
-					surprise: surprise[i].includes(true)
-						? surprise[i].indexOf(true)
-						: "None",
+					surprise: surprise[i].includes(true) ? surprise[i].indexOf(true) : 'None',
 					targetPosition: targetPosition[i],
-					probePosition: RSVP[i].includes("X") ? RSVP[i].indexOf("X") : "None",
-					streamDuration: streamDuration[i],
+					probePosition: RSVP[i].includes('X') ? RSVP[i].indexOf('X') : 'None',
+					streamDuration: streamDuration[i]
 				};
 			}
 
@@ -282,10 +270,10 @@ export const dbController = {
 				const data = snapshot.val();
 				return data;
 			} else {
-				console.log("No data available");
+				console.log('No data available');
 			}
 		} catch (error) {
 			console.error(error);
 		}
-	},
+	}
 };
