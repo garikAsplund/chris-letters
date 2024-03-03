@@ -233,15 +233,16 @@ export const dbController = {
 		streamDuration,
 		numberOfTrials,
 		everyProbeGuess,
-		everyProbeAccuracy
+		everyProbeAccuracy,
+		blockCount
 	) {
 		try {
 			const updates = {};
 
-			updates[`VAB/${userId}/session${sessionNumber}/time`] = Date.now();
+			updates[`VAB/${userId}/session${sessionNumber}/block${blockCount}/time`] = Date.now();
 
 			for (let i = 0; i < numberOfTrials; i++) {
-				updates[`VAB/${userId}/session${sessionNumber}/${i + 1}`] = {
+				updates[`VAB/${userId}/session${sessionNumber}/block${blockCount}/${i + 1}`] = {
 					target: everyTarget[i],
 					targetResponse: everyGuess[i],
 					probe: RSVP[i].includes('X') ? true : false,

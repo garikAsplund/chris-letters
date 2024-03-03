@@ -61,7 +61,9 @@
 					fgColor: { argb: 'FFDDDDDD' }
 				};
 				cell.border = {
-					bottom: { style: 'thin', color: { argb: 'FF000000' } }
+					bottom: { style: 'thin', color: { argb: 'FF000000' } },
+					right: { style: 'thin', color: { argb: 'FF000000' } },
+					left: { style: 'thin', color: { argb: 'FF000000' } }
 				};
 			});
 		};
@@ -74,6 +76,10 @@
 					const trials = sessions[session];
 
 					for (const trial in trials) {
+						if (trial === 'time') {
+							continue;
+						}
+
 						const newRow = [
 							uid,
 							session,
@@ -126,6 +132,10 @@
 						const trials = blocks[block];
 
 						for (const trialID in trials) {
+							if (trialID === 'time') {
+								continue;
+							}
+
 							const trial = trials[trialID];
 
 							const newRow = [
@@ -182,6 +192,10 @@
 					const trials = sessions[session];
 
 					for (const trialID in trials) {
+						if (trialID === 'time') {
+							continue;
+						}
+
 						const trial = trials[trialID];
 
 						const newRow = [
@@ -233,36 +247,43 @@
 				const sessions = data[uid];
 
 				for (const session in sessions) {
-					const trials = sessions[session];
+					const blocks = sessions[session];
 
-					for (const trialID in trials) {
-						if (trialID === 'time') {
-							continue;
+					for (const block in blocks) {
+						const trials = blocks[block];
+
+						const date = new Date(trials.time);
+
+						for (const trialID in trials) {
+							if (trialID === 'time') {
+								continue;
+							}
+
+							const trial = trials[trialID];
+
+							const newRow = [
+								uid,
+								session,
+								block,
+								date.toLocaleString(),
+								trialID,
+								'VAB',
+								trial.RSVP,
+								trial.probe,
+								trial.probeAccuracy,
+								trial.probePosition,
+								trial.probeResponse,
+								trial.reactionTime,
+								trial.streamDuration,
+								trial.surprise,
+								trial.target,
+								trial.targetAccuracy,
+								trial.targetPosition,
+								trial.targetResponse
+							];
+
+							worksheet.addRow(newRow);
 						}
-						
-						const trial = trials[trialID];
-
-						const newRow = [
-							uid,
-							session,
-							trial.time,
-							trialID,
-							'VAB',
-							trial.RSVP,
-							trial.probe,
-							trial.probeAccuracy,
-							trial.probePosition,
-							trial.probeResponse,
-							trial.reactionTime,
-							trial.streamDuration,
-							trial.surprise,
-							trial.target,
-							trial.targetAccuracy,
-							trial.targetPosition,
-							trial.targetResponse
-						];
-
-						worksheet.addRow(newRow);
 					}
 				}
 			}
@@ -272,6 +293,7 @@
 		const headersVAB = [
 			'User ID',
 			'Session Number',
+			'Block Number',
 			'Date',
 			'Trial ID',
 			'Task',
@@ -332,8 +354,14 @@
 					};
 
 					row.border = {
-						bottom: { style: 'thin', color: { argb: 'FF000000' } }
+						bottom: { style: 'thin', color: { argb: 'FF000000' } },
+						right: { style: 'thin', color: { argb: 'FF000000' } },
+						left: { style: 'thin', color: { argb: 'FF000000' } }
 					};
+
+					row.eachCell((cell) => {
+						cell.alignment = { horizontal: 'right' };
+					});
 				});
 			} else {
 				worksheet.eachRow({ includeEmpty: false }, (row) => {
@@ -353,8 +381,14 @@
 					};
 
 					row.border = {
-						bottom: { style: 'thin', color: { argb: 'FF000000' } }
+						bottom: { style: 'thin', color: { argb: 'FF000000' } },
+						right: { style: 'thin', color: { argb: 'FF000000' } },
+						left: { style: 'thin', color: { argb: 'FF000000' } }
 					};
+
+					row.eachCell((cell) => {
+						cell.alignment = { horizontal: 'right' };
+					});
 				});
 			}
 		};
@@ -363,6 +397,8 @@
 		setStyling(worksheetCC);
 		setStyling(worksheetSiB);
 		setStyling(worksheetVAB);
+
+		setHeaderStyling(worksheetVAB);
 
 		workbook.xlsx.writeBuffer().then((buffer) => {
 			const blob = new Blob([buffer], {

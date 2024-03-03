@@ -8,7 +8,12 @@
 		SiBTrials,
 		CCTrials2,
 		// SiBTrials2,
-		VABTrials,
+		VABTrials1,
+		VABTrials2,
+		VABTrials3,
+		VABTrials4,
+		VABTrials5,
+		VABTrials6,
 		ABPractice,
 		CCPractice,
 		SiBPractice,
@@ -118,6 +123,8 @@
 
 	const NUMBER_OF_TRIALS = 28;
 
+	let VABTrials = $VABTrials1;
+
 	function stream(trialType) {
 		const currentTime = performance.now();
 
@@ -188,7 +195,7 @@
 	}
 
 	function onClick() {
-		if (practiceBlock === 5) practiceBlock = 1;
+		if (practiceBlock === 5) practiceBlock = 4;
 		clicked = true;
 		$started = false;
 		VAB = true;
@@ -269,6 +276,7 @@
 				// AB = false;
 				// CC = trialOrder[trialIndex] === 'CC';
 				// SiB = trialOrder[trialIndex] === 'SiB';
+
 				dbController.writeVAB(
 					$user.uid,
 					$everyTarget,
@@ -276,14 +284,37 @@
 					$everyAccuracy,
 					$everyReactionTime,
 					$sessionNumber,
-					$VABTrials.letters,
-					$VABTrials.surpriseTrial,
-					$VABTrials.T1Indices,
+					VABTrials.letters,
+					VABTrials.surpriseTrial,
+					VABTrials.T1Indices,
 					$everyStreamDuration,
 					NUMBER_OF_TRIALS,
 					$everyProbeGuess,
-					$everyProbeAccuracy
+					$everyProbeAccuracy,
+					trialIndex
 				);
+
+				switch (trialIndex) {
+					case 0:
+						VABTrials = $VABTrials1;
+						break;
+					case 1:
+						VABTrials = $VABTrials2;
+						break;
+					case 2:
+						VABTrials = $VABTrials3;
+						break;
+					case 3:
+						VABTrials = $VABTrials4;
+						break;
+					case 4:
+						VABTrials = $VABTrials5;
+						break;
+					case 5:
+						VABTrials = $VABTrials6;
+						break;
+				}
+
 				resetDataGathering();
 			}
 			// else if ((CC || SiB) && blockCount < 2) {
@@ -358,7 +389,7 @@
 			// 	// SiB = trialOrder[trialIndex] === 'SiB';
 			// 	resetDataGathering();
 			// }
-			if (trialIndex === 1) dbController.updateSessionNumber($user.uid);
+			if (trialIndex === 6) dbController.updateSessionNumber($user.uid);
 			clicked = false;
 			$inProgress = false;
 			$isPractice = false;
@@ -418,7 +449,7 @@
 			// 		blockCount === 1 ? stream($SiBTrials) : stream($SiBTrials2);
 			// 		break;
 			// }
-			stream($VABTrials);
+			stream(VABTrials);
 		}
 	}
 
@@ -539,10 +570,10 @@
 										</div>
 									{:else if practiceBlock === 5}
 										<div transition:fade={{ delay: 75, duration: 350 }}>
-											You are 1/6 done with the experiment.
+											You are {trialIndex}/6 done with the experiment.
 											<br />
-											<br /> 
-											You may opt to take a break now. 
+											<br />
+											You may opt to take a break now.
 											<br />
 											<br />
 											When you are ready to continue with the experiment, please press any key.

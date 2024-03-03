@@ -14,11 +14,16 @@ export const incorrect = writable(0);
 
 export const ABTrials = writable(createABTrials());
 export const CCTrials = writable(createCCTrials());
-export const SiBTrials = writable(createSiBTrials());
-export const VABTrials = writable(createVABTrials());
-
 export const CCTrials2 = writable(createCCTrials());
+export const SiBTrials = writable(createSiBTrials());
 // export const SiBTrials2 = writable(createSiBTrials(false, true));
+
+export const VABTrials1 = writable(createVABTrials());
+export const VABTrials2 = writable(createVABTrials());
+export const VABTrials3 = writable(createVABTrials());
+export const VABTrials4 = writable(createVABTrials());
+export const VABTrials5 = writable(createVABTrials());
+export const VABTrials6 = writable(createVABTrials());
 
 export const ABPractice = writable(createABTrials());
 export const CCPractice = writable(createCCTrials(true));

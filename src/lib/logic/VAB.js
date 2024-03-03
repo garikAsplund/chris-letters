@@ -1,38 +1,38 @@
-import { randomRange, shuffle } from "$lib/logic/ConstantsAndHelpers";
+import { randomRange, shuffle } from '$lib/logic/ConstantsAndHelpers';
 
 let NUMBER_OF_TRIALS = 28;
 const GCD = 30;
-const DISTRACTORS = ["blue", "green", "yellow", "purple", "orange", "pink"];
+const DISTRACTORS = ['blue', 'green', 'yellow', 'purple', 'orange', 'pink'];
 const LETTERS = [
-	"A",
-	"B",
-	"C",
+	'A',
+	'B',
+	'C',
 	// 'D',
-	"E",
+	'E',
 	// 'F',
-	"G",
-	"H",
+	'G',
+	'H',
 	// 'I',
-	"J",
-	"K",
+	'J',
+	'K',
 	// 'L',
-	"M",
-	"N",
+	'M',
+	'N',
 	// 'O',
-	"P",
+	'P',
 	// 'Q',
-	"R",
-	"S",
-	"T",
-	"U",
-	"V",
-	"W",
+	'R',
+	'S',
+	'T',
+	'U',
+	'V',
+	'W',
 	// 'X',
-	"Y",
-	"Z",
+	'Y',
+	'Z'
 ];
-const TARGETS = ["D", "F"];
-const PROBE = "X";
+// const TARGETS = ["D", "F"];
+const PROBE = 'X';
 
 // 3 practice blocks of 8 trials each.
 // The first block contained targets but no probes;
@@ -53,37 +53,39 @@ export function createVABTrials(practice = false, round = 0) {
 			.concat(Array.from({ length: GCD / 6 }, () => 3))
 			.concat(Array.from({ length: GCD / 6 }, () => 5))
 			.concat(Array.from({ length: GCD / 6 }, () => 7))
-			.concat(Array.from({ length: GCD / 6 }, () => 9)),
+			.concat(Array.from({ length: GCD / 6 }, () => 9))
 	).slice(0, NUMBER_OF_TRIALS);
 
 	const T1Indices = shuffle(
 		Array.from({ length: GCD / 3 }, () => 2)
 			.concat(Array.from({ length: GCD / 3 }, () => 3))
-			.concat(Array.from({ length: GCD / 3 }, () => 4)),
+			.concat(Array.from({ length: GCD / 3 }, () => 4))
 	).slice(0, NUMBER_OF_TRIALS);
 
 	const targets = shuffle(
-		Array.from({ length: GCD / 2 }, () => "F").concat(
-			Array.from({ length: GCD / 2 }, () => "D"),
-		),
+		Array.from({ length: GCD / 2 }, () => 'F').concat(Array.from({ length: GCD / 2 }, () => 'D'))
 	).slice(0, NUMBER_OF_TRIALS);
 
 	const probes = shuffle(
 		Array.from({ length: (NUMBER_OF_TRIALS * 3) / 4 }, () => true).concat(
-			Array.from({ length: NUMBER_OF_TRIALS / 4 }, () => false),
-		),
+			Array.from({ length: NUMBER_OF_TRIALS / 4 }, () => false)
+		)
 	).slice(0, NUMBER_OF_TRIALS);
 
+	// 2 sessions
+	// 6 blocks per session
+	// Across the 24 surprise trials in each session, 12 (50%) were surprise-probe lag 3,
+	// 6 (25%) were surprise-probe lag 7, and 6 (25%) contained a surprise stimulus but no probe.
+	// not the first 3, or last, at least 2 separated
+
 	const surprise = shuffle(
-		Array.from({ length: 24 }, () => true).concat(
-			Array.from({ length: NUMBER_OF_TRIALS * 6 - 24 }, () => false),
-		),
+		Array.from({ length: 4 }, () => true).concat(Array.from({ length: 24 }, () => false))
 	);
 
 	const surpriseOffsets = shuffle(
 		Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 2).concat(
-			Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 6),
-		),
+			Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 6)
+		)
 	);
 
 	console.log({ targetOffsets, T1Indices, targets, probes, surprise });
@@ -106,19 +108,15 @@ export function createVABTrials(practice = false, round = 0) {
 		while (VABLettersTrial.length < 16) {
 			if (VABTargetsTrial.length === T1Index && round !== 2) {
 				VABTargetsTrial.push(true);
-				VABTextColorsTrial.push("red");
+				VABTextColorsTrial.push('red');
 				VABLettersTrial.push(targets[i]);
-			} else if (
-				probes[i] &&
-				VABTargetsTrial.length === probeIndex &&
-				round !== 1
-			) {
+			} else if (probes[i] && VABTargetsTrial.length === probeIndex && round !== 1) {
 				VABTargetsTrial.push(false);
-				VABTextColorsTrial.push("white");
+				VABTextColorsTrial.push('white');
 				VABLettersTrial.push(PROBE);
 			} else {
 				VABTargetsTrial.push(false);
-				VABTextColorsTrial.push("white");
+				VABTextColorsTrial.push('white');
 				VABLettersTrial.push(shuffledLetters[VABLettersTrial.length]);
 			}
 
@@ -142,7 +140,7 @@ export function createVABTrials(practice = false, round = 0) {
 		targetOffsets,
 		T1Indices,
 		surprise,
-		VABSurprise,
+		VABSurprise
 	});
 
 	return {
@@ -152,6 +150,6 @@ export function createVABTrials(practice = false, round = 0) {
 		targetOffsets,
 		T1Indices,
 		surprise,
-		surpriseTrial: VABSurprise,
+		surpriseTrial: VABSurprise
 	};
 }
