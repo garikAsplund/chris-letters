@@ -238,5 +238,13 @@ export function createVABTrials(practice = false, round = 0) {
 		}
 	}
 
-	return output;
+	return {
+		letters: output.letters,
+		targets: output.targets,
+		textColors: output.textColors,
+		targetOffsets: output.targetOffsets,
+		T1Indices: output.T1Indices,
+		surprise: output.surprise,
+		surpriseTrial: output.surpriseTrial
+	};
 }
