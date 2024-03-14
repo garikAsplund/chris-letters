@@ -237,4 +237,6 @@ export function createVABTrials(practice = false, round = 0) {
 			// console.log({ isSurpriseValid });
 		}
 	}
+
+	return output;
 }
