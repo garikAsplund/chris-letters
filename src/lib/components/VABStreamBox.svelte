@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import interact from 'interactjs';
 	import { onMount } from 'svelte';
 	// import { NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
@@ -105,21 +105,25 @@
 	// let AB = false;
 	// let CC = false;
 	// let SiB = false;
-	let VAB = false;
+	let VAB: boolean = false;
 
 	// let blockCount = 1;
-	let practiceBlock = 1;
+	let practiceBlock: number = 1;
 
 	let guesses = ['A'];
-	let clicked = false;
+	let clicked: boolean = false;
 
-	let boxText = 280;
-	let boxTextClone = boxText;
-	let borderWidth = 8;
+	let boxText: number = 280;
+	let boxTextClone: number = boxText;
+	let borderWidth: number = 8;
 
-	let value = 117;
+	let value: number = 117;
 	let streamTime;
-	let resizedCard = false;
+	let resizedCard: boolean = false;
+
+	let surprisePath: string = `surprises/face_1.jpg`;		
+	let surpriseCount: number = (trialIndex) * 8;
+	console.log({surpriseCount});
 
 	const NUMBER_OF_TRIALS = 28;
 
@@ -177,6 +181,13 @@
 					trialType.surprise[$currentTrial - 1] &&
 					trialType.surpriseTrial[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 				// console.log({$displayFace});
+
+				if ($displayFace) {
+					surprisePath = `/surprises/${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${
+						Math.floor(surpriseCount++ / 2) + 1
+					}.jpg`;
+					console.log(surprisePath);
+				}
 
 				if ($isTarget) {
 					$targetLetter += $currentLetter;
@@ -272,6 +283,8 @@
 			$currentTrial = 0;
 			if (VAB) {
 				trialIndex += 1;
+				surpriseCount = (trialIndex) * 4;
+				console.log({surpriseCount});
 				$isPractice = true;
 				// AB = false;
 				// CC = trialOrder[trialIndex] === 'CC';
@@ -616,7 +629,7 @@
 						style="color: {$textColor}; font-size: {boxTextClone}px"
 					>
 						{#if $displayFace}
-							<img src="garik_bw.jpg" alt="Garik!!!" />
+							<img src={surprisePath} alt="Surprise!!!" />
 						{:else}
 							{$currentLetter}
 						{/if}

@@ -39,11 +39,11 @@ const PROBE = 'X';
 // the second block contained probes but no targets;
 // and the third block contained both.
 
-export function createVABTrials(practice = false, round = 0) {
-	const VABLetters = [];
-	const VABTargets = [];
-	const VABTextColors = [];
-	const VABSurprise = [];
+function helperVAB(practice = false, round = 0) {
+	let VABLetters = [];
+	let VABTargets = [];
+	let VABTextColors = [];
+	let VABSurprise = [];
 
 	practice ? (NUMBER_OF_TRIALS = 8) : (NUMBER_OF_TRIALS = 28);
 
@@ -77,10 +77,9 @@ export function createVABTrials(practice = false, round = 0) {
 	// Across the 24 surprise trials in each session, 12 (50%) were surprise-probe lag 3,
 	// 6 (25%) were surprise-probe lag 7, and 6 (25%) contained a surprise stimulus but no probe.
 	// not the first 3, or last, at least 2 separated
+	// 4 SiBs per block--2 lag 3, 1 lag 7, 1 no probe
 
-	const surprise = shuffle(
-		Array.from({ length: 4 }, () => true).concat(Array.from({ length: 24 }, () => false))
-	);
+	const surprise = shuffle(Array.from({ length: 28 }, () => false));
 
 	const surpriseOffsets = shuffle(
 		Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 2).concat(
@@ -88,7 +87,15 @@ export function createVABTrials(practice = false, round = 0) {
 		)
 	);
 
-	console.log({ targetOffsets, T1Indices, targets, probes, surprise });
+	// console.log({ targetOffsets, T1Indices, targets, probes, surprise, surpriseOffsets });
+
+	// function createTrials() {
+	let numberOfSurprises = 0;
+	let lastSurpriseIndex = 0;
+	// create variables for lag 3 and lag 7 and no probe
+	let lag3 = 2;
+	let lag7 = 1;
+	let noProbe = 1;
 
 	for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
 		const VABLettersTrial = [];
@@ -120,11 +127,61 @@ export function createVABTrials(practice = false, round = 0) {
 				VABLettersTrial.push(shuffledLetters[VABLettersTrial.length]);
 			}
 
-			if (VABSurpriseTrial.length === surpriseIndex && !practice) {
-				VABSurpriseTrial.push(true);
+			if (
+				i >= 3 &&
+				i < NUMBER_OF_TRIALS - 1 &&
+				numberOfSurprises < 4 &&
+				i - 2 > lastSurpriseIndex &&
+				!practice
+			) {
+				if (
+					lag3 > 0 &&
+					// surprise[i] &&
+					VABSurpriseTrial.length === probeIndex - 3 &&
+					// surpriseOffset === 2
+					probeIndex === 9
+				) {
+					VABSurpriseTrial.push(true);
+					numberOfSurprises++;
+					lastSurpriseIndex = i;
+					lag3--;
+				} else if (
+					lag7 > 0 &&
+					// surprise[i] &&
+					VABSurpriseTrial.length === probeIndex - 7 &&
+					// surpriseOffset === 6
+					probeIndex === 9
+				) {
+					VABSurpriseTrial.push(true);
+					numberOfSurprises++;
+					lastSurpriseIndex = i;
+					lag7--;
+				} else if (
+					noProbe > 0 &&
+					// surprise[i] &&
+					VABSurpriseTrial.length === surpriseIndex &&
+					!probes[i]
+				) {
+					VABSurpriseTrial.push(true);
+					numberOfSurprises++;
+					lastSurpriseIndex = i;
+					noProbe--;
+				} else {
+					VABSurpriseTrial.push(false);
+				}
 			} else {
 				VABSurpriseTrial.push(false);
 			}
+
+			// if (VABSurpriseTrial.length === surpriseIndex && !practice) {
+			// 	VABSurpriseTrial.push(true);
+			// } else {
+			// 	VABSurpriseTrial.push(false);
+			// }
+		}
+
+		if (VABSurpriseTrial.includes(true)) {
+			surprise[i] = true;
 		}
 
 		VABLetters.push(VABLettersTrial);
@@ -132,6 +189,22 @@ export function createVABTrials(practice = false, round = 0) {
 		VABTextColors.push(VABTextColorsTrial);
 		VABSurprise.push(VABSurpriseTrial);
 	}
+	// }
+
+	// let count = 10;
+	// let valid = surprise.filter((s) => s === true);
+	// while (valid.length !== 4 && count > 0) {
+	// 	VABLetters = [];
+	// 	VABTargets = [];
+	// 	VABTextColors = [];
+	// 	VABSurprise = [];
+	// 	console.log({ surprise });
+	// 	console.log({ valid });
+	// 	console.log({ count });
+	// 	createTrials();
+	// 	valid = surprise.filter((s) => s === true);
+	// 	count--;
+	// }
 
 	console.log({
 		VABLetters,
@@ -152,4 +225,16 @@ export function createVABTrials(practice = false, round = 0) {
 		surprise,
 		surpriseTrial: VABSurprise
 	};
+}
+
+export function createVABTrials(practice = false, round = 0) {
+	let output = helperVAB(practice, round);
+	let isSurpriseValid = output.surprise.filter((s) => s === true);
+	if (!practice) {
+		while (isSurpriseValid.length !== 4) {
+			output = helperVAB(practice, round);
+			isSurpriseValid = output.surprise.filter((s) => s === true);
+			// console.log({ isSurpriseValid });
+		}
+	}
 }
