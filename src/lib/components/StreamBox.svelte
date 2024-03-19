@@ -109,7 +109,7 @@
 	let streamTime;
 	let resizedCard: boolean = false;
 
-	let surprisePath: string = `surprises/face_1.jpg`;
+	let surprisePath: string = `surprise/face_1.jpg`;
 	setTimeout(() => console.log({surpriseCount}), 1000);
 
 	function stream(trialType) {
@@ -140,7 +140,7 @@
 				if (SiB)
 					$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 					if ($displayFace) {
-						surprisePath = `/surprises/${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${Math.floor(surpriseCount++ / 2) + 1}.jpg`;
+						surprisePath = `/surprise/${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${Math.floor(surpriseCount++ / 2) + 1}.jpg`;
 						console.log(surprisePath);
 					}
 				if ($isTarget) {
@@ -412,9 +412,11 @@
 				<div class="flex flex-col items-center justify-center space-y-16">
 					{#if !AB && !CC && !SiB}
 						<p class="p-2 font-sans text-3xl text-gray-200 absolute -translate-y-72 w-1/2">
-							Please re-size this card to be the size of a real-life credit card.
+							This step ensures that the letters in the experiment are the correct size.
 							<br /><br />
-							Click on the edge of the card and drag towards/away from the card to re-size it.
+							Please place a standard credit card against your screen and then 
+							click on the edge of the image to re-size it until they match.
+							.
 						</p>
 
 						<div
