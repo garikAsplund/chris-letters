@@ -141,7 +141,7 @@
 					$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 					if ($displayFace) {
 						surprisePath = `/surprise/${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${Math.floor(surpriseCount++ / 2) + 1}.jpg`;
-						console.log(surprisePath);
+						// console.log(surprisePath);
 					}
 				if ($isTarget) {
 					$targetLetter += $currentLetter;
