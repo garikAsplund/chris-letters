@@ -389,8 +389,8 @@
 
 			// target.style.transform = `translate(0px, ${event.rect.height / 44}px)`;
 
-			boxText = Math.floor(event.rect.width / 6);
-			borderWidth = Math.floor((event.rect.width / 6) * 0.03);
+			boxText = Math.floor(event.rect.width / 5);
+			borderWidth = Math.floor((event.rect.width / 5) * 0.03);
 
 			localStorage.setItem('boxText', boxText.toString());
 			localStorage.setItem('borderWidth', borderWidth.toString());
