@@ -416,7 +416,6 @@
 							<br /><br />
 							Please place a standard credit card against your screen and then 
 							click on the edge of the image to re-size it until they match.
-							.
 						</p>
 
 						<div
