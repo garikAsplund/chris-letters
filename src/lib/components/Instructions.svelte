@@ -34,7 +34,7 @@
 						<p>Please take note of the following requirements for participating in this study:</p>
 						<ul class="m-3 list">
 							<li>Age 21-35 (18+ for Yale-NUS or NUS students)</li>
-							<li>Color vision (not color blind)</li>
+							<li>Normal color vision</li>
 							<li>Normal or corrected-to-normal vision</li>
 							<li>
 								Using Google Chrome, Firefox, or Safari browser on a desktop or laptop computer
@@ -42,7 +42,7 @@
 						</ul>
 						<p>
 							If you do not meet these requirements, you are unfortunately not eligible to
-							participate in this survey.
+							participate in this experiment.
 						</p>
 						<p>If you meet these requirements, please continue!</p>
 					</div>
@@ -189,6 +189,9 @@
 							browser's "Back" button or "Refresh" buttons throughout the study, as this may cause
 							errors, or force you to redo certain sections of the study.
 						</p>
+						<p>
+							This experiment lasts approximately 20 minutes and there are 3 short breaks built in.
+						</p>
 					</div>
 				</Step>
 				<Step>
@@ -204,7 +207,7 @@
 							letter you saw. Once you input the letter, you will automatically be taken to the next
 							trial. Both capital and lowercase letters will be accepted.
 						</p>
-						<p>If you do not know what the target letter is, you may just input your best guess.</p>
+						<p>If you do not know what the target letter is, please input your best guess.</p>
 					</div>
 				</Step>
 				<Step>
@@ -226,7 +229,7 @@
 					<svelte:fragment slot="header">Almost there</svelte:fragment>
 					<div class="space-y-6 mb-8" in:fly={{ duration: 600, x: 40 }}>
 						<p>We will now begin the main experiment.</p>
-						<p>The main experiment will consist of 90 trials.</p>
+						<p>The main experiment will consist of 4 blocks with 96 trials in each block.</p>
 					</div>
 				</Step>
 			</Stepper>
