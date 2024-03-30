@@ -90,13 +90,12 @@ export const dbController = {
 		}
 	},
 
-	async writeParticipantData(userId, gender, handedness, age, problemDescription) {
+	async writeParticipantData(userId, gender, handedness, age) {
 		try {
 			await update(child(dbRef, `users/${userId}`), {
 				gender: gender,
 				age: age,
 				handedness: handedness,
-				problemDescription: problemDescription
 			});
 		} catch (error) {
 			console.error(error);

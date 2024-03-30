@@ -1,12 +1,18 @@
 <script>
+	import { gender, handedness, age } from '$lib/stores/GameStore';
 	import { Accordion, AccordionItem, Stepper, Step, SlideToggle } from '@skeletonlabs/skeleton';
 	import { fade, fly } from 'svelte/transition';
+	import { user } from '$lib/database/firebase';
 
 	let locked = false;
 	$: unlocked = !locked;
 	export let signIn;
 
 	let isMobile = window.innerWidth < 800 ? true : false;
+
+	$age = '';
+	$gender = '';
+	$handedness = '';
 
 	addEventListener('resize', (event) => {});
 
@@ -16,6 +22,14 @@
 
 	function onCompleteHandler(e) {
 		signIn();
+	}
+
+	$: isNotValid = !$gender || !$handedness || !$age;
+
+	function handleNumericInput(event) {
+		const inputValue = event.target.value;
+		const numericValue = inputValue.replace(/\D/g, '');
+		$age = numericValue;
 	}
 </script>
 
@@ -224,6 +238,77 @@
 							answering each question.
 						</p>
 					</div>
+				</Step>
+				<Step locked={isNotValid}>
+					<svelte:fragment slot="header">Information</svelte:fragment>
+					<div class="space-y-6 mb-8" in:fly={{ duration: 600, x: 40 }}>
+							<div class="p-5 mx-auto space-y-6 text-xl card">
+									<form
+										on:submit|preventDefault={() =>
+											submitForm($user?.uid, $gender, $handedness, $age)}
+										class="space-y-4"
+									>
+										<p>Please select your gender:</p>
+										<div class="gap-4 px-8 m-3 btn-group">
+											{#each ['Male', 'Female', 'Other', 'Prefer not to say'] as option}
+												<input
+													type="radio"
+													id={option}
+													name="gender"
+													value={option}
+													class="hidden"
+													bind:group={$gender}
+												/>
+												<label
+													for={option}
+													class="btn {$gender === option
+														? 'variant-filled-primary'
+														: 'variant-ghost-primary'} rounded">{option}</label
+												>
+											{/each}
+										</div>
+			
+										<label>
+											<p>Please select your handedness:</p>
+											<div class="gap-4 px-8 m-3 btn-group">
+												{#each ['Right', 'Left', 'Ambidextrous'] as option}
+													<input
+														type="radio"
+														id={option}
+														name="handedness"
+														value={option}
+														class="hidden"
+														required
+														bind:group={$handedness}
+													/>
+													<label
+														for={option}
+														class="btn {$handedness === option
+															? 'variant-filled-primary'
+															: 'variant-ghost-primary'} rounded">{option}</label
+													>
+												{/each}
+											</div>
+										</label>
+			
+										<label>
+											<p>Enter your age:</p>
+											<div class="px-8 m-3 text-lg font-light">
+												<input
+													type="text"
+													inputmode="numeric"
+													pattern="[0-9]*"
+													class="w-16 h-16 mx-2 text-4xl text-center uppercase bg-transparent border border-primary-900 rounded-lg"
+													maxlength="2"
+													required
+													on:keyup={handleNumericInput}
+													bind:value={$age}
+												/>
+											</div>
+										</label>
+									</form>
+							</div>
+						</div>
 				</Step>
 				<Step>
 					<svelte:fragment slot="header">Almost there</svelte:fragment>

@@ -5,9 +5,10 @@
 	import ProgressBar from './ProgressBar.svelte';
 	import Admin from './Admin.svelte';
 	import Instructions from './Instructions.svelte';
-	import { currentTrial, isAdmin, isPractice, sessionNumber } from '$lib/stores/GameStore';
+	import { currentTrial, isAdmin, isPractice, sessionNumber, age, handedness, gender } from '$lib/stores/GameStore';
 	import { NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
 	import { onMount } from 'svelte';
+	import { dbController } from '$lib/database/dbController';
 
 	export let isVAB = false;
 	let numberOfTrials;
@@ -66,6 +67,9 @@
 				.catch((error) => {
 					console.error(error);
 				});
+
+				dbController.writeParticipantData(user.uid, $gender, $handedness, $age);
+
 		} catch (error) {
 			console.error('Error signing in with Google:', error.message);
 		}

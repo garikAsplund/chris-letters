@@ -63,3 +63,7 @@ export const everyStreamDuration = writable([]);
 export const probe = writable("");
 export const everyProbeGuess = writable([]);
 export const everyProbeAccuracy = writable([]);
+
+export const gender= writable("");
+export const handedness = writable("");
+export const age = writable("");

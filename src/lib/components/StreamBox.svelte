@@ -485,11 +485,11 @@
 			{#if $inProgress && clicked}
 				<div
 					class="flex justify-center"
-					style="border-width: {borderWidth}px; width: {boxText}px; height: {boxText}px; border-color: {$boxColor}"
+					style="border-width: {borderWidth}px; width: {boxText}px; height: {boxText}px; border-color: {$boxColor === 'green' ? 'rgb(0, 200, 0)' : $boxColor}"
 				>
 					<p
 						class={`self-center font-thin text-center font-courier-new`}
-						style="color: {$isTarget ? $targetColor : $textColor}; font-size: {boxText}px"
+						style="color: {$isTarget ? ($targetColor === 'green' ? 'rgb(0, 200, 0)' : 'red') : $textColor}; font-size: {boxText}px"
 					>
 						{#if $displayFace}
 							<img src={surprisePath} alt="Surprise!!!" />
