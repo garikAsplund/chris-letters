@@ -110,7 +110,7 @@
 	let streamTime;
 	let resizedCard: boolean = false;
 
-	let surprisePath: string = `surprise/face_1.jpg`;
+	let surprisePath: string = `../surprise/face_1.jpg`;
 	setTimeout(() => console.log({surpriseCount}), 1000);
 
 	function stream(trialType) {
@@ -141,7 +141,7 @@
 				if (SiB)
 					$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 					if ($displayFace) {
-						surprisePath = `/surprise/${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${Math.floor(surpriseCount++ / 2) + 1}.jpg`;
+						surprisePath = `../surprise/${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${Math.floor(surpriseCount++ / 2) + 1}.jpg`;
 						// console.log(surprisePath);
 					}
 				if ($isTarget) {
