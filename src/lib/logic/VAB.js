@@ -206,15 +206,15 @@ function helperVAB(practice = false, round = 0) {
 	// 	count--;
 	// }
 
-	console.log({
-		VABLetters,
-		VABTargets,
-		VABTextColors,
-		targetOffsets,
-		T1Indices,
-		surprise,
-		VABSurprise
-	});
+	// console.log({
+	// 	VABLetters,
+	// 	VABTargets,
+	// 	VABTextColors,
+	// 	targetOffsets,
+	// 	T1Indices,
+	// 	surprise,
+	// 	VABSurprise
+	// });
 
 	return {
 		letters: VABLetters,

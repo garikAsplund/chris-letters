@@ -3,6 +3,7 @@ import {
 	LETTERS,
 	NUMBER_OF_TRIALS,
 	randomRange,
+	shuffle,
 } from "$lib/logic/ConstantsAndHelpers";
 
 export function createSiBTrials(practice = false, second = false) {
@@ -32,14 +33,14 @@ export function createSiBTrials(practice = false, second = false) {
 
 	console.log({ surpriseTrials });
 
-	const targetIndices = Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 7)
+	const targetIndices = Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 6)
+		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 7))
 		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 8))
 		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 9))
 		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 10))
 		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 11))
 		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 12))
 		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 13))
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 14))
 		.sort(() => Math.random() - 0.5);
 
 	for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
@@ -53,14 +54,9 @@ export function createSiBTrials(practice = false, second = false) {
 		const targetIndex = targetIndices[i];
 		const surpriseIndex = targetIndex - targetOffset;
 
-		while (SiBLettersTrial.length < 16) {
-			let letterToAdd = randomRange(LETTERS.length) - 1;
+		const shuffledLetters = shuffle(LETTERS);
 
-			if (
-				SiBLettersTrial[SiBLettersTrial.length - 1] === LETTERS[letterToAdd]
-			) {
-				letterToAdd = (letterToAdd + 1) % LETTERS.length;
-			}
+		while (SiBLettersTrial.length < 16) {
 
 			if (SiBTargetsTrial.length === targetIndex) {
 				SiBTargetsTrial.push(true);
@@ -79,7 +75,7 @@ export function createSiBTrials(practice = false, second = false) {
 				SiBSurpriseTrial.push(false);
 			}
 
-			SiBLettersTrial.push(LETTERS[letterToAdd]);
+			SiBLettersTrial.push(shuffledLetters[SiBLettersTrial.length]);
 		}
 
 		SiBLetters.push(SiBLettersTrial);

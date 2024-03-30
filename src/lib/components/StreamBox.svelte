@@ -81,6 +81,7 @@
 		.getTrialOrder()
 		.then((index) => {
 			trialOrder = trialOrders[index];
+			console.log({trialOrder});
 		})
 		.catch((error) => {
 			console.error('An error occurred:', error);
