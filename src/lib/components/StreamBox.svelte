@@ -110,7 +110,7 @@
 	let streamTime;
 	let resizedCard: boolean = false;
 
-	let surprisePath: string = `../surprise/face_1.jpg`;
+	let surprisePath: string = `/surprise/face_1.jpg`;
 	setTimeout(() => console.log({surpriseCount}), 1000);
 
 	function stream(trialType) {

@@ -65,7 +65,7 @@
 
 <div class="flex justify-center text-5xl font-bold translate-y-16" in:blur={{ duration: 1000 }}>
 	<div class="mb-48 space-y-12 text-center">
-		{#if introPicture}
+		<!-- {#if introPicture}
 			<div
 				class="relative w-full overflow-hidden mt-24"
 				in:blur={{ duration: 1000 }}
@@ -195,16 +195,16 @@
 							<button class="rounded btn variant-filled-warning" type="submit" disabled={isNotValid}
 								>Submit</button
 							>
-						</form>
-					{:else}
+						</form> -->
+					<!-- {:else} -->
 						<div in:blur={{ duration: 800 }}>
 							<h1 class="m-3 h1">You're all done :)</h1>
 							<i class="fa-solid fa-champagne-glasses fa-xl" />
 							<h3 class="h3">Thank you for participating!</h3>
 						</div>
-					{/if}
-				</div>
-			</div>
-		{/if}
+					<!-- {/if} -->
+				<!-- </div> -->
+			<!-- </div> -->
+		<!-- {/if} -->
 	</div>
 </div>

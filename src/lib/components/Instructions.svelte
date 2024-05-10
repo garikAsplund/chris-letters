@@ -131,11 +131,6 @@
 										the domains of visual working memory and attention. This information sheet
 										provides you with information about the research.
 									</p>
-									<p>
-										Who can participate in the research? What is the expected duration of my
-										participation? What is the duration of this research? What is the approximate
-										number of participants involved?
-									</p>
 								</svelte:fragment>
 							</AccordionItem>
 							<AccordionItem>
@@ -191,6 +186,7 @@
 							At this time, please take a moment to adjust your browser window so that it takes up
 							as much of your screen as possible.
 						</p>
+						<p>Please position your chair such that your face is roughly 57 cm (or about one arm’s length) away from the screen. Do your best to maintain this position throughout the experiment.</p>
 						<p>
 							Please also take a moment now to close other browser tabs, silence your phone, etc.,
 							so that you are not interrupted by any messages mid-experiment. Finally, please switch

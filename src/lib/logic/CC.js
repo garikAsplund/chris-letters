@@ -12,18 +12,15 @@ export function createCCTrials(practice = false) {
 	const CCTextColors = [];
 	const CCBoxColors = [];
 
-	const targetOffsets = Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 3)
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 8))
-		.sort(() => Math.random() - 0.5);
+	const targetOffsets = shuffle(Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 3)
+		.concat(Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 8)));
 
-	const distractorColor = Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 'red')
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 'green'))
-		.sort(() => Math.random() - 0.5);
+	const distractorColor = shuffle(Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 'red')
+		.concat(Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 'green')));
 
-	const distractorIndices = Array.from({ length: NUMBER_OF_TRIALS / 3 }, () => 4)
+	const distractorIndices = shuffle(Array.from({ length: NUMBER_OF_TRIALS / 3 }, () => 4)
 		.concat(Array.from({ length: NUMBER_OF_TRIALS / 3 }, () => 5))
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 3 }, () => 6))
-		.sort(() => Math.random() - 0.5);
+		.concat(Array.from({ length: NUMBER_OF_TRIALS / 3 }, () => 6)));
 
 	// console.log({ targetOffsets, distractorIndices, distractorColor });
 

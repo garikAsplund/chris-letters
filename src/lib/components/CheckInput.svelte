@@ -48,6 +48,11 @@
 		if (field) field.focus();
 	};
 
+	document.addEventListener('click', function(event) {
+		const field = document.getElementById(`codefield_0`);
+		if (field) field.focus();
+	});
+
 	function handleKeydown(event) {
 		let reactionTime;
 
