@@ -42,7 +42,30 @@
 	import { dbController } from '$lib/database/dbController';
 	import { user } from '$lib/database/firebase';
 	import { fade } from 'svelte/transition';
-	import 
+	import face1 from '$lib/images/surprise/face_1.jpg';
+	import face2 from '$lib/images/surprise/face_2.jpg';
+	import face3 from '$lib/images/surprise/face_3.jpg';
+	import face4 from '$lib/images/surprise/face_4.jpg';
+	import face5 from '$lib/images/surprise/face_5.jpg';
+	import face6 from '$lib/images/surprise/face_6.jpg';
+	import face7 from '$lib/images/surprise/face_7.jpg';
+	import face8 from '$lib/images/surprise/face_8.jpg';
+	import face9 from '$lib/images/surprise/face_9.jpg';
+	import face10 from '$lib/images/surprise/face_10.jpg';
+	import face11 from '$lib/images/surprise/face_11.jpg';
+	import face12 from '$lib/images/surprise/face_12.jpg';
+	import object1 from '$lib/images/surprise/object_1.jpg';
+	import object2 from '$lib/images/surprise/object_2.jpg';
+	import object3 from '$lib/images/surprise/object_3.jpg';
+	import object4 from '$lib/images/surprise/object_4.jpg';
+	import object5 from '$lib/images/surprise/object_5.jpg';
+	import object6 from '$lib/images/surprise/object_6.jpg';
+	import object7 from '$lib/images/surprise/object_7.jpg';
+	import object8 from '$lib/images/surprise/object_8.jpg';
+	import object9 from '$lib/images/surprise/object_9.jpg';
+	import object10 from '$lib/images/surprise/object_10.jpg';
+	import object11 from '$lib/images/surprise/object_11.jpg';
+	import object12 from '$lib/images/surprise/object_12.jpg';
 
 	// console.log({
 	// 	$ABTrials,
@@ -111,7 +134,7 @@
 	let streamTime;
 	let resizedCard: boolean = false;
 
-	let surprisePath: string = `/surprise/face_1.jpg`;
+	let surprisePath: string = `face1`;
 	setTimeout(() => console.log({surpriseCount}), 1000);
 
 	function stream(trialType) {
@@ -142,8 +165,8 @@
 				if (SiB)
 					$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 					if ($displayFace) {
-						surprisePath = `/surprise/${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${Math.floor(surpriseCount++ / 2) + 1}.jpg`;
-						// console.log(surprisePath);
+						surprisePath = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}${Math.floor(surpriseCount++ / 2) + 1}`;
+						console.log(surprisePath);
 					}
 				if ($isTarget) {
 					$targetLetter += $currentLetter;
