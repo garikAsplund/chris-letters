@@ -67,6 +67,11 @@
 	import object11 from '$lib/images/surprise/object_11.jpg';
 	import object12 from '$lib/images/surprise/object_12.jpg';
 
+	let surpriseImages = {
+    face1, face2, face3, face4, face5, face6, face7, face8, face9, face10, face11, face12,
+    object1, object2, object3, object4, object5, object6, object7, object8, object9, object10, object11, object12
+  };
+
 	// console.log({
 	// 	$ABTrials,
 	// 	$CCTrials,
@@ -517,7 +522,7 @@
 						style="color: {$isTarget ? ($targetColor === 'green' ? 'rgb(0, 200, 0)' : 'red') : $textColor}; font-size: {boxText}px"
 					>
 						{#if $displayFace}
-							<img src={surprisePath} alt="Surprise!!!" />
+							<img src={surpriseImages[surprisePath]} alt="Surprise!!!" />
 						{:else}
 							{$currentLetter}
 						{/if}
