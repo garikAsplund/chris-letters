@@ -42,6 +42,7 @@
 	import { dbController } from '$lib/database/dbController';
 	import { user } from '$lib/database/firebase';
 	import { fade } from 'svelte/transition';
+	import 
 
 	// console.log({
 	// 	$ABTrials,
@@ -141,7 +142,7 @@
 				if (SiB)
 					$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 					if ($displayFace) {
-						surprisePath = `../surprise/${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${Math.floor(surpriseCount++ / 2) + 1}.jpg`;
+						surprisePath = `/surprise/${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${Math.floor(surpriseCount++ / 2) + 1}.jpg`;
 						// console.log(surprisePath);
 					}
 				if ($isTarget) {
