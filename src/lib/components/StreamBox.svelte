@@ -35,7 +35,8 @@
 		everyGuess,
 		targetColor,
 		sessionNumber,
-		everyStreamDuration
+		everyStreamDuration,
+		everySurprisePath,
 	} from '$lib/stores/GameStore';
 	import GameOver from './GameOver.svelte';
 	import CheckInput from './CheckInput.svelte';
@@ -120,7 +121,7 @@
 		$sessionNumber = number;	
 		surpriseCount = (number - 1) * 12;
 
-		// console.log({ $sessionNumber });
+		// console.log({ $sessionNumber, surpriseCount });
 	});
 
 	let AB: boolean = false;
@@ -172,10 +173,13 @@
 					if ($displayFace) {
 						surprisePath = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}${Math.floor(surpriseCount++ / 2) + 1}`;
 						console.log(surprisePath);
+						$everySurprisePath.push(surprisePath);
+						console.log({$everySurprisePath});	
 					}
 				if ($isTarget) {
 					$targetLetter += $currentLetter;
 				}
+				
 			} else {
 				$currentLetter = ' ';
 				if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes + 1) / 2 - 1];
@@ -224,6 +228,7 @@
 		$everyAccuracy = [];
 		$everyReactionTime = [];
 		$everyStreamDuration = [];
+		$everySurprisePath = [];
 
 		console.log('reset data gathering');
 	}
@@ -259,11 +264,6 @@
 		if ($currentTrial > NUMBER_OF_TRIALS) {
 			$currentTrial = 0;
 			if (AB || SiB) {
-				trialIndex += 1;
-				$isPractice = true;
-				AB = trialOrder[trialIndex] === 'AB';
-				CC = trialOrder[trialIndex] === 'CC';
-				SiB = trialOrder[trialIndex] === 'SiB';
 				AB
 					? dbController.writeAB(
 							$user.uid,
@@ -276,7 +276,7 @@
 							$ABTrials.T1Indices,
 							$ABTrials.targetOffsets,
 							$targetColor,
-							$everyStreamDuration
+							$everyStreamDuration,
 					  )
 					: dbController.writeSiB(
 							$user.uid,
@@ -289,9 +289,15 @@
 							$SiBTrials.surprise,
 							$SiBTrials.targetIndices,
 							$targetColor,
-							$everyStreamDuration
+							$everyStreamDuration,
+							$everySurprisePath,
 					  );
-				resetDataGathering();
+
+				trialIndex += 1;
+				$isPractice = true;
+				AB = trialOrder[trialIndex] === 'AB';
+				CC = trialOrder[trialIndex] === 'CC';
+				SiB = trialOrder[trialIndex] === 'SiB';
 			} else if (CC && blockCount < 2) {
 				dbController.writeCC(
 					$user.uid,
@@ -306,10 +312,9 @@
 					$CCTrials.distractorIndices,
 					$CCTrials.distractorColor,
 					$targetColor,
-					$everyStreamDuration
+					$everyStreamDuration,
 				);
 				blockCount += 1;
-				resetDataGathering();
 			} else if (CC) {
 				dbController.writeCC(
 					$user.uid,
@@ -324,7 +329,7 @@
 					$CCTrials2.distractorIndices,
 					$CCTrials2.distractorColor,
 					$targetColor,
-					$everyStreamDuration
+					$everyStreamDuration,
 				);
 				trialIndex += 1;
 				$isPractice = true;
@@ -332,8 +337,8 @@
 				AB = trialOrder[trialIndex] === 'AB';
 				CC = trialOrder[trialIndex] === 'CC';
 				SiB = trialOrder[trialIndex] === 'SiB';
-				resetDataGathering();
-			}
+			}				
+			resetDataGathering();
 			if (trialIndex === 3) dbController.updateSessionNumber($user.uid);
 			clicked = false;
 			$inProgress = false;

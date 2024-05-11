@@ -59,6 +59,7 @@ export const everyGuess = writable([]);
 export const everyTarget = writable([]);
 export const everyAccuracy = writable([]);
 export const everyStreamDuration = writable([]);
+export const everySurprisePath = writable([]);
 
 export const probe = writable("");
 export const everyProbeGuess = writable([]);

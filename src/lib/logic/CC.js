@@ -12,17 +12,32 @@ export function createCCTrials(practice = false) {
 	const CCTextColors = [];
 	const CCBoxColors = [];
 
-	const targetOffsets = shuffle(Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 3)
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 8)));
+	// Create separate arrays for each combination
+	const red3Trials = Array.from({ length: 24 }, () => ({
+		targetOffset: 3,
+		distractorColor: 'red'
+	}));
+	const red8Trials = Array.from({ length: 24 }, () => ({
+		targetOffset: 8,
+		distractorColor: 'red'
+	}));
+	const green3Trials = Array.from({ length: 24 }, () => ({
+		targetOffset: 3,
+		distractorColor: 'green'
+	}));
+	const green8Trials = Array.from({ length: 24 }, () => ({
+		targetOffset: 8,
+		distractorColor: 'green'
+	}));
 
-	const distractorColor = shuffle(Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 'red')
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 2 }, () => 'green')));
+	// Shuffle and concatenate the trials
+	const trials = shuffle([...red3Trials, ...red8Trials, ...green3Trials, ...green8Trials]);
 
-	const distractorIndices = shuffle(Array.from({ length: NUMBER_OF_TRIALS / 3 }, () => 4)
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 3 }, () => 5))
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 3 }, () => 6)));
-
-	// console.log({ targetOffsets, distractorIndices, distractorColor });
+	const distractorIndices = shuffle(
+		Array.from({ length: NUMBER_OF_TRIALS / 3 }, () => 4)
+			.concat(Array.from({ length: NUMBER_OF_TRIALS / 3 }, () => 5))
+			.concat(Array.from({ length: NUMBER_OF_TRIALS / 3 }, () => 6))
+	);
 
 	for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
 		const CCLettersTrial = [];
@@ -30,10 +45,9 @@ export function createCCTrials(practice = false) {
 		const CCTextColorsTrial = [];
 		const CCBoxColorsTrial = [];
 
-		const targetOffset = targetOffsets[i];
+		const { targetOffset, distractorColor } = trials[i];
 		const distractorIndex = distractorIndices[i];
 		const targetIndex = distractorIndex + targetOffset;
-
 		const shuffledLetters = shuffle(LETTERS);
 
 		while (CCLettersTrial.length < 16) {
@@ -46,7 +60,7 @@ export function createCCTrials(practice = false) {
 			}
 
 			if (CCTargetsTrial.length === distractorIndex && !practice) {
-				CCBoxColorsTrial.push(distractorColor[i]);
+				CCBoxColorsTrial.push(distractorColor);
 			} else {
 				CCBoxColorsTrial.push('white');
 			}
@@ -65,12 +79,12 @@ export function createCCTrials(practice = false) {
 		targets: CCTargets,
 		textColors: CCTextColors,
 		boxColors: CCBoxColors,
-		targetOffsets,
-		distractorColor,
-		distractorIndices
+		targetOffsets: trials.map(({ targetOffset }) => targetOffset),
+		distractorColor: trials.map(({ distractorColor }) => distractorColor),
+		distractorIndices,
 	};
+	
 
-	console.log({CCoutput});
-
+	console.log({ CCoutput });
 	return CCoutput;
 }

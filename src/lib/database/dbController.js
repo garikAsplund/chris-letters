@@ -192,14 +192,22 @@ export const dbController = {
 		surprise,
 		targetPosition,
 		targetColor,
-		streamDuration
+		streamDuration,
+		surprisePath
 	) {
 		try {
 			const updates = {};
 
+			let pathIndex = 0;
+
 			updates[`SiB/${userId}/session${sessionNumber}/time`] = Date.now();
 
 			for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
+				let surprisePathSingle = 'None';
+				if (surprise[i].includes(true)) {
+					surprisePathSingle = surprisePath[pathIndex++];
+				}
+
 				updates[`SiB/${userId}/session${sessionNumber}/${i + 1}`] = {
 					target: everyTarget[i],
 					targetResponse: everyGuess[i],
@@ -209,11 +217,13 @@ export const dbController = {
 					surprise: surprise[i].includes(true) ? surprise[i].indexOf(true) : 'None',
 					targetPosition: targetPosition[i],
 					targetColor,
-					streamDuration: streamDuration[i]
+					streamDuration: streamDuration[i],
+					surprisePath: surprisePathSingle
 				};
 			}
 
 			await update(dbRef, updates);
+			console.log('SiB data written');
 		} catch (error) {
 			console.error(error);
 		}
