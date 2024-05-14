@@ -33,15 +33,14 @@ export function createSiBTrials(practice = false, second = false) {
 
 	console.log({ surpriseTrials });
 
-	const targetIndices = Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 6)
+	const targetIndices = shuffle(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 6)
 		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 7))
 		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 8))
 		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 9))
 		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 10))
 		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 11))
 		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 12))
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 13))
-		.sort(() => Math.random() - 0.5);
+		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 13)));
 
 	for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
 		const SiBLettersTrial = [];

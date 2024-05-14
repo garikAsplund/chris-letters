@@ -121,7 +121,6 @@
 		];
 		worksheetAB.addRow(headersAB);
 		addRowsForAB(worksheetAB, excelData.AB);
-		setHeaderStyling(worksheetAB);
 
 		const addRowsForCC = (worksheet, data) => {
 			for (const uid in data) {
@@ -184,7 +183,6 @@
 		];
 		worksheetCC.addRow(headersCC);
 		addRowsForCC(worksheetCC, excelData.CC);
-		setHeaderStyling(worksheetCC);
 
 		const addRowsForSiB = (worksheet, data) => {
 			for (const uid in data) {
@@ -244,7 +242,6 @@
 		];
 		worksheetSiB.addRow(headersSiB);
 		addRowsForSiB(worksheetSiB, excelData.SiB);
-		setHeaderStyling(worksheetSiB);
 
 		const addRowsForVAB = (worksheet, data) => {
 			for (const uid in data) {
@@ -316,7 +313,6 @@
 		];
 		worksheetVAB.addRow(headersVAB);
 		addRowsForVAB(worksheetVAB, excelData.VAB);
-		setHeaderStyling(worksheetVAB);
 
 		const autoFitColumns = (worksheet) => {
 			worksheet.columns.forEach((column) => {
@@ -336,72 +332,106 @@
 		autoFitColumns(worksheetSiB);
 		autoFitColumns(worksheetVAB);
 
-		const setStyling = (worksheet) => {
-			const sessionColors = ['FFE4E1F3', 'FFD2CDEB', 'FFBFB8E3', 'FFADA4DA'];
-			let currentSession = null;
-			let currentBlock = null;
-			let sessionColorIndex = 0;
+		const setStyling = (worksheet, endColor = 'FFDB92FC') => {
+    let currentSession = null;
+    let currentBlock = null;
+    let trialCount = 0;
+    const maxTrials = 96;
 
-			if (worksheet.getRow(1).getCell(3).value === 'Trial ID') {
-				worksheet.eachRow({ includeEmpty: false }, (row) => {
-					const session = row.getCell(2).value;
+    if (worksheet.getRow(1).getCell(3).value === 'Trial ID') {
+        worksheet.eachRow({ includeEmpty: false }, (row) => {
+            const session = row.getCell(2).value;
 
-					if (session !== currentSession) {
-						currentSession = session;
-						sessionColorIndex = (sessionColorIndex + 1) % sessionColors.length;
-					}
+            if (session !== currentSession) {
+                currentSession = session;
+                trialCount = 0;
+            }
 
-					row.fill = {
-						type: 'pattern',
-						pattern: 'solid',
-						fgColor: { argb: sessionColors[sessionColorIndex] }
-					};
+            const transitionColor = getTransitionColor('FFFFFFFF', endColor, trialCount, maxTrials);
 
-					row.border = {
-						bottom: { style: 'thin', color: { argb: 'FF000000' } },
-						right: { style: 'thin', color: { argb: 'FF000000' } },
-						left: { style: 'thin', color: { argb: 'FF000000' } }
-					};
+            row.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: transitionColor }
+            };
 
-					row.eachCell((cell) => {
-						cell.alignment = { horizontal: 'right' };
-					});
-				});
-			} else {
-				worksheet.eachRow({ includeEmpty: false }, (row) => {
-					const session = row.getCell(2).value;
-					const block = row.getCell(3).value;
+            row.border = {
+                bottom: { style: 'thin', color: { argb: 'FF000000' } },
+                right: { style: 'thin', color: { argb: 'FF000000' } },
+                left: { style: 'thin', color: { argb: 'FF000000' } }
+            };
 
-					if (session !== currentSession || block !== currentBlock) {
-						currentSession = session;
-						currentBlock = block;
-						sessionColorIndex = (sessionColorIndex + 1) % sessionColors.length;
-					}
+            row.eachCell((cell) => {
+                cell.alignment = { horizontal: 'right' };
+            });
 
-					row.fill = {
-						type: 'pattern',
-						pattern: 'solid',
-						fgColor: { argb: sessionColors[sessionColorIndex] }
-					};
+            trialCount++;
+        });
+    } else {
+        worksheet.eachRow({ includeEmpty: false }, (row) => {
+            const session = row.getCell(2).value;
+            const block = row.getCell(3).value;
 
-					row.border = {
-						bottom: { style: 'thin', color: { argb: 'FF000000' } },
-						right: { style: 'thin', color: { argb: 'FF000000' } },
-						left: { style: 'thin', color: { argb: 'FF000000' } }
-					};
+            if (session !== currentSession || block !== currentBlock) {
+                currentSession = session;
+                currentBlock = block;
+                trialCount = 0;
+            }
 
-					row.eachCell((cell) => {
-						cell.alignment = { horizontal: 'right' };
-					});
-				});
-			}
-		};
+            const transitionColor = getTransitionColor('FFFFFFFF', endColor, trialCount, maxTrials);
 
+            row.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: transitionColor }
+            };
+
+            row.border = {
+                bottom: { style: 'thin', color: { argb: 'FF000000' } },
+                right: { style: 'thin', color: { argb: 'FF000000' } },
+                left: { style: 'thin', color: { argb: 'FF000000' } }
+            };
+
+            row.eachCell((cell) => {
+                cell.alignment = { horizontal: 'right' };
+            });
+
+            trialCount++;
+        });
+    }
+};
+
+function getTransitionColor(startColor, endColor, step, maxSteps) {
+    const startRed = parseInt(startColor.substr(2, 2), 16);
+    const startGreen = parseInt(startColor.substr(4, 2), 16);
+    const startBlue = parseInt(startColor.substr(6, 2), 16);
+
+    const endRed = parseInt(endColor.substr(2, 2), 16);
+    const endGreen = parseInt(endColor.substr(4, 2), 16);
+    const endBlue = parseInt(endColor.substr(6, 2), 16);
+
+    const redDiff = endRed - startRed;
+    const greenDiff = endGreen - startGreen;
+    const blueDiff = endBlue - startBlue;
+
+    const redStep = Math.floor((redDiff / maxSteps) * step);
+    const greenStep = Math.floor((greenDiff / maxSteps) * step);
+    const blueStep = Math.floor((blueDiff / maxSteps) * step);
+
+    const red = (startRed + redStep).toString(16).padStart(2, '0');
+    const green = (startGreen + greenStep).toString(16).padStart(2, '0');
+    const blue = (startBlue + blueStep).toString(16).padStart(2, '0');
+
+    return `FF${red}${green}${blue}`;
+}
 		setStyling(worksheetAB);
 		setStyling(worksheetCC);
 		setStyling(worksheetSiB);
 		setStyling(worksheetVAB);
 
+		setHeaderStyling(worksheetAB);
+		setHeaderStyling(worksheetCC);
+		setHeaderStyling(worksheetSiB);
 		setHeaderStyling(worksheetVAB);
 
 		workbook.xlsx.writeBuffer().then((buffer) => {

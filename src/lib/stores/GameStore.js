@@ -25,7 +25,7 @@ export const VABTrials4 = writable(createVABTrials());
 export const VABTrials5 = writable(createVABTrials());
 export const VABTrials6 = writable(createVABTrials());
 
-export const ABPractice = writable(createABTrials());
+export const ABPractice = writable(createABTrials(true));
 export const CCPractice = writable(createCCTrials(true));
 export const SiBPractice = writable(createSiBTrials(true));
 export const VABPractice1 = writable(createVABTrials(true, 1));
