@@ -175,6 +175,7 @@
 						console.log(surprisePath);
 						$everySurprisePath.push(surprisePath);
 						console.log({$everySurprisePath});	
+						console.log(surpriseImages[surprisePath]);
 					}
 				if ($isTarget) {
 					$targetLetter += $currentLetter;
@@ -425,7 +426,7 @@
 			// target.style.transform = `translate(0px, ${event.rect.height / 44}px)`;
 
 			boxText = Math.floor(event.rect.width / 5);
-			borderWidth = Math.floor((event.rect.width / 5) * 0.03);
+			borderWidth = Math.floor((event.rect.width / 5) * 0.05);
 
 			localStorage.setItem('boxText', boxText.toString());
 			localStorage.setItem('borderWidth', borderWidth.toString());
