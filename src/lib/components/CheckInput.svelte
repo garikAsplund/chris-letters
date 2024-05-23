@@ -29,7 +29,7 @@
 
 	const stepForward = (i) => {
 		if (codeFields[i] && i !== pinlength - 1) {
-			codeFields[i + 1] = '';
+			// codeFields[i + 1] = '';
 			resetFieldFocus(i + 1);
 		}
 	};
@@ -64,6 +64,8 @@
 						if (event.key !== 'Backspace' && event.key !== ' ') {
 							$guesses = [...$guesses, event.key.toUpperCase()];
 							// console.log('guesses: ' + $guesses);
+							// codeFields = [...codeFields]; // Ensure reactivity
+							codeFields[$guesses.length - 1] = event.key.toUpperCase(); // Update codeFields
 						}
 					}
 					if ($guesses.length === 2) {
