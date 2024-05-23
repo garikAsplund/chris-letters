@@ -37,6 +37,7 @@
 		sessionNumber,
 		everyStreamDuration,
 		everySurprisePath,
+		blockNumber,
 	} from '$lib/stores/GameStore';
 	import GameOver from './GameOver.svelte';
 	import CheckInput from './CheckInput.svelte';
@@ -72,6 +73,8 @@
     face1: face1, face2: face2, face3: face3, face4: face4, face5: face5, face6: face6, face7: face7, face8: face8, face9: face9, face10: face10, face11: face11, face12: face12,
     object1: object1, object2: object2, object3: object3, object4: object4, object5: object5, object6: object6, object7: object7, object8: object8, object9: object9, object10: object10, object11: object11, object12: object12
   };
+
+  $: $blockNumber = trialIndex + 1;
 
 	// console.log({
 	// 	$ABTrials,

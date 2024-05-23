@@ -68,3 +68,5 @@ export const everyProbeAccuracy = writable([]);
 export const gender= writable("");
 export const handedness = writable("");
 export const age = writable("");
+
+export const blockNumber = writable(0);
