@@ -28,19 +28,19 @@
 		AB: {},
 		CC: {},
 		SiB: {},
-		VAB: {}
+		// VAB: {}
 	};
 
 	async function fetchDataFromFirebase() {
 		const dataAB = await dbController.readData('AB');
 		const dataCC = await dbController.readData('CC');
 		const dataSiB = await dbController.readData('SiB');
-		const dataVAB = await dbController.readData('VAB');
+		// const dataVAB = await dbController.readData('VAB');
 
 		excelData.AB = dataAB || {};
 		excelData.CC = dataCC || {};
 		excelData.SiB = dataSiB || {};
-		excelData.VAB = dataVAB || {};
+		// excelData.VAB = dataVAB || {};
 
 		console.log(excelData);
 		crunchData();
@@ -75,6 +75,8 @@
 				for (const session in sessions) {
 					const trials = sessions[session];
 
+					const date = new Date(trials.time);
+
 					for (const trial in trials) {
 						if (trial === 'time') {
 							continue;
@@ -83,6 +85,7 @@
 						const newRow = [
 							uid,
 							session,
+							date.toLocaleString(),
 							trial,
 							'AB',
 							trials[trial].RSVP,
@@ -106,6 +109,7 @@
 		const headersAB = [
 			'User ID',
 			'Session Number',
+			'Date',
 			'Trial ID',
 			'Task',
 			'RSVP',
@@ -128,6 +132,8 @@
 
 				for (const session in sessions) {
 					const blocks = sessions[session];
+						
+					const date = new Date(blocks.time);
 
 					for (const block in blocks) {
 						const trials = blocks[block];
@@ -143,6 +149,7 @@
 								uid,
 								session,
 								block,
+								date.toLocaleString(),
 								trialID,
 								'CC',
 								trial.RSVP,
@@ -168,6 +175,7 @@
 			'User ID',
 			'Session Number',
 			'Block Count',
+			'Date',
 			'Trial ID',
 			'Task',
 			'RSVP',
@@ -191,6 +199,8 @@
 				for (const session in sessions) {
 					const trials = sessions[session];
 
+					const date = new Date(trials.time);
+
 					for (const trialID in trials) {
 						if (trialID === 'time') {
 							continue;
@@ -201,7 +211,7 @@
 						const newRow = [
 							uid,
 							session,
-							// block,
+							date.toLocaleString(),
 							trialID,
 							'SiB',
 							trial.RSVP,
@@ -226,7 +236,7 @@
 		const headersSiB = [
 			'User ID',
 			'Session Number',
-			// 'Block Count',
+			'Date',
 			'Trial ID',
 			'Task',
 			'RSVP',
@@ -243,76 +253,76 @@
 		worksheetSiB.addRow(headersSiB);
 		addRowsForSiB(worksheetSiB, excelData.SiB);
 
-		const addRowsForVAB = (worksheet, data) => {
-			for (const uid in data) {
-				const sessions = data[uid];
+		// const addRowsForVAB = (worksheet, data) => {
+		// 	for (const uid in data) {
+		// 		const sessions = data[uid];
 
-				for (const session in sessions) {
-					const blocks = sessions[session];
+		// 		for (const session in sessions) {
+		// 			const blocks = sessions[session];
 
-					for (const block in blocks) {
-						const trials = blocks[block];
+		// 			for (const block in blocks) {
+		// 				const trials = blocks[block];
 
-						const date = new Date(trials.time);
+		// 				const date = new Date(trials.time);
 
-						for (const trialID in trials) {
-							if (trialID === 'time') {
-								continue;
-							}
+		// 				for (const trialID in trials) {
+		// 					if (trialID === 'time') {
+		// 						continue;
+		// 					}
 
-							const trial = trials[trialID];
+		// 					const trial = trials[trialID];
 
-							const newRow = [
-								uid,
-								session,
-								block,
-								date.toLocaleString(),
-								trialID,
-								'VAB',
-								trial.RSVP,
-								trial.probe,
-								trial.probeAccuracy,
-								trial.probePosition,
-								trial.probeResponse,
-								trial.reactionTime,
-								trial.streamDuration,
-								trial.surprise,
-								trial.target,
-								trial.targetAccuracy,
-								trial.targetPosition,
-								trial.targetResponse
-							];
+		// 					const newRow = [
+		// 						uid,
+		// 						session,
+		// 						block,
+		// 						date.toLocaleString(),
+		// 						trialID,
+		// 						'VAB',
+		// 						trial.RSVP,
+		// 						trial.probe,
+		// 						trial.probeAccuracy,
+		// 						trial.probePosition,
+		// 						trial.probeResponse,
+		// 						trial.reactionTime,
+		// 						trial.streamDuration,
+		// 						trial.surprise,
+		// 						trial.target,
+		// 						trial.targetAccuracy,
+		// 						trial.targetPosition,
+		// 						trial.targetResponse
+		// 					];
 
-							worksheet.addRow(newRow);
-						}
-					}
-				}
-			}
-		};
+		// 					worksheet.addRow(newRow);
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// };
 
-		const worksheetVAB = workbook.addWorksheet('VAB');
-		const headersVAB = [
-			'User ID',
-			'Session Number',
-			'Block Number',
-			'Date',
-			'Trial ID',
-			'Task',
-			'RSVP',
-			'Probe',
-			'Probe Accuracy',
-			'Probe Position',
-			'Probe Response',
-			'Reaction Time',
-			'Stream Duration',
-			'Surprise',
-			'Target',
-			'Target Accuracy',
-			'Target Position',
-			'Target Response'
-		];
-		worksheetVAB.addRow(headersVAB);
-		addRowsForVAB(worksheetVAB, excelData.VAB);
+		// const worksheetVAB = workbook.addWorksheet('VAB');
+		// const headersVAB = [
+		// 	'User ID',
+		// 	'Session Number',
+		// 	'Block Number',
+		// 	'Date',
+		// 	'Trial ID',
+		// 	'Task',
+		// 	'RSVP',
+		// 	'Probe',
+		// 	'Probe Accuracy',
+		// 	'Probe Position',
+		// 	'Probe Response',
+		// 	'Reaction Time',
+		// 	'Stream Duration',
+		// 	'Surprise',
+		// 	'Target',
+		// 	'Target Accuracy',
+		// 	'Target Position',
+		// 	'Target Response'
+		// ];
+		// worksheetVAB.addRow(headersVAB);
+		// addRowsForVAB(worksheetVAB, excelData.VAB);
 
 		const autoFitColumns = (worksheet) => {
 			worksheet.columns.forEach((column) => {
@@ -330,7 +340,7 @@
 		autoFitColumns(worksheetAB);
 		autoFitColumns(worksheetCC);
 		autoFitColumns(worksheetSiB);
-		autoFitColumns(worksheetVAB);
+		// autoFitColumns(worksheetVAB);
 
 		const setStyling = (worksheet, endColor = 'FFDB92FC') => {
     let currentSession = null;
@@ -427,12 +437,12 @@ function getTransitionColor(startColor, endColor, step, maxSteps) {
 		setStyling(worksheetAB);
 		setStyling(worksheetCC);
 		setStyling(worksheetSiB);
-		setStyling(worksheetVAB);
+		// setStyling(worksheetVAB);
 
 		setHeaderStyling(worksheetAB);
 		setHeaderStyling(worksheetCC);
 		setHeaderStyling(worksheetSiB);
-		setHeaderStyling(worksheetVAB);
+		// setHeaderStyling(worksheetVAB);
 
 		workbook.xlsx.writeBuffer().then((buffer) => {
 			const blob = new Blob([buffer], {

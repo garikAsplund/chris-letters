@@ -74,8 +74,6 @@
     object1: object1, object2: object2, object3: object3, object4: object4, object5: object5, object6: object6, object7: object7, object8: object8, object9: object9, object10: object10, object11: object11, object12: object12
   };
 
-  $: $blockNumber = trialIndex + 1;
-
 	// console.log({
 	// 	$ABTrials,
 	// 	$CCTrials,
@@ -298,6 +296,7 @@
 					  );
 
 				trialIndex += 1;
+				$blockNumber += 1;
 				$isPractice = true;
 				AB = trialOrder[trialIndex] === 'AB';
 				CC = trialOrder[trialIndex] === 'CC';
@@ -319,6 +318,7 @@
 					$everyStreamDuration,
 				);
 				blockCount += 1;
+				$blockNumber += 1;
 			} else if (CC) {
 				dbController.writeCC(
 					$user.uid,
@@ -336,6 +336,7 @@
 					$everyStreamDuration,
 				);
 				trialIndex += 1;
+				$blockNumber += 1;
 				$isPractice = true;
 				blockCount = 1;
 				AB = trialOrder[trialIndex] === 'AB';

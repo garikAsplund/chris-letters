@@ -69,4 +69,4 @@ export const gender= writable("");
 export const handedness = writable("");
 export const age = writable("");
 
-export const blockNumber = writable(0);
+export const blockNumber = writable(1);
