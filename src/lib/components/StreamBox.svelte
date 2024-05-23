@@ -107,7 +107,7 @@
 		['SiB', 'CC', 'AB']
 	];
 	let trialOrder;
-	let trialIndex: number = 0;
+	let trialIndex: number = 3;
 	let surpriseCount: number = 0;
 
 	dbController

@@ -102,6 +102,16 @@ export const dbController = {
 		}
 	},
 
+	async writeParticipantProblems(userId, problems) {
+		try {
+			await update(child(dbRef, `users/${userId}`), {
+				problems
+			});
+		} catch (error) {
+			console.error(error);
+		}
+	},
+
 	async writeAB(
 		userId,
 		everyTarget,

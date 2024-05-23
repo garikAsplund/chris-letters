@@ -47,8 +47,8 @@
 		setTimeout(cancel, 750);
 	}
 
-	const submitForm = (userId, gender, handedness, age, problemDescription) => {
-		dbController.writeParticipantData(userId, gender, handedness, age, problemDescription);
+	const submitForm = (userId, problemDescription) => {
+		dbController.writeParticipantProblems(userId, problemDescription);
 		$isComplete = true;
 	};
 
@@ -65,7 +65,7 @@
 
 <div class="flex justify-center text-5xl font-bold translate-y-16" in:blur={{ duration: 1000 }}>
 	<div class="mb-48 space-y-12 text-center">
-		<!-- {#if introPicture}
+		{#if introPicture}
 			<div
 				class="relative w-full overflow-hidden mt-24"
 				in:blur={{ duration: 1000 }}
@@ -82,10 +82,10 @@
 					{#if !$isComplete}
 						<form
 							on:submit|preventDefault={() =>
-								submitForm($user?.uid, gender, handedness, age, problemDescription)}
+								submitForm($user?.uid, problemDescription)}
 							class="space-y-4"
 						>
-							<p>Please select your gender:</p>
+							<!-- <p>Please select your gender:</p>
 							<div class="gap-4 px-8 m-3 btn-group">
 								{#each ['Male', 'Female', 'Other', 'Prefer not to say'] as option}
 									<input
@@ -142,7 +142,7 @@
 										bind:value={age}
 									/>
 								</div>
-							</label>
+							</label> -->
 
 							<label>
 								<p>Did you encounter any problems?</p>
@@ -192,19 +192,19 @@
 								</div>
 							{/if}
 
-							<button class="rounded btn variant-filled-warning" type="submit" disabled={isNotValid}
+							<button class="rounded btn variant-filled-warning" type="submit"
 								>Submit</button
 							>
-						</form> -->
-					<!-- {:else} -->
-						<div in:blur={{ duration: 800 }}>
+						</form>
+					{:else}
+						<div in:blur={{ duration: 800 }} class="space-y-4">
 							<h1 class="m-3 h1">You're all done :)</h1>
 							<i class="fa-solid fa-champagne-glasses fa-xl" />
 							<h3 class="h3">Thank you for participating!</h3>
 						</div>
-					<!-- {/if} -->
-				<!-- </div> -->
-			<!-- </div> -->
-		<!-- {/if} -->
+					{/if}
+				</div>
+			</div>
+		{/if}
 	</div>
 </div>
