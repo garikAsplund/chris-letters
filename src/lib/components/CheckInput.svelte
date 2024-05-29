@@ -53,26 +53,42 @@
 		if (field) field.focus();
 	});
 
+	let reactionTimes = [];
+
 	function handleKeydown(event) {
 		let reactionTime;
+		let reactionTime2;
 
 		if (isAB && !$inProgress) {
 			if (event.key && event.key.length === 1) {
+				
 				if ($guesses.length <= 2) {
 					if ($startTime) {
-						reactionTime = Date.now() - $startTime;
 						if (event.key !== 'Backspace' && event.key !== ' ') {
 							$guesses = [...$guesses, event.key.toUpperCase()];
 							// console.log('guesses: ' + $guesses);
 							// codeFields = [...codeFields]; // Ensure reactivity
 							codeFields[$guesses.length - 1] = event.key.toUpperCase(); // Update codeFields
 						}
+						
+						if ($guesses.length === 1) {
+							reactionTime = Date.now() - $startTime;
+							console.log({reactionTime});
+							reactionTimes.push(reactionTime);
+							$startTime = Date.now();
+						} else {
+							reactionTime2 = Date.now() - $startTime;
+							console.log({reactionTime});
+							reactionTimes.push(reactionTime2);
+						}
 					}
 					if ($guesses.length === 2) {
 						$startTime = 0;
-						$everyReactionTime.push(reactionTime);
+						$everyReactionTime.push(reactionTimes);
 						$everyGuess.push([...$guesses]);
 						$everyTarget.push($targetLetter.split(''));
+
+						reactionTimes = [];
 
 						const correctGuess = {
 							message: '<font size="+2">Nice work!</font>',
@@ -111,12 +127,12 @@
 							if ($isPractice) toastStore.trigger(wrongGuess);
 						}
 
-						// console.log(
+						console.log(
 						// 	{ everyAccuracy: $everyAccuracy },
 						// 	{ everyGuess: $everyGuess },
-						// 	{ everyReactionTime: $everyReactionTime },
+							{ everyReactionTime: $everyReactionTime },
 						// 	{ everyTarget: $everyTarget }
-						// );
+						);
 
 						$numberOfFlashes = 0;
 						$started = false;
@@ -161,12 +177,12 @@
 					classes: 'p-12 m-8 w-auto h-18 text-center'
 				};
 
-				// console.log(
+				console.log(
 				// 	{ everyAccuracy: $everyAccuracy },
 				// 	{ everyGuess: $everyGuess },
-				// 	{ everyReactionTime: $everyReactionTime },
+					{ everyReactionTime: $everyReactionTime },
 				// 	{ everyTarget: $everyTarget }
-				// );
+				);
 
 				if ($isPractice) {
 					receivedLetter === $targetLetter

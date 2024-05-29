@@ -237,15 +237,15 @@
 				</Step>
 				<Step locked={isNotValid}>
 					<svelte:fragment slot="header">Information</svelte:fragment>
-					<div class="space-y-6 mb-8" in:fly={{ duration: 600, x: 40 }}>
+					<div class="space-y-6 mb-8 " in:fly={{ duration: 600, x: 40 }}>
 							<div class="p-5 mx-auto space-y-6 text-xl card">
 									<form
 										on:submit|preventDefault={() =>
 											submitForm($user?.uid, $gender, $handedness, $age)}
-										class="space-y-4"
+										class="space-y-4 "
 									>
 										<p>Please select your gender:</p>
-										<div class="gap-4 px-8 m-3 btn-group">
+										<div class="gap-4 px-8 m-3 btn-group rounded flex flex-wrap">
 											{#each ['Male', 'Female', 'Other', 'Prefer not to say'] as option}
 												<input
 													type="radio"
@@ -266,7 +266,7 @@
 			
 										<label>
 											<p>Please select your handedness:</p>
-											<div class="gap-4 px-8 m-3 btn-group">
+											<div class="gap-4 px-8 m-3 btn-group rounded flex flex-wrap">
 												{#each ['Right', 'Left', 'Ambidextrous'] as option}
 													<input
 														type="radio"
