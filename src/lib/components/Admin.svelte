@@ -96,7 +96,7 @@
 							trials[trial].responses[0],
 							trials[trial].responses[1],
 							trials[trial].accuracy,
-							trials[trial].reactionTime[0],
+							trials[trial].reactionTime[0] ? trials[trial].reactionTime[0] : trials[trial].reactionTime,
 							trials[trial].reactionTime[1],
 							trials[trial].streamDuration
 						];
