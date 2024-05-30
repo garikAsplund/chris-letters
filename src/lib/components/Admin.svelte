@@ -42,7 +42,7 @@
 		excelData.SiB = dataSiB || {};
 		// excelData.VAB = dataVAB || {};
 
-		console.log(excelData);
+		// console.log(excelData);
 		crunchData();
 	}
 

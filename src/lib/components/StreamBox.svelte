@@ -176,7 +176,7 @@
 						console.log(surprisePath);
 						$everySurprisePath.push(surprisePath);
 						console.log({$everySurprisePath});	
-						console.log(surpriseImages[surprisePath]);
+						// console.log(surpriseImages[surprisePath]);
 					}
 				if ($isTarget) {
 					$targetLetter += $currentLetter;

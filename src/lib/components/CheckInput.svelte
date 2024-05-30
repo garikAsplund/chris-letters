@@ -73,12 +73,12 @@
 						
 						if ($guesses.length === 1) {
 							reactionTime = Date.now() - $startTime;
-							console.log({reactionTime});
+							// console.log({reactionTime});
 							reactionTimes.push(reactionTime);
 							$startTime = Date.now();
 						} else {
 							reactionTime2 = Date.now() - $startTime;
-							console.log({reactionTime});
+							// console.log({reactionTime});
 							reactionTimes.push(reactionTime2);
 						}
 					}
@@ -127,12 +127,12 @@
 							if ($isPractice) toastStore.trigger(wrongGuess);
 						}
 
-						console.log(
+						// console.log(
 						// 	{ everyAccuracy: $everyAccuracy },
 						// 	{ everyGuess: $everyGuess },
-							{ everyReactionTime: $everyReactionTime },
+							// { everyReactionTime: $everyReactionTime },
 						// 	{ everyTarget: $everyTarget }
-						);
+						// );
 
 						$numberOfFlashes = 0;
 						$started = false;
@@ -177,12 +177,12 @@
 					classes: 'p-12 m-8 w-auto h-18 text-center'
 				};
 
-				console.log(
+				// console.log(
 				// 	{ everyAccuracy: $everyAccuracy },
 				// 	{ everyGuess: $everyGuess },
-					{ everyReactionTime: $everyReactionTime },
+					// { everyReactionTime: $everyReactionTime },
 				// 	{ everyTarget: $everyTarget }
-				);
+				// );
 
 				if ($isPractice) {
 					receivedLetter === $targetLetter
