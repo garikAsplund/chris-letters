@@ -120,8 +120,16 @@
 			clearInterval(interval);
 		}, 3333);
 	});
-</script>
 
+	let isMobile = window.innerWidth < 800 ? true : false;
+
+	addEventListener('resize', (event) => {});
+
+	onresize = () => {
+		window.innerWidth < 800 ? (isMobile = true) : (isMobile = false);
+	};
+</script>
+{#if !isMobile}
 {#if !$user}
 	<div class="h-screen w-screen">
 		<h1
@@ -157,6 +165,16 @@
 			</div>
 		{/if}
 		<ProgressBar current={$currentTrial} total={$isPractice ? 8 : numberOfTrials} />
+	</div>
+{/if}
+{:else}
+	<div class="flex flex-col justify-center items-center">
+		<div class="w-3/4 space-y-12 fixed top-1/3 text-primary-50">
+			<p class="text-4xl">Oh no, your screen is too small for this study.</p>
+			<p class="text-3xl font-light">
+				Please move to a larger screen with a keyboard to participate.
+			</p>
+		</div>
 	</div>
 {/if}
 

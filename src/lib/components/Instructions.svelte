@@ -8,17 +8,9 @@
 	$: unlocked = !locked;
 	export let signIn;
 
-	let isMobile = window.innerWidth < 800 ? true : false;
-
 	$age = '';
 	$gender = '';
 	$handedness = '';
-
-	addEventListener('resize', (event) => {});
-
-	onresize = () => {
-		window.innerWidth < 800 ? (isMobile = true) : (isMobile = false);
-	};
 
 	function onCompleteHandler(e) {
 		signIn();
@@ -33,7 +25,6 @@
 	}
 </script>
 
-{#if !isMobile}
 	<div class="flex justify-center translate-y-8 mt-32">
 		<div class="w-3/5 p-4 text-lg mb-36 card text-token">
 			<Stepper
@@ -316,13 +307,3 @@
 			</Stepper>
 		</div>
 	</div>
-{:else}
-	<div class="flex flex-col justify-center items-center">
-		<div class="w-3/4 space-y-12 fixed top-1/3 text-primary-50">
-			<p class="text-4xl">Oh no, your screen is too small for this study.</p>
-			<p class="text-3xl font-light">
-				Please move to a larger screen with a keyboard to participate.
-			</p>
-		</div>
-	</div>
-{/if}
