@@ -96,7 +96,8 @@
 							trials[trial].responses[0],
 							trials[trial].responses[1],
 							trials[trial].accuracy,
-							trials[trial].reactionTime,
+							trials[trial].reactionTime[0],
+							trials[trial].reactionTime[1],
 							trials[trial].streamDuration
 						];
 						worksheet.addRow(newRow);
@@ -120,7 +121,8 @@
 			'T1 Response',
 			'T2 Response',
 			'Accuracy',
-			'Reaction Time',
+			'T1 Reaction Time',
+			'T2 Reaction Time',
 			'Stream Duration'
 		];
 		worksheetAB.addRow(headersAB);
