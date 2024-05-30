@@ -451,7 +451,7 @@
 			{#if !clicked}
 				<div class="flex flex-col items-center justify-center space-y-16">
 					{#if !AB && !CC && !SiB}
-						<p class="p-2 font-sans text-3xl text-gray-200 absolute top-6 lg:w-4/5 xl:w-3/4 z-10">
+						<p class="p-2 font-sans text-3xl text-gray-200 absolute top-6 w-full lg:w-4/5 xl:w-3/4 z-10">
 							This step ensures that the letters in the experiment are the correct size.
 							<br /><br />
 							Please place a standard credit card against your screen and then 
