@@ -44,8 +44,31 @@
 	import { dbController } from '$lib/database/dbController';
 	import { user } from '$lib/database/firebase';
 	import { fade } from 'svelte/transition';
-	import face_7 from '$lib/images/surprise/face_7.jpg';
-
+	import face1 from '/surprise/face_1.jpg';
+	import face2 from '/surprise/face_2.jpg';
+	import face3 from '/surprise/face_3.jpg';
+	import face4 from '/surprise/face_4.jpg';
+	import face5 from '/surprise/face_5.jpg';
+	import face6 from '/surprise/face_6.jpg';
+	import face7 from '/surprise/face_7.jpg';
+	import face8 from '/surprise/face_8.jpg';
+	import face9 from '/surprise/face_9.jpg';
+	import face10 from '/surprise/face_10.jpg';
+	import face11 from '/surprise/face_11.jpg';
+	import face12 from '/surprise/face_12.jpg';
+	import object1 from '/surprise/object_1.jpg';
+	import object2 from '/surprise/object_2.jpg';
+	import object3 from '/surprise/object_3.jpg';
+	import object4 from '/surprise/object_4.jpg';
+	import object5 from '/surprise/object_5.jpg';
+	import object6 from '/surprise/object_6.jpg';
+	import object7 from '/surprise/object_7.jpg';
+	import object8 from '/surprise/object_8.jpg';
+	import object9 from '/surprise/object_9.jpg';
+	import object10 from '/surprise/object_10.jpg';
+	import object11 from '/surprise/object_11.jpg';
+	import object12 from '/surprise/object_12.jpg';
+	
 	// console.log({
 	// 	$ABTrials,
 	// 	$CCTrials,
@@ -144,7 +167,7 @@
 				if (SiB)
 					$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 					if ($displayFace) {
-						const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${Math.floor(surpriseCount++ / 2) + 1}`;
+						const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}${Math.floor(surpriseCount++ / 2) + 1}`;
     					$everySurprisePath.push(imageName);
     					surprisePath = imageName;
 						console.log({surprisePath});
@@ -503,7 +526,7 @@
 						style="color: {$isTarget ? ($targetColor === 'green' ? 'rgb(0, 200, 0)' : 'red') : $textColor}; font-size: {boxText}px"
 					>
 						{#if $displayFace}
-							<img src={`/surprise/${surprisePath}.jpg`} alt="Surprise!!!" />
+							<img src={surprisePath} alt="Surprise!!!" />
 						{:else}
 							{$currentLetter}
 						{/if}
