@@ -147,10 +147,10 @@
 				if (SiB)
 					$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 					if ($displayFace) {
-						const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}${Math.floor(surpriseCount++ / 2) + 1}`;
+						const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${Math.floor(surpriseCount++ / 2) + 1}`;
     					$everySurprisePath.push(imageName);
-    					surprisePath = imageName;
-						// console.log({surprisePath});
+    					surprisePath = `$lib/images/surprise/${imageName}.jpg`;
+						console.log({surprisePath});
 					}
 				if ($isTarget) {
 					$targetLetter += $currentLetter;
@@ -506,7 +506,7 @@
 						style="color: {$isTarget ? ($targetColor === 'green' ? 'rgb(0, 200, 0)' : 'red') : $textColor}; font-size: {boxText}px"
 					>
 						{#if $displayFace}
-							<img src={surpriseImages[surprisePath]} alt="Surprise!!!" />
+							<img src={surprisePath} alt="Surprise!!!" />
 						{:else}
 							{$currentLetter}
 						{/if}
