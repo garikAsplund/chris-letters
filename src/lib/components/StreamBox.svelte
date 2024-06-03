@@ -501,7 +501,7 @@
 						style="color: {$isTarget ? ($targetColor === 'green' ? 'rgb(0, 200, 0)' : 'red') : $textColor}; font-size: {boxText}px"
 					>
 						{#if $displayFace}
-							<img src={`/surprise/${surprisePath}`} alt="Surprise!!!" />
+							<img src={`/surprise/${surprisePath}.jpg`} alt="Surprise!!!" />
 						{:else}
 							{$currentLetter}
 						{/if}
