@@ -44,7 +44,7 @@
 	import { dbController } from '$lib/database/dbController';
 	import { user } from '$lib/database/firebase';
 	import { fade } from 'svelte/transition';
-	import face_1 from '$lib/assets/surprise/face_1.jpg';
+	import face_1 from '$lib/images/surprise/face_1.jpg';
 
 	// console.log({
 	// 	$ABTrials,
