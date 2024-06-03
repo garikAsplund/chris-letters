@@ -116,7 +116,7 @@
 	let surprisePath: string = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${Math.floor(surpriseCount++ / 2) + 1}`;
 	// setTimeout(() => console.log({surpriseCount}), 1000);
 	let surpriseImages = {
-		face_1: face_1,
+		face1: face_1,
 	};
 
 	function stream(trialType) {
@@ -147,7 +147,7 @@
 				if (SiB)
 					$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 					if ($displayFace) {
-						const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${Math.floor(surpriseCount++ / 2) + 1}`;
+						const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}${Math.floor(surpriseCount++ / 2) + 1}`;
     					$everySurprisePath.push(imageName);
     					surprisePath = imageName;
 						console.log({surprisePath});
