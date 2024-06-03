@@ -69,33 +69,6 @@
 	import object11 from '/surprise/object_11.jpg';
 	import object12 from '/surprise/object_12.jpg';
 
-	let surpriseImages = {
-		face1,
-		face2,
-		face3,
-		face4,
-		face5,
-		face6,
-		face7,
-		face8,
-		face9,
-		face10,
-		face11,
-		face12,
-		object1,
-		object2,
-		object3,
-		object4,
-		object5,
-		object6,
-		object7,
-		object8,
-		object9,
-		object10,
-		object11,
-		object12,
-	};
-
 	// console.log({
 	// 	$ABTrials,
 	// 	$CCTrials,
@@ -196,7 +169,7 @@
 					if ($displayFace) {
 						const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}${Math.floor(surpriseCount++ / 2) + 1}`;
     					$everySurprisePath.push(imageName);
-    					surprisePath = surpriseImages[imageName];
+    					surprisePath = imageName;
 					}
 				if ($isTarget) {
 					$targetLetter += $currentLetter;
