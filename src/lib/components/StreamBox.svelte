@@ -44,7 +44,7 @@
 	import { dbController } from '$lib/database/dbController';
 	import { user } from '$lib/database/firebase';
 	import { fade } from 'svelte/transition';
-	import face_1 from '$lib/images/surprise/face_1.jpg';
+	import face_7 from '$lib/images/surprise/face_7.jpg';
 
 	// console.log({
 	// 	$ABTrials,
@@ -149,7 +149,7 @@
 					if ($displayFace) {
 						const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${Math.floor(surpriseCount++ / 2) + 1}`;
     					$everySurprisePath.push(imageName);
-    					surprisePath = imageName;
+    					surprisePath = `surprise/${imageName}.jpg`;
 						console.log({surprisePath});
 					}
 				if ($isTarget) {
