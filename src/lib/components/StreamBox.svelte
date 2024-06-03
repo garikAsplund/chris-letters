@@ -149,7 +149,7 @@
 					if ($displayFace) {
 						const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${Math.floor(surpriseCount++ / 2) + 1}`;
     					$everySurprisePath.push(imageName);
-    					surprisePath = `$lib/images/surprise/${imageName}.jpg`;
+    					surprisePath = imageName;
 						console.log({surprisePath});
 					}
 				if ($isTarget) {
