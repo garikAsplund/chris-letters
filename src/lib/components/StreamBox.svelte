@@ -44,11 +44,57 @@
 	import { dbController } from '$lib/database/dbController';
 	import { user } from '$lib/database/firebase';
 	import { fade } from 'svelte/transition';
+	import face1 from '/surprise/face_1.jpg';
+	import face2 from '/surprise/face_2.jpg';
+	import face3 from '/surprise/face_3.jpg';
+	import face4 from '/surprise/face_4.jpg';
+	import face5 from '/surprise/face_5.jpg';
+	import face6 from '/surprise/face_6.jpg';
+	import face7 from '/surprise/face_7.jpg';
+	import face8 from '/surprise/face_8.jpg';
+	import face9 from '/surprise/face_9.jpg';
+	import face10 from '/surprise/face_10.jpg';
+	import face11 from '/surprise/face_11.jpg';
+	import face12 from '/surprise/face_12.jpg';
+	import object1 from '/surprise/object_1.jpg';
+	import object2 from '/surprise/object_2.jpg';
+	import object3 from '/surprise/object_3.jpg';
+	import object4 from '/surprise/object_4.jpg';
+	import object5 from '/surprise/object_5.jpg';
+	import object6 from '/surprise/object_6.jpg';
+	import object7 from '/surprise/object_7.jpg';
+	import object8 from '/surprise/object_8.jpg';
+	import object9 from '/surprise/object_9.jpg';
+	import object10 from '/surprise/object_10.jpg';
+	import object11 from '/surprise/object_11.jpg';
+	import object12 from '/surprise/object_12.jpg';
 
 	let surpriseImages = {
-    face1: '/surprise/face_1.jpg', face2: '/surprise/face_2.jpg', face3: '/surprise/face_3.jpg', face4: '/surprise/face_4.jpg', face5: '/surprise/face_5.jpg', face6: '/surprise/face_6.jpg', face7: '/surprise/face_7.jpg', face8: '/surprise/face_8.jpg', face9: '/surprise/face_9.jpg', face10: '/surprise/face_10.jpg', face11: '/surprise/face_11.jpg', face12: '/surprise/face_12.jpg',
-    object1: '/surprise/object_1.jpg', object2: '/surprise/object_2.jpg', object3: '/surprise/object_3.jpg', object4: '/surprise/object_4.jpg', object5: '/surprise/object_5.jpg', object6: '/surprise/object_6.jpg', object7: '/surprise/object_7.jpg', object8: '/surprise/object_8.jpg', object9: '/surprise/object_9.jpg', object10: '/surprise/object_10.jpg', object11: '/surprise/object_11.jpg', object12: '/surprise/object_12.jpg'
-  };
+		face1,
+		face2,
+		face3,
+		face4,
+		face5,
+		face6,
+		face7,
+		face8,
+		face9,
+		face10,
+		face11,
+		face12,
+		object1,
+		object2,
+		object3,
+		object4,
+		object5,
+		object6,
+		object7,
+		object8,
+		object9,
+		object10,
+		object11,
+		object12,
+	};
 
 	// console.log({
 	// 	$ABTrials,
