@@ -199,7 +199,7 @@
 						$everySurprisePath.push(surprisePath);
 						// console.log({$everySurprisePath});	
 						// console.log(surpriseImages[surprisePath]);
-						surprisePath = `/surprise/${surprisePath}.jpg`
+						surprisePath = `../surprise/${surprisePath}.jpg`
 					}
 				if ($isTarget) {
 					$targetLetter += $currentLetter;
