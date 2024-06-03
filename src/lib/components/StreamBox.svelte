@@ -194,7 +194,7 @@
 				if (SiB)
 					$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 					if ($displayFace) {
-						const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${Math.floor(surpriseCount++ / 2) + 1}`;
+						const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}${Math.floor(surpriseCount++ / 2) + 1}`;
     					$everySurprisePath.push(imageName);
     					surprisePath = surpriseImages[imageName];
 					}
