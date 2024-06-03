@@ -115,9 +115,6 @@
 
 	let surprisePath: string = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${Math.floor(surpriseCount++ / 2) + 1}`;
 	// setTimeout(() => console.log({surpriseCount}), 1000);
-	let surpriseImages = {
-		face1: face_1,
-	};
 
 	function stream(trialType) {
 		const currentTime = performance.now();
