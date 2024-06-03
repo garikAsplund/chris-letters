@@ -195,9 +195,9 @@
 					$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 					if ($displayFace) {
 						surprisePath = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${Math.floor(surpriseCount++ / 2) + 1}`;
-						console.log(surprisePath);
+						// console.log(surprisePath);
 						$everySurprisePath.push(surprisePath);
-						console.log({$everySurprisePath});	
+						// console.log({$everySurprisePath});	
 						// console.log(surpriseImages[surprisePath]);
 						surprisePath = `/surprise/${surprisePath}.jpg`
 					}
