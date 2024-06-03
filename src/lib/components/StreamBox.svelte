@@ -146,7 +146,7 @@
 					if ($displayFace) {
 						const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${Math.floor(surpriseCount++ / 2) + 1}`;
     					$everySurprisePath.push(imageName);
-    					surprisePath = `/surprise/${imageName}.jpg`;
+    					surprisePath = imageName;
 						console.log({surprisePath});
 					}
 				if ($isTarget) {
@@ -503,7 +503,7 @@
 						style="color: {$isTarget ? ($targetColor === 'green' ? 'rgb(0, 200, 0)' : 'red') : $textColor}; font-size: {boxText}px"
 					>
 						{#if $displayFace}
-							<img src={surprisePath} alt="Surprise!!!" />
+							<img src={`/surprise/${surprisePath}.jpg`} alt="Surprise!!!" />
 						{:else}
 							{$currentLetter}
 						{/if}
