@@ -44,30 +44,57 @@
 	import { dbController } from '$lib/database/dbController';
 	import { user } from '$lib/database/firebase';
 	import { fade } from 'svelte/transition';
-	import face1 from '/face_1.jpg';
-	import face2 from '/face_2.jpg';
-	import face3 from '/face_3.jpg';
-	import face4 from '/face_4.jpg';
-	import face5 from '/face_5.jpg';
-	import face6 from '/face_6.jpg';
-	import face7 from '/face_7.jpg';
-	import face8 from '/face_8.jpg';
-	import face9 from '/face_9.jpg';
-	import face10 from '/face_10.jpg';
-	import face11 from '/face_11.jpg';
-	import face12 from '/face_12.jpg';
-	import object1 from '/object_1.jpg';
-	import object2 from '/object_2.jpg';
-	import object3 from '/object_3.jpg';
-	import object4 from '/object_4.jpg';
-	import object5 from '/object_5.jpg';
-	import object6 from '/object_6.jpg';
-	import object7 from '/object_7.jpg';
-	import object8 from '/object_8.jpg';
-	import object9 from '/object_9.jpg';
-	import object10 from '/object_10.jpg';
-	import object11 from '/object_11.jpg';
-	import object12 from '/object_12.jpg';
+	import face1 from '$lib/images/surprise/face_1.jpg';
+	import face2 from '$lib/images/surprise/face_2.jpg';
+	import face3 from '$lib/images/surprise/face_3.jpg';
+	import face4 from '$lib/images/surprise/face_4.jpg';
+	import face5 from '$lib/images/surprise/face_5.jpg';
+	import face6 from '$lib/images/surprise/face_6.jpg';
+	import face7 from '$lib/images/surprise/face_7.jpg';
+	import face8 from '$lib/images/surprise/face_8.jpg';
+	import face9 from '$lib/images/surprise/face_9.jpg';
+	import face10 from '$lib/images/surprise/face_10.jpg';
+	import face11 from '$lib/images/surprise/face_11.jpg';
+	import face12 from '$lib/images/surprise/face_12.jpg';
+	import object1 from '$lib/images/surprise/object_1.jpg';
+	import object2 from '$lib/images/surprise/object_2.jpg';
+	import object3 from '$lib/images/surprise/object_3.jpg';
+	import object4 from '$lib/images/surprise/object_4.jpg';
+	import object5 from '$lib/images/surprise/object_5.jpg';
+	import object6 from '$lib/images/surprise/object_6.jpg';
+	import object7 from '$lib/images/surprise/object_7.jpg';
+	import object8 from '$lib/images/surprise/object_8.jpg';
+	import object9 from '$lib/images/surprise/object_9.jpg';
+	import object10 from '$lib/images/surprise/object_10.jpg';
+	import object11 from '$lib/images/surprise/object_11.jpg';
+	import object12 from '$lib/images/surprise/object_12.jpg';
+
+	let surpriseImages = {
+    face1,
+    face2,
+    face3,
+    face4,
+    face5,
+    face6,
+    face7,
+    face8,
+    face9,
+    face10,
+    face11,
+    face12,
+    object1,
+    object2,
+    object3,
+    object4,
+    object5,
+    object6,
+    object7,
+    object8,
+    object9,
+    object10,
+    object11,
+    object12,
+};
 	
 	// console.log({
 	// 	$ABTrials,
@@ -169,7 +196,7 @@
 					if ($displayFace) {
 						const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${Math.floor(surpriseCount++ / 2) + 1}`;
     					$everySurprisePath.push(imageName);
-    					surprisePath = imageName;
+    					surprisePath = surpriseImages[imageName];
 						console.log({surprisePath});
 					}
 				if ($isTarget) {
@@ -526,7 +553,7 @@
 						style="color: {$isTarget ? ($targetColor === 'green' ? 'rgb(0, 200, 0)' : 'red') : $textColor}; font-size: {boxText}px"
 					>
 						{#if $displayFace}
-							<img src={`/surprise/${surprisePath}.jpg`} alt="Surprise!!!" />
+							<img src={surprisePath} alt="Surprise!!!" />
 						{:else}
 							{$currentLetter}
 						{/if}
