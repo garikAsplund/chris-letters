@@ -197,7 +197,7 @@
 						const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}${Math.floor(surpriseCount++ / 2) + 1}`;
     					$everySurprisePath.push(imageName);
     					surprisePath = surpriseImages[imageName];
-						console.log({surprisePath});
+						// console.log({surprisePath});
 					}
 				if ($isTarget) {
 					$targetLetter += $currentLetter;
