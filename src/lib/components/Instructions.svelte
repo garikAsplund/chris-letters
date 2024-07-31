@@ -199,9 +199,7 @@
 					<svelte:fragment slot="header">Instructions</svelte:fragment>
 					<div class="space-y-6" in:fly={{ duration: 600, x: 40 }}>
 						<p>
-							For each trial, you will see a rapid stream of gray letters inside a gray box. Your
-							task, for every stream, is to detect the designated target letter, which will be the
-							only red letter.
+							For each trial, you will see a rapid stream of letters inside a box. Your task is to detect the red or green letter(s). Before each trial begins you will be instructed which color letter you are looking for. You will be prompted to report these letters at the end of each stream.
 						</p>
 						<p>
 							After you finish viewing each stream, you will be prompted to type in the target
