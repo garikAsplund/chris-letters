@@ -10,7 +10,8 @@
 		started,
 		guesses,
 		inProgress,
-		guessed
+		guessed,
+		refreshRate,
 	} from '$lib/stores/GameStore';
 
 	function onGoToGameClicked() {
@@ -458,6 +459,33 @@ function getTransitionColor(startColor, endColor, step, maxSteps) {
 			URL.revokeObjectURL(a.href);
 		});
 	}
+
+// 	async function getLastRefreshed() {
+		
+// 	// https://vercel.com/docs/rest-api#endpoints/deployments/get-a-deployment-by-id-or-url
+// const deploymentId = 'https://chris-letters-hdpcgl987-garik-asplunds-projects.vercel.app' // replace with your own
+// // https://vercel.com/support/articles/how-do-i-use-a-vercel-api-access-token
+// const accessToken = import.meta.env.VERCEL_ACCESS_TOKEN
+// const result = await fetch(
+//     `https://api.vercel.com/v13/deployments/${deploymentId}`,
+//     {
+//         method: 'GET',
+//         headers: {
+//             Authorization: `Bearer ${accessToken}`,
+//         }
+//     }
+// );
+
+// // ms since epoch for when the deployment finished
+// const { ready } = await result.json() // 1650903484801
+// // convert to human-readable date
+// const lastDeployedTime = new Date(ready).toLocaleString() // 4/25/2022, 9:18:04 AM
+// console.log(lastDeployedTime);
+// return lastDeployedTime;
+// 	}
+
+// let lastRefreshed = new Date().toString();
+
 </script>
 
 <button class="hover:text-gray-400" on:click={fetchDataFromFirebase}>Export data</button>
@@ -470,3 +498,6 @@ function getTransitionColor(startColor, endColor, step, maxSteps) {
 		<a href="/">Go to game</a>
 	</button>
 {/if}
+<p class="text-center">Displaying at {$refreshRate} FPS</p>
+<p class="text-center">Last refreshed on {new Date().toUTCString()}</p>
+

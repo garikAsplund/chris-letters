@@ -130,15 +130,17 @@
 	let trialIndex: number = 0;
 	let surpriseCount: number = 0;
 
-	dbController
-		.getTrialOrder()
-		.then((index) => {
-			trialOrder = trialOrders[index];
-			console.log({trialOrder});
-		})
-		.catch((error) => {
-			console.error('An error occurred:', error);
-		});
+	// dbController
+	// 	.getTrialOrder()
+	// 	.then((index) => {
+	// 		trialOrder = trialOrders[index];
+	// 		console.log({trialOrder});
+	// 	})
+	// 	.catch((error) => {
+	// 		console.error('An error occurred:', error);
+	// 	});
+
+	trialOrder = trialOrders[5];
 
 	dbController.getSessionNumber($user.uid).then((number) => {
 		$sessionNumber = number;	
@@ -464,7 +466,8 @@
 		else if ($guessed && !$inProgress && resizedCard) onClick();
 	}}
 />
-{#if trialIndex < 3}
+{#if trialIndex < 3}	
+
 	<div
 		class="flex flex-col justify-center items-center h-view w-view space-x-4 text-white h-screen"
 	>
@@ -489,7 +492,7 @@
 							/>
 						</div>
 					{/if}
-					{#if resizedCard}
+					{#if resizedCard}	
 						<div transition:fade={{ delay: 75, duration: 350 }}>
 							<p
 								class="flex justify-center text-center items-center font-thin text-3xl font-sans mx-12"
@@ -544,6 +547,8 @@
 				</div>
 			{/if}
 			{#if $inProgress && clicked}
+			<!-- <p class="text-center align-top mt-5 text-white">{trialOrder[trialIndex]}</p>
+ -->
 				<div
 					class="flex justify-center"
 					style="border-width: {borderWidth}px; width: {boxText}px; height: {boxText}px; border-color: {$boxColor === 'green' ? 'rgb(0, 200, 0)' : $boxColor}"
