@@ -499,5 +499,5 @@ function getTransitionColor(startColor, endColor, step, maxSteps) {
 	</button>
 {/if}
 <p class="text-center">Displaying at {$refreshRate} FPS</p>
-<p class="text-center">Last refreshed on {new Date().toUTCString()}</p>
+<!-- <p class="text-center">Last refreshed on 1 August</p> -->
 
