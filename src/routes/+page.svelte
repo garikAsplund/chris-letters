@@ -12,10 +12,10 @@
 
 	setTimeout(() => {
 		getScreenRefreshRate(function (FPS) {
-			$refreshRate = Math.round(FPS / 5) * 5;
+			$refreshRate = Math.round(FPS / 5) * 5 < 60 ? 60 : Math.round(FPS / 5) * 5;
 			console.log(`${$refreshRate} FPS`);
 			dbController.setScreenParams($user.uid, $refreshRate, window.innerWidth, window.innerHeight);
-		});
+		}, false);
 	}, 1000);
 </script>
 
