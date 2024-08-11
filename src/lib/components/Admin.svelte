@@ -11,7 +11,7 @@
 		guesses,
 		inProgress,
 		guessed,
-		refreshRate,
+		refreshRate
 	} from '$lib/stores/GameStore';
 
 	function onGoToGameClicked() {
@@ -28,7 +28,7 @@
 	let excelData = {
 		AB: {},
 		CC: {},
-		SiB: {},
+		SiB: {}
 		// VAB: {}
 	};
 
@@ -97,7 +97,9 @@
 							trials[trial].responses[0],
 							trials[trial].responses[1],
 							trials[trial].accuracy,
-							trials[trial].reactionTime[0] ? trials[trial].reactionTime[0] : trials[trial].reactionTime,
+							trials[trial].reactionTime[0]
+								? trials[trial].reactionTime[0]
+								: trials[trial].reactionTime,
 							trials[trial].reactionTime[1],
 							trials[trial].streamDuration
 						];
@@ -135,7 +137,7 @@
 
 				for (const session in sessions) {
 					const blocks = sessions[session];
-						
+
 					const date = new Date(blocks.time);
 
 					for (const block in blocks) {
@@ -346,97 +348,97 @@
 		// autoFitColumns(worksheetVAB);
 
 		const setStyling = (worksheet, endColor = 'FFDB92FC') => {
-    let currentSession = null;
-    let currentBlock = null;
-    let trialCount = 0;
-    const maxTrials = 96;
+			let currentSession = null;
+			let currentBlock = null;
+			let trialCount = 0;
+			const maxTrials = 96;
 
-    if (worksheet.getRow(1).getCell(3).value === 'Trial ID') {
-        worksheet.eachRow({ includeEmpty: false }, (row) => {
-            const session = row.getCell(2).value;
+			if (worksheet.getRow(1).getCell(3).value === 'Trial ID') {
+				worksheet.eachRow({ includeEmpty: false }, (row) => {
+					const session = row.getCell(2).value;
 
-            if (session !== currentSession) {
-                currentSession = session;
-                trialCount = 0;
-            }
+					if (session !== currentSession) {
+						currentSession = session;
+						trialCount = 0;
+					}
 
-            const transitionColor = getTransitionColor('FFFFFFFF', endColor, trialCount, maxTrials);
+					const transitionColor = getTransitionColor('FFFFFFFF', endColor, trialCount, maxTrials);
 
-            row.fill = {
-                type: 'pattern',
-                pattern: 'solid',
-                fgColor: { argb: transitionColor }
-            };
+					row.fill = {
+						type: 'pattern',
+						pattern: 'solid',
+						fgColor: { argb: transitionColor }
+					};
 
-            row.border = {
-                bottom: { style: 'thin', color: { argb: 'FF000000' } },
-                right: { style: 'thin', color: { argb: 'FF000000' } },
-                left: { style: 'thin', color: { argb: 'FF000000' } }
-            };
+					row.border = {
+						bottom: { style: 'thin', color: { argb: 'FF000000' } },
+						right: { style: 'thin', color: { argb: 'FF000000' } },
+						left: { style: 'thin', color: { argb: 'FF000000' } }
+					};
 
-            row.eachCell((cell) => {
-                cell.alignment = { horizontal: 'right' };
-            });
+					row.eachCell((cell) => {
+						cell.alignment = { horizontal: 'right' };
+					});
 
-            trialCount++;
-        });
-    } else {
-        worksheet.eachRow({ includeEmpty: false }, (row) => {
-            const session = row.getCell(2).value;
-            const block = row.getCell(3).value;
+					trialCount++;
+				});
+			} else {
+				worksheet.eachRow({ includeEmpty: false }, (row) => {
+					const session = row.getCell(2).value;
+					const block = row.getCell(3).value;
 
-            if (session !== currentSession || block !== currentBlock) {
-                currentSession = session;
-                currentBlock = block;
-                trialCount = 0;
-            }
+					if (session !== currentSession || block !== currentBlock) {
+						currentSession = session;
+						currentBlock = block;
+						trialCount = 0;
+					}
 
-            const transitionColor = getTransitionColor('FFFFFFFF', endColor, trialCount, maxTrials);
+					const transitionColor = getTransitionColor('FFFFFFFF', endColor, trialCount, maxTrials);
 
-            row.fill = {
-                type: 'pattern',
-                pattern: 'solid',
-                fgColor: { argb: transitionColor }
-            };
+					row.fill = {
+						type: 'pattern',
+						pattern: 'solid',
+						fgColor: { argb: transitionColor }
+					};
 
-            row.border = {
-                bottom: { style: 'thin', color: { argb: 'FF000000' } },
-                right: { style: 'thin', color: { argb: 'FF000000' } },
-                left: { style: 'thin', color: { argb: 'FF000000' } }
-            };
+					row.border = {
+						bottom: { style: 'thin', color: { argb: 'FF000000' } },
+						right: { style: 'thin', color: { argb: 'FF000000' } },
+						left: { style: 'thin', color: { argb: 'FF000000' } }
+					};
 
-            row.eachCell((cell) => {
-                cell.alignment = { horizontal: 'right' };
-            });
+					row.eachCell((cell) => {
+						cell.alignment = { horizontal: 'right' };
+					});
 
-            trialCount++;
-        });
-    }
-};
+					trialCount++;
+				});
+			}
+		};
 
-function getTransitionColor(startColor, endColor, step, maxSteps) {
-    const startRed = parseInt(startColor.substr(2, 2), 16);
-    const startGreen = parseInt(startColor.substr(4, 2), 16);
-    const startBlue = parseInt(startColor.substr(6, 2), 16);
+		function getTransitionColor(startColor, endColor, step, maxSteps) {
+			const startRed = parseInt(startColor.substr(2, 2), 16);
+			const startGreen = parseInt(startColor.substr(4, 2), 16);
+			const startBlue = parseInt(startColor.substr(6, 2), 16);
 
-    const endRed = parseInt(endColor.substr(2, 2), 16);
-    const endGreen = parseInt(endColor.substr(4, 2), 16);
-    const endBlue = parseInt(endColor.substr(6, 2), 16);
+			const endRed = parseInt(endColor.substr(2, 2), 16);
+			const endGreen = parseInt(endColor.substr(4, 2), 16);
+			const endBlue = parseInt(endColor.substr(6, 2), 16);
 
-    const redDiff = endRed - startRed;
-    const greenDiff = endGreen - startGreen;
-    const blueDiff = endBlue - startBlue;
+			const redDiff = endRed - startRed;
+			const greenDiff = endGreen - startGreen;
+			const blueDiff = endBlue - startBlue;
 
-    const redStep = Math.floor((redDiff / maxSteps) * step);
-    const greenStep = Math.floor((greenDiff / maxSteps) * step);
-    const blueStep = Math.floor((blueDiff / maxSteps) * step);
+			const redStep = Math.floor((redDiff / maxSteps) * step);
+			const greenStep = Math.floor((greenDiff / maxSteps) * step);
+			const blueStep = Math.floor((blueDiff / maxSteps) * step);
 
-    const red = (startRed + redStep).toString(16).padStart(2, '0');
-    const green = (startGreen + greenStep).toString(16).padStart(2, '0');
-    const blue = (startBlue + blueStep).toString(16).padStart(2, '0');
+			const red = (startRed + redStep).toString(16).padStart(2, '0');
+			const green = (startGreen + greenStep).toString(16).padStart(2, '0');
+			const blue = (startBlue + blueStep).toString(16).padStart(2, '0');
 
-    return `FF${red}${green}${blue}`;
-}
+			return `FF${red}${green}${blue}`;
+		}
 		setStyling(worksheetAB);
 		setStyling(worksheetCC);
 		setStyling(worksheetSiB);
@@ -460,32 +462,60 @@ function getTransitionColor(startColor, endColor, step, maxSteps) {
 		});
 	}
 
-// 	async function getLastRefreshed() {
-		
-// 	// https://vercel.com/docs/rest-api#endpoints/deployments/get-a-deployment-by-id-or-url
-// const deploymentId = 'https://chris-letters-hdpcgl987-garik-asplunds-projects.vercel.app' // replace with your own
-// // https://vercel.com/support/articles/how-do-i-use-a-vercel-api-access-token
-// const accessToken = import.meta.env.VERCEL_ACCESS_TOKEN
-// const result = await fetch(
-//     `https://api.vercel.com/v13/deployments/${deploymentId}`,
-//     {
-//         method: 'GET',
-//         headers: {
-//             Authorization: `Bearer ${accessToken}`,
-//         }
-//     }
-// );
+	// 	async function getLastRefreshed() {
 
-// // ms since epoch for when the deployment finished
-// const { ready } = await result.json() // 1650903484801
-// // convert to human-readable date
-// const lastDeployedTime = new Date(ready).toLocaleString() // 4/25/2022, 9:18:04 AM
-// console.log(lastDeployedTime);
-// return lastDeployedTime;
-// 	}
+	// 	// https://vercel.com/docs/rest-api#endpoints/deployments/get-a-deployment-by-id-or-url
+	// const deploymentId = 'https://chris-letters-hdpcgl987-garik-asplunds-projects.vercel.app' // replace with your own
+	// // https://vercel.com/support/articles/how-do-i-use-a-vercel-api-access-token
+	// const accessToken = import.meta.env.VERCEL_ACCESS_TOKEN
+	// const result = await fetch(
+	//     `https://api.vercel.com/v13/deployments/${deploymentId}`,
+	//     {
+	//         method: 'GET',
+	//         headers: {
+	//             Authorization: `Bearer ${accessToken}`,
+	//         }
+	//     }
+	// );
 
-// let lastRefreshed = new Date().toString();
+	// // ms since epoch for when the deployment finished
+	// const { ready } = await result.json() // 1650903484801
+	// // convert to human-readable date
+	// const lastDeployedTime = new Date(ready).toLocaleString() // 4/25/2022, 9:18:04 AM
+	// console.log(lastDeployedTime);
+	// return lastDeployedTime;
+	// 	}
 
+	// let lastRefreshed = new Date().toString();
+
+	async function getLastDeploymentTime() {
+		const projectId = 'prj_6FlC2PslQXROINoxpnJrgAMisFU1'; // Your project ID
+		const token = import.meta.env.VITE_VERCEL_ACCESS_TOKEN;
+
+		const response = await fetch(
+			`https://api.vercel.com/v6/deployments?projectId=${projectId}&limit=1`,
+			{
+				headers: {
+					Authorization: `Bearer ${token}`
+				}
+			}
+		);
+
+		const data = await response.json();
+
+		if (data.deployments && data.deployments.length > 0) {
+			const lastDeployment = data.deployments[0];
+			const deploymentTime = new Date(lastDeployment.created);
+			return deploymentTime.toLocaleString();
+		}
+
+		return 'No deployments found';
+	}
+
+	// Usage
+	getLastDeploymentTime().then((time) => {
+		document.getElementById('last-deployment').textContent = `Last deployed: ${time}`;
+	});
 </script>
 
 <button class="hover:text-gray-400" on:click={fetchDataFromFirebase}>Export data</button>
@@ -499,5 +529,4 @@ function getTransitionColor(startColor, endColor, step, maxSteps) {
 	</button>
 {/if}
 <p class="text-center">Displaying at {$refreshRate} FPS</p>
-<!-- <p class="text-center">Last refreshed on 1 August</p> -->
-
+<p class="text-center" id="last-deployment">Last deployed OOPSiES</p>

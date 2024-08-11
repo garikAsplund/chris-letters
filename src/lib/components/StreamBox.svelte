@@ -37,7 +37,7 @@
 		sessionNumber,
 		everyStreamDuration,
 		everySurprisePath,
-		blockNumber,
+		blockNumber
 	} from '$lib/stores/GameStore';
 	import GameOver from './GameOver.svelte';
 	import CheckInput from './CheckInput.svelte';
@@ -68,34 +68,35 @@
 	import object10 from '$lib/images/surprise/object_10.jpg';
 	import object11 from '$lib/images/surprise/object_11.jpg';
 	import object12 from '$lib/images/surprise/object_12.jpg';
+	import { getScreenRefreshRate } from '$lib/logic/refreshRate';
 
 	let surpriseImages = {
-    face1,
-    face2,
-    face3,
-    face4,
-    face5,
-    face6,
-    face7,
-    face8,
-    face9,
-    face10,
-    face11,
-    face12,
-    object1,
-    object2,
-    object3,
-    object4,
-    object5,
-    object6,
-    object7,
-    object8,
-    object9,
-    object10,
-    object11,
-    object12,
-};
-	
+		face1,
+		face2,
+		face3,
+		face4,
+		face5,
+		face6,
+		face7,
+		face8,
+		face9,
+		face10,
+		face11,
+		face12,
+		object1,
+		object2,
+		object3,
+		object4,
+		object5,
+		object6,
+		object7,
+		object8,
+		object9,
+		object10,
+		object11,
+		object12
+	};
+
 	// console.log({
 	// 	$ABTrials,
 	// 	$CCTrials,
@@ -143,7 +144,7 @@
 	trialOrder = trialOrders[5];
 
 	dbController.getSessionNumber($user.uid).then((number) => {
-		$sessionNumber = number;	
+		$sessionNumber = number;
 		surpriseCount = (number - 1) * 12;
 
 		// console.log({ $sessionNumber, surpriseCount });
@@ -165,7 +166,9 @@
 	let streamTime;
 	let resizedCard: boolean = false;
 
-	let surprisePath: string = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${Math.floor(surpriseCount++ / 2) + 1}`;
+	let surprisePath: string = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${
+		Math.floor(surpriseCount++ / 2) + 1
+	}`;
 	// setTimeout(() => console.log({surpriseCount}), 1000);
 
 	function stream(trialType) {
@@ -179,7 +182,49 @@
 			}, 100);
 			$displayFace = false;
 			$everyStreamDuration.push(Math.round(performance.now() - streamTime));
-			// console.log('Stream length: ', $everyStreamDuration[$everyStreamDuration.length - 1]);
+			console.log('Stream length: ', $everyStreamDuration[$everyStreamDuration.length - 1]);
+			console.log({ $currentTrial });
+
+			// Check to see if refreshRate is accurate
+			if (
+				$isPractice &&
+				$currentTrial <= 4 &&
+				($everyStreamDuration[$everyStreamDuration.length - 1] < 3000 ||
+					$everyStreamDuration[$everyStreamDuration.length - 1] > 3200)
+			) {
+				console.log('OH NO--WRONG REFRESH RATE. RECALCULATING...');
+
+				getScreenRefreshRate(function (FPS) {
+					$refreshRate = Math.round(FPS / 5) * 5 < 60 ? 60 : Math.round(FPS / 5) * 5;
+					console.log(`${$refreshRate} FPS`);
+					dbController.setScreenParams(
+						$user.uid,
+						$refreshRate,
+						window.innerWidth,
+						window.innerHeight
+					);
+				}, false);
+			}
+			if (
+				!$isPractice &&
+				$currentTrial > 4 &&
+				($everyStreamDuration[$everyStreamDuration.length - 1] < 1500 ||
+					$everyStreamDuration[$everyStreamDuration.length - 1] > 1600)
+			) {
+				console.log('OH NO--WRONG REFRESH RATE. RECALCULATING...');
+
+				getScreenRefreshRate(function (FPS) {
+					$refreshRate = Math.round(FPS / 5) * 5 < 60 ? 60 : Math.round(FPS / 5) * 5;
+					console.log(`${$refreshRate} FPS`);
+					dbController.setScreenParams(
+						$user.uid,
+						$refreshRate,
+						window.innerWidth,
+						window.innerHeight
+					);
+				}, false);
+			}
+
 			return;
 		}
 
@@ -195,16 +240,17 @@
 				if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 				if (SiB)
 					$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
-					if ($displayFace) {
-						const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}${Math.floor(surpriseCount++ / 2) + 1}`;
-    					$everySurprisePath.push(imageName);
-    					surprisePath = surpriseImages[imageName];
-						// console.log({surprisePath});
-					}
+				if ($displayFace) {
+					const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}${
+						Math.floor(surpriseCount++ / 2) + 1
+					}`;
+					$everySurprisePath.push(imageName);
+					surprisePath = surpriseImages[imageName];
+					// console.log({surprisePath});
+				}
 				if ($isTarget) {
 					$targetLetter += $currentLetter;
 				}
-				
 			} else {
 				$currentLetter = ' ';
 				if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes + 1) / 2 - 1];
@@ -301,7 +347,7 @@
 							$ABTrials.T1Indices,
 							$ABTrials.targetOffsets,
 							$targetColor,
-							$everyStreamDuration,
+							$everyStreamDuration
 					  )
 					: dbController.writeSiB(
 							$user.uid,
@@ -315,7 +361,7 @@
 							$SiBTrials.targetIndices,
 							$targetColor,
 							$everyStreamDuration,
-							$everySurprisePath,
+							$everySurprisePath
 					  );
 
 				trialIndex += 1;
@@ -338,7 +384,7 @@
 					$CCTrials.distractorIndices,
 					$CCTrials.distractorColor,
 					$targetColor,
-					$everyStreamDuration,
+					$everyStreamDuration
 				);
 				blockCount += 1;
 				$blockNumber += 1;
@@ -356,7 +402,7 @@
 					$CCTrials2.distractorIndices,
 					$CCTrials2.distractorColor,
 					$targetColor,
-					$everyStreamDuration,
+					$everyStreamDuration
 				);
 				trialIndex += 1;
 				$blockNumber += 1;
@@ -365,7 +411,7 @@
 				AB = trialOrder[trialIndex] === 'AB';
 				CC = trialOrder[trialIndex] === 'CC';
 				SiB = trialOrder[trialIndex] === 'SiB';
-			}				
+			}
 			resetDataGathering();
 			if (trialIndex === 3) dbController.updateSessionNumber($user.uid);
 			clicked = false;
@@ -466,8 +512,7 @@
 		else if ($guessed && !$inProgress && resizedCard) onClick();
 	}}
 />
-{#if trialIndex < 3}	
-
+{#if trialIndex < 3}
 	<div
 		class="flex flex-col justify-center items-center h-view w-view space-x-4 text-white h-screen"
 	>
@@ -475,11 +520,13 @@
 			{#if !clicked}
 				<div class="flex flex-col items-center justify-center space-y-16">
 					{#if !AB && !CC && !SiB}
-						<p class="p-2 font-sans text-3xl text-gray-200 absolute top-6 w-full lg:w-4/5 xl:w-3/4 z-10">
+						<p
+							class="p-2 font-sans text-3xl text-gray-200 absolute top-6 w-full lg:w-4/5 xl:w-3/4 z-10"
+						>
 							This step ensures that the letters in the experiment are the correct size.
 							<br /><br />
-							Please place a standard credit card against your screen and then 
-							click on the edge of the image to re-size it until they match.
+							Please place a standard credit card against your screen and then click on the edge of the
+							image to re-size it until they match.
 						</p>
 
 						<div
@@ -492,7 +539,7 @@
 							/>
 						</div>
 					{/if}
-					{#if resizedCard}	
+					{#if resizedCard}
 						<div transition:fade={{ delay: 75, duration: 350 }}>
 							<p
 								class="flex justify-center text-center items-center font-thin text-3xl font-sans mx-12"
@@ -547,15 +594,22 @@
 				</div>
 			{/if}
 			{#if $inProgress && clicked}
-			<!-- <p class="text-center align-top mt-5 text-white">{trialOrder[trialIndex]}</p>
+				<!-- <p class="text-center align-top mt-5 text-white">{trialOrder[trialIndex]}</p>
  -->
 				<div
 					class="flex justify-center"
-					style="border-width: {borderWidth}px; width: {boxText}px; height: {boxText}px; border-color: {$boxColor === 'green' ? 'rgb(0, 200, 0)' : $boxColor}"
+					style="border-width: {borderWidth}px; width: {boxText}px; height: {boxText}px; border-color: {$boxColor ===
+					'green'
+						? 'rgb(0, 200, 0)'
+						: $boxColor}"
 				>
 					<p
 						class={`self-center font-thin text-center font-courier-new`}
-						style="color: {$isTarget ? ($targetColor === 'green' ? 'rgb(0, 200, 0)' : 'red') : $textColor}; font-size: {boxText}px"
+						style="color: {$isTarget
+							? $targetColor === 'green'
+								? 'rgb(0, 200, 0)'
+								: 'red'
+							: $textColor}; font-size: {boxText}px"
 					>
 						{#if $displayFace}
 							<img src={surprisePath} alt="Surprise!!!" />
