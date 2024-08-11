@@ -36,7 +36,7 @@ export const numberOfFlashes = writable(0);
 export const startTime = writable(Date.now());
 export const inProgress = writable(false);
 export const count = writable(0);
-export const refreshRate = writable(50);
+export const refreshRate = writable(60);
 export const isOn = writable(true);
 export const lastTime = writable(performance.now());
 export const currentLetter = writable(" ");
@@ -46,7 +46,7 @@ export const targetLetter = writable("");
 export const boxColor = writable("white");
 export const displayFace = writable(false);
 export const currentTrial = writable(0);
-export const isPractice = writable(true);
+export const isPractice = writable(false);
 export const isPracticeCount = writable(0);
 export const targetColor = writable("");
 

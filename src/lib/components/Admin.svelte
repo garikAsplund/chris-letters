@@ -462,32 +462,6 @@
 		});
 	}
 
-	// 	async function getLastRefreshed() {
-
-	// 	// https://vercel.com/docs/rest-api#endpoints/deployments/get-a-deployment-by-id-or-url
-	// const deploymentId = 'https://chris-letters-hdpcgl987-garik-asplunds-projects.vercel.app' // replace with your own
-	// // https://vercel.com/support/articles/how-do-i-use-a-vercel-api-access-token
-	// const accessToken = import.meta.env.VERCEL_ACCESS_TOKEN
-	// const result = await fetch(
-	//     `https://api.vercel.com/v13/deployments/${deploymentId}`,
-	//     {
-	//         method: 'GET',
-	//         headers: {
-	//             Authorization: `Bearer ${accessToken}`,
-	//         }
-	//     }
-	// );
-
-	// // ms since epoch for when the deployment finished
-	// const { ready } = await result.json() // 1650903484801
-	// // convert to human-readable date
-	// const lastDeployedTime = new Date(ready).toLocaleString() // 4/25/2022, 9:18:04 AM
-	// console.log(lastDeployedTime);
-	// return lastDeployedTime;
-	// 	}
-
-	// let lastRefreshed = new Date().toString();
-
 	async function getLastDeploymentTime() {
 		const projectId = 'prj_6FlC2PslQXROINoxpnJrgAMisFU1'; // Your project ID
 		const token = import.meta.env.VITE_VERCEL_ACCESS_TOKEN;
@@ -512,7 +486,6 @@
 		return 'No deployments found';
 	}
 
-	// Usage
 	getLastDeploymentTime().then((time) => {
 		document.getElementById('last-deployment').textContent = `Last deployed: ${time}`;
 	});
@@ -529,4 +502,4 @@
 	</button>
 {/if}
 <p class="text-center">Displaying at {$refreshRate} FPS</p>
-<p class="text-center" id="last-deployment">Last deployed OOPSiES</p>
+<p class="text-center" id="last-deployment">Retrieving time last deployed</p>
