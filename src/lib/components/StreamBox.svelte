@@ -508,7 +508,15 @@
 			localStorage.setItem('boxText', boxText.toString());
 			localStorage.setItem('borderWidth', borderWidth.toString());
 		});
+
+		const imageUrls = Object.values(surpriseImages);
 </script>
+
+<svelte:head>
+  {#each imageUrls as imageUrl}
+    <link rel="preload" href={imageUrl} as="image">
+  {/each}
+</svelte:head>
 
 <svelte:window
 	on:keydown={() => {
