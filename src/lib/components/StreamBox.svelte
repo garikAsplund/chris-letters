@@ -624,7 +624,7 @@
 							: $textColor}; font-size: {boxText}px"
 					>
 						{#if $displayFace}
-							<img src={surprisePath} alt="Surprise!!!" />
+							<img src={surprisePath} alt="Surprise!!!" class="scale-75"/>
 						{:else}
 							{$currentLetter}
 						{/if}
