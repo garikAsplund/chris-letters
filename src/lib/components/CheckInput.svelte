@@ -48,7 +48,7 @@
 		if (field) field.focus();
 	};
 
-	document.addEventListener('click', function(event) {
+	document.addEventListener('click', function (event) {
 		const field = document.getElementById(`codefield_0`);
 		if (field) field.focus();
 	});
@@ -61,7 +61,6 @@
 
 		if (isAB && !$inProgress) {
 			if (event.key && event.key.length === 1) {
-				
 				if ($guesses.length <= 2) {
 					if ($startTime) {
 						if (event.key !== 'Backspace' && event.key !== ' ') {
@@ -70,7 +69,7 @@
 							// codeFields = [...codeFields]; // Ensure reactivity
 							codeFields[$guesses.length - 1] = event.key.toUpperCase(); // Update codeFields
 						}
-						
+
 						if ($guesses.length === 1) {
 							reactionTime = Date.now() - $startTime;
 							// console.log({reactionTime});
@@ -130,7 +129,7 @@
 						// console.log(
 						// 	{ everyAccuracy: $everyAccuracy },
 						// 	{ everyGuess: $everyGuess },
-							// { everyReactionTime: $everyReactionTime },
+						// { everyReactionTime: $everyReactionTime },
 						// 	{ everyTarget: $everyTarget }
 						// );
 
@@ -141,10 +140,10 @@
 						setTimeout(() => {
 							$guessed = true;
 						}, 200);
-						setTimeout(() => {
-							$inProgress = true;
-							begin();
-						}, 1200);
+						// setTimeout(() => {
+						// 	$inProgress = true;
+						// 	begin();
+						// }, 1200);
 					}
 				}
 			}
@@ -166,7 +165,7 @@
 					timeout: 2000,
 					hideDismiss: true,
 					background: 'bg-green-500',
-					classes: 'p-12 m-8 w-auto h-18 text-center',
+					classes: 'p-12 m-8 w-auto h-18 text-center'
 				};
 
 				const wrongGuess = {
@@ -180,7 +179,7 @@
 				// console.log(
 				// 	{ everyAccuracy: $everyAccuracy },
 				// 	{ everyGuess: $everyGuess },
-					// { everyReactionTime: $everyReactionTime },
+				// { everyReactionTime: $everyReactionTime },
 				// 	{ everyTarget: $everyTarget }
 				// );
 
@@ -197,10 +196,10 @@
 				setTimeout(() => {
 					$guessed = true;
 				}, 200);
-				setTimeout(() => {
-					$inProgress = true;
-					begin();
-				}, 1200);
+				// setTimeout(() => {
+				// 	$inProgress = true;
+				// 	begin();
+				// }, 1200);
 			}
 		}
 	}
@@ -219,11 +218,22 @@
 			}
 		});
 	});
+
+	function afterFadeOut() {
+		setTimeout(() => {
+			$inProgress = true;
+			begin();
+		}, 600);
+	}
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
 
-<div transition:fade={{ delay: 75, duration: 350 }} class="-translate-y-12">
+<div
+	transition:fade={{ delay: 75, duration: 350 }}
+	on:outroend={afterFadeOut}
+	class="-translate-y-12"
+>
 	<div class="m-12 text-4xl font-sans font-thin text-gray-200">{isAB ? 'Targets?' : 'Target?'}</div>
 	<div class="flex justify-center nospaces">
 		{#each codeFields as value, i (i)}
