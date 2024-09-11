@@ -44,31 +44,58 @@
 	import { dbController } from '$lib/database/dbController';
 	import { user } from '$lib/database/firebase';
 	import { fade } from 'svelte/transition';
-	import face1 from '../images/surprise/face_1.jpg';
-	import face2 from '../images/surprise/face_2.jpg';
-	import face3 from '../images/surprise/face_3.jpg';
-	import face4 from '../images/surprise/face_4.jpg';
-	import face5 from '../images/surprise/face_5.jpg';
-	import face6 from '../images/surprise/face_6.jpg';
-	import face7 from '../images/surprise/face_7.jpg';
-	import face8 from '../images/surprise/face_8.jpg';
-	import face9 from '../images/surprise/face_9.jpg';
-	import face10 from '../images/surprise/face_10.jpg';
-	import face11 from '../images/surprise/face_11.jpg';
-	import face12 from '../images/surprise/face_12.jpg';
-	import object1 from '../images/surprise/object_1.jpg';
-	import object2 from '../images/surprise/object_2.jpg';
-	import object3 from '../images/surprise/object_3.jpg';
-	import object4 from '../images/surprise/object_4.jpg';
-	import object5 from '../images/surprise/object_5.jpg';
-	import object6 from '../images/surprise/object_6.jpg';
-	import object7 from '../images/surprise/object_7.jpg';
-	import object8 from '../images/surprise/object_8.jpg';
-	import object9 from '../images/surprise/object_9.jpg';
-	import object10 from '../images/surprise/object_10.jpg';
-	import object11 from '../images/surprise/object_11.jpg';
-	import object12 from '../images/surprise/object_12.jpg';
+	import face1 from '$lib/images/surprise/face_1.jpg';
+	import face2 from '$lib/images/surprise/face_2.jpg';
+	import face3 from '$lib/images/surprise/face_3.jpg';
+	import face4 from '$lib/images/surprise/face_4.jpg';
+	import face5 from '$lib/images/surprise/face_5.jpg';
+	import face6 from '$lib/images/surprise/face_6.jpg';
+	import face7 from '$lib/images/surprise/face_7.jpg';
+	import face8 from '$lib/images/surprise/face_8.jpg';
+	import face9 from '$lib/images/surprise/face_9.jpg';
+	import face10 from '$lib/images/surprise/face_10.jpg';
+	import face11 from '$lib/images/surprise/face_11.jpg';
+	import face12 from '$lib/images/surprise/face_12.jpg';
+	import object1 from '$lib/images/surprise/object_1.jpg';
+	import object2 from '$lib/images/surprise/object_2.jpg';
+	import object3 from '$lib/images/surprise/object_3.jpg';
+	import object4 from '$lib/images/surprise/object_4.jpg';
+	import object5 from '$lib/images/surprise/object_5.jpg';
+	import object6 from '$lib/images/surprise/object_6.jpg';
+	import object7 from '$lib/images/surprise/object_7.jpg';
+	import object8 from '$lib/images/surprise/object_8.jpg';
+	import object9 from '$lib/images/surprise/object_9.jpg';
+	import object10 from '$lib/images/surprise/object_10.jpg';
+	import object11 from '$lib/images/surprise/object_11.jpg';
+	import object12 from '$lib/images/surprise/object_12.jpg';
+
+	import _face1 from '$lib/images/surprise/face_1.avif';
+	import _face2 from '$lib/images/surprise/face_2.avif';
+	import _face3 from '$lib/images/surprise/face_3.avif';
+	import _face4 from '$lib/images/surprise/face_4.avif';
+	import _face5 from '$lib/images/surprise/face_5.avif';
+	import _face6 from '$lib/images/surprise/face_6.avif';
+	import _face7 from '$lib/images/surprise/face_7.avif';
+	import _face8 from '$lib/images/surprise/face_8.avif';
+	import _face9 from '$lib/images/surprise/face_9.avif';
+	import _face10 from '$lib/images/surprise/face_10.avif';
+	import _face11 from '$lib/images/surprise/face_11.avif';
+	import _face12 from '$lib/images/surprise/face_12.avif';
+	import _object1 from '$lib/images/surprise/object_1.avif';
+	import _object2 from '$lib/images/surprise/object_2.avif';
+	import _object3 from '$lib/images/surprise/object_3.avif';
+	import _object4 from '$lib/images/surprise/object_4.avif';
+	import _object5 from '$lib/images/surprise/object_5.avif';
+	import _object6 from '$lib/images/surprise/object_6.avif';
+	import _object7 from '$lib/images/surprise/object_7.avif';
+	import _object8 from '$lib/images/surprise/object_8.avif';
+	import _object9 from '$lib/images/surprise/object_9.avif';
+	import _object10 from '$lib/images/surprise/object_10.avif';
+	import _object11 from '$lib/images/surprise/object_11.avif';
+	import _object12 from '$lib/images/surprise/object_12.avif';
+
 	import { getScreenRefreshRate } from '$lib/logic/refreshRate';
+	import { prolificStore } from '$lib/stores/prolificStore';
 
 	let surpriseImages = {
 		face1,
@@ -94,7 +121,31 @@
 		object9,
 		object10,
 		object11,
-		object12
+		object12,
+		_face1,
+		_face2,
+		_face3,
+		_face4,
+		_face5,
+		_face6,
+		_face7,
+		_face8,
+		_face9,
+		_face10,
+		_face11,
+		_face12,
+		_object1,
+		_object2,
+		_object3,
+		_object4,
+		_object5,
+		_object6,
+		_object7,
+		_object8,
+		_object9,
+		_object10,
+		_object11,
+		_object12
 	};
 
 	// console.log({
@@ -173,100 +224,307 @@
 	}`;
 	// setTimeout(() => console.log({surpriseCount}), 1000);
 
+	// OG
+	// function stream(trialType) {
+	// 	const currentTime = performance.now();
+
+	// 	if ($numberOfFlashes === 32) {
+	// 		setTimeout(() => {
+	// 			$startTime = Date.now();
+	// 			$inProgress = false;
+	// 			$guessed = false;
+	// 		}, 100);
+	// 		$displayFace = false;
+	// 		$everyStreamDuration.push(Math.round(performance.now() - streamTime));
+	// 		console.log('Stream length: ', $everyStreamDuration[$everyStreamDuration.length - 1]);
+	// 		console.log({ $currentTrial });
+
+	// 		// Check to see if refreshRate is accurate
+	// 		if (
+	// 			$isPractice &&
+	// 			$currentTrial <= 4 &&
+	// 			($everyStreamDuration[$everyStreamDuration.length - 1] < 3000 ||
+	// 				$everyStreamDuration[$everyStreamDuration.length - 1] > 3200)
+	// 		) {
+	// 			console.log('OH NO--WRONG REFRESH RATE. RECALCULATING...');
+
+	// 			getScreenRefreshRate(function (FPS) {
+	// 				$refreshRate = Math.round(FPS / 5) * 5 < 60 ? 60 : Math.round(FPS / 5) * 5;
+	// 				console.log(`${$refreshRate} FPS`);
+	// 				dbController.setScreenParams(
+	// 					$user.uid,
+	// 					$refreshRate,
+	// 					window.innerWidth,
+	// 					window.innerHeight
+	// 				);
+	// 			}, false);
+	// 		}
+	// 		if (
+	// 			$isPractice &&
+	// 			$currentTrial > 4 &&
+	// 			($everyStreamDuration[$everyStreamDuration.length - 1] < 1500 ||
+	// 				$everyStreamDuration[$everyStreamDuration.length - 1] > 1600)
+	// 		) {
+	// 			console.log('OH NO--WRONG REFRESH RATE. RECALCULATING...');
+
+	// 			getScreenRefreshRate(function (FPS) {
+	// 				$refreshRate = Math.round(FPS / 5) * 5 < 60 ? 60 : Math.round(FPS / 5) * 5;
+	// 				console.log(`${$refreshRate} FPS`);
+	// 				dbController.setScreenParams(
+	// 					$user.uid,
+	// 					$refreshRate,
+	// 					window.innerWidth,
+	// 					window.innerHeight
+	// 				);
+	// 			}, false);
+	// 		}
+
+	// 		return;
+	// 	}
+
+	// 	$isPractice && $isPracticeCount <= 4 ? (value = 100) : (value = 50);
+
+	// 	$count += 1;
+
+	// 	if ($count % Math.floor(value / Math.floor(1000 / $refreshRate)) === 0) {
+	// 		if ($isOn) {
+	// 			$currentLetter = trialType.letters[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
+	// 			$textColor = trialType.textColors[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
+	// 			$isTarget = trialType.targets[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
+	// 			if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
+	// 			if (SiB)
+	// 				$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
+	// 			if ($displayFace) {
+	// 				const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${
+	// 					Math.floor(surpriseCount++ / 2) + 1
+	// 				}`;
+	// 				$everySurprisePath.push(imageName);
+	// 				// surprisePath = `${imageName}`;
+
+	// 				surprisePath = imageName;
+	// 				// console.log({surprisePath});
+	// 			}
+	// 			if ($isTarget) {
+	// 				$targetLetter += $currentLetter;
+	// 			}
+	// 		} else {
+	// 			$currentLetter = ' ';
+	// 			console.log(performance.now() - $lastTime);
+	// 			if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes + 1) / 2 - 1];
+	// 			if (SiB) $displayFace = false;
+	// 		}
+	// 		$isOn = !$isOn;
+	// 		$numberOfFlashes += 1;
+	// 		$lastTime = currentTime;
+	// 	}
+
+	// 	requestAnimationFrame(() => stream(trialType));
+	// }
+
+	// setTimeout version
 	function stream(trialType) {
-		const currentTime = performance.now();
+		const startTime = performance.now();
+		const totalDuration = $isPractice && $currentTrial <= 4 ? 3200 : 1600; // Total desired duration in ms
+		const flashDuration = $isPractice && $currentTrial <= 4 ? 100 : 50; // Duration of each flash (on or off) in ms
+		const totalFlashes = 32; // Total number of flashes (on + off)
 
-		if ($numberOfFlashes === 32) {
-			setTimeout(() => {
-				$startTime = Date.now();
-				$inProgress = false;
-				$guessed = false;
-			}, 100);
-			$displayFace = false;
-			$everyStreamDuration.push(Math.round(performance.now() - streamTime));
-			console.log('Stream length: ', $everyStreamDuration[$everyStreamDuration.length - 1]);
-			console.log({ $currentTrial });
+		function flashStep(flashCount) {
+			const elapsed = performance.now() - startTime;
 
-			// Check to see if refreshRate is accurate
-			if (
-				$isPractice &&
-				$currentTrial <= 4 &&
-				($everyStreamDuration[$everyStreamDuration.length - 1] < 3000 ||
-					$everyStreamDuration[$everyStreamDuration.length - 1] > 3200)
-			) {
-				console.log('OH NO--WRONG REFRESH RATE. RECALCULATING...');
+			if (flashCount >= totalFlashes) {
+				// Stream complete
+				$displayFace = false;
+				$everyStreamDuration.push(Math.round(elapsed));
+				console.log('Stream length: ', $everyStreamDuration[$everyStreamDuration.length - 1]);
+				console.log({ $currentTrial });
 
-				getScreenRefreshRate(function (FPS) {
-					$refreshRate = Math.round(FPS / 5) * 5 < 60 ? 60 : Math.round(FPS / 5) * 5;
-					console.log(`${$refreshRate} FPS`);
-					dbController.setScreenParams(
-						$user.uid,
-						$refreshRate,
-						window.innerWidth,
-						window.innerHeight
-					);
-				}, false);
+				// Check refresh rate accuracy (your existing code)
+				// Check to see if refreshRate is accurate
+				if (
+					$isPractice &&
+					$currentTrial <= 4 &&
+					($everyStreamDuration[$everyStreamDuration.length - 1] < 3100 ||
+						$everyStreamDuration[$everyStreamDuration.length - 1] > 3300)
+				) {
+					console.log('OH NO--WRONG REFRESH RATE. RECALCULATING...');
+
+					getScreenRefreshRate(function (FPS) {
+						$refreshRate = Math.round(FPS / 5) * 5 < 60 ? 60 : Math.round(FPS / 5) * 5;
+						console.log(`${$refreshRate} FPS`);
+						dbController.setScreenParams(
+							$user.uid,
+							$refreshRate,
+							window.innerWidth,
+							window.innerHeight
+						);
+					}, false);
+				}
+				if (
+					$isPractice &&
+					$currentTrial > 4 &&
+					($everyStreamDuration[$everyStreamDuration.length - 1] < 1550 ||
+						$everyStreamDuration[$everyStreamDuration.length - 1] > 1650)
+				) {
+					console.log('OH NO--WRONG REFRESH RATE. RECALCULATING...');
+
+					getScreenRefreshRate(function (FPS) {
+						$refreshRate = Math.round(FPS / 5) * 5 < 60 ? 60 : Math.round(FPS / 5) * 5;
+						console.log(`${$refreshRate} FPS`);
+						dbController.setScreenParams(
+							$user.uid,
+							$refreshRate,
+							window.innerWidth,
+							window.innerHeight
+						);
+					}, false);
+				}
+
+				setTimeout(() => {
+					$startTime = Date.now();
+					$inProgress = false;
+					$guessed = false;
+				}, 100);
+
+				return;
 			}
-			if (
-				$isPractice &&
-				$currentTrial > 4 &&
-				($everyStreamDuration[$everyStreamDuration.length - 1] < 1500 ||
-					$everyStreamDuration[$everyStreamDuration.length - 1] > 1600)
-			) {
-				console.log('OH NO--WRONG REFRESH RATE. RECALCULATING...');
 
-				getScreenRefreshRate(function (FPS) {
-					$refreshRate = Math.round(FPS / 5) * 5 < 60 ? 60 : Math.round(FPS / 5) * 5;
-					console.log(`${$refreshRate} FPS`);
-					dbController.setScreenParams(
-						$user.uid,
-						$refreshRate,
-						window.innerWidth,
-						window.innerHeight
-					);
-				}, false);
-			}
+			const isOn = flashCount % 2 === 0;
+			const flashIndex = Math.floor(flashCount / 2);
 
-			return;
-		}
-
-		$isPractice && $isPracticeCount <= 4 ? (value = 100) : (value = 50);
-
-		$count += 1;
-
-		if ($count % Math.floor(value / Math.floor(1000 / $refreshRate)) === 0) {
-			if ($isOn) {
-				$currentLetter = trialType.letters[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
-				$textColor = trialType.textColors[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
-				$isTarget = trialType.targets[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
-				if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
-				if (SiB)
-					$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
+			if (isOn) {
+				$currentLetter = trialType.letters[$currentTrial - 1][flashIndex];
+				$textColor = trialType.textColors[$currentTrial - 1][flashIndex];
+				$isTarget = trialType.targets[$currentTrial - 1][flashIndex];
+				if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][flashIndex];
+				if (SiB) $displayFace = trialType.surprise[$currentTrial - 1][flashIndex];
 				if ($displayFace) {
-					const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}${
+					const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${
 						Math.floor(surpriseCount++ / 2) + 1
 					}`;
 					$everySurprisePath.push(imageName);
-					// surprisePath = `${imageName}`;
-
-					surprisePath = surpriseImages[imageName];
-					// console.log({surprisePath});
+					surprisePath = imageName;
 				}
 				if ($isTarget) {
 					$targetLetter += $currentLetter;
 				}
 			} else {
 				$currentLetter = ' ';
-				if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes + 1) / 2 - 1];
+				// console.log(performance.now() - $lastTime);
+				if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][flashIndex];
 				if (SiB) $displayFace = false;
 			}
-			$isOn = !$isOn;
-			$numberOfFlashes += 1;
-			$lastTime = currentTime;
+
+			// Schedule next flash
+			const nextFlashTime = startTime + (flashCount + 1) * flashDuration;
+			const delay = Math.max(0, nextFlashTime - performance.now());
+			// $lastTime = startTime;
+
+			setTimeout(() => flashStep(flashCount + 1), delay);
 		}
 
-		requestAnimationFrame(() => stream(trialType));
+		// Start the stream
+		flashStep(0);
 	}
+
+	// hybrid?
+	// function stream(trialType) {
+	// 	const startTime = performance.now();
+	// 	const totalDuration = $isPractice && $currentTrial <= 4 ? 3200 : 1600; // Total desired duration in ms
+	// 	const flashDuration = $isPractice && $currentTrial <= 4 ? 100: 50; // Duration of each flash (on or off) in ms
+	// 	const totalFlashes = 32; // Total number of flashes (on + off)
+
+	// 	function flashStep(timestamp) {
+	// 		const elapsed = timestamp - startTime;
+	// 		const flashCount = Math.floor(elapsed / flashDuration);
+
+	// 		if (flashCount >= totalFlashes) {
+	// 			// Stream complete
+	// 			$displayFace = false;
+	// 			$everyStreamDuration.push(Math.round(elapsed));
+	// 			console.log('Stream length: ', $everyStreamDuration[$everyStreamDuration.length - 1]);
+	// 			console.log({ $currentTrial });
+
+	// 			// Check refresh rate accuracy (your existing code)
+	// 			// Check to see if refreshRate is accurate
+	// 			if (
+	// 				$isPractice &&
+	// 				$currentTrial <= 4 &&
+	// 				($everyStreamDuration[$everyStreamDuration.length - 1] < 3100 ||
+	// 					$everyStreamDuration[$everyStreamDuration.length - 1] > 3300)
+	// 			) {
+	// 				console.log('OH NO--WRONG REFRESH RATE. RECALCULATING...');
+
+	// 				getScreenRefreshRate(function (FPS) {
+	// 					$refreshRate = Math.round(FPS / 5) * 5 < 60 ? 60 : Math.round(FPS / 5) * 5;
+	// 					console.log(`${$refreshRate} FPS`);
+	// 					dbController.setScreenParams(
+	// 						$user.uid,
+	// 						$refreshRate,
+	// 						window.innerWidth,
+	// 						window.innerHeight
+	// 					);
+	// 				}, false);
+	// 			}
+	// 			if (
+	// 				$isPractice &&
+	// 				$currentTrial > 4 &&
+	// 				($everyStreamDuration[$everyStreamDuration.length - 1] < 1550 ||
+	// 					$everyStreamDuration[$everyStreamDuration.length - 1] > 1650)
+	// 			) {
+	// 				console.log('OH NO--WRONG REFRESH RATE. RECALCULATING...');
+
+	// 				getScreenRefreshRate(function (FPS) {
+	// 					$refreshRate = Math.round(FPS / 5) * 5 < 60 ? 60 : Math.round(FPS / 5) * 5;
+	// 					console.log(`${$refreshRate} FPS`);
+	// 					dbController.setScreenParams(
+	// 						$user.uid,
+	// 						$refreshRate,
+	// 						window.innerWidth,
+	// 						window.innerHeight
+	// 					);
+	// 				}, false);
+	// 			}
+
+	// 			setTimeout(() => {
+	// 				$startTime = Date.now();
+	// 				$inProgress = false;
+	// 				$guessed = false;
+	// 			}, 100);
+
+	// 			return;
+	// 		}
+
+	// 		const isOn = flashCount % 2 === 0;
+	// 		const flashIndex = Math.floor(flashCount / 2);
+
+	// 		if (isOn) {
+	// 			$currentLetter = trialType.letters[$currentTrial - 1][flashIndex];
+	// 			$textColor = trialType.textColors[$currentTrial - 1][flashIndex];
+	// 			$isTarget = trialType.targets[$currentTrial - 1][flashIndex];
+	// 			if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][flashIndex];
+	// 			if (SiB) $displayFace = trialType.surprise[$currentTrial - 1][flashIndex];
+	// 			if ($displayFace) {
+	// 				const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${
+	// 					Math.floor(surpriseCount++ / 2) + 1
+	// 				}`;
+	// 				$everySurprisePath.push(imageName);
+	// 				surprisePath = imageName;
+	// 			}
+	// 			if ($isTarget) {
+	// 				$targetLetter += $currentLetter;
+	// 			}
+	// 		} else {
+	// 			$currentLetter = ' ';
+	// 			if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][flashIndex];
+	// 			if (SiB) $displayFace = false;
+	// 		}
+
+	// 		requestAnimationFrame(flashStep);
+	// 	}
+
+	// 	// Start the stream
+	// 	requestAnimationFrame(flashStep);
+	// }
 
 	function onClick() {
 		clicked = true;
@@ -540,6 +798,10 @@
 							image to re-size it until they match.
 						</p>
 
+						<!-- <p>Prolific PID: {$prolificStore.PROLIFIC_PID}</p>
+						<p>Prolific study ID: {$prolificStore.STUDY_ID}</p>
+						<p>Prolific session ID: {$prolificStore.SESSION_ID}</p> -->
+
 						<div
 							id="resizable-div"
 							class="resize-handle justify-center items-center w-96 h-96 absolute"
@@ -629,7 +891,14 @@
 							: $textColor}; font-size: {boxText}px"
 					>
 						{#if $displayFace}
-							<img src={surprisePath} alt="Surprise!!!" class="scale-[0.7]" />
+							<picture>
+								<source srcset={`src/lib/images/surprise/${surprisePath}.avif`} type="image/avif" />
+								<img
+									src={`src/lib/images/surprise/${surprisePath}.jpg`}
+									alt="Surprise!!!"
+									class="scale-[0.7]"
+								/>
+							</picture>
 						{:else}
 							{$currentLetter}
 						{/if}

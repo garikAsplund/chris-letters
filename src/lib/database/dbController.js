@@ -2,6 +2,7 @@ import { NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
 import { things } from '$lib/stores/GameStore';
 import { child, get, runTransaction, set, update } from 'firebase/database';
 import { dbRef } from './firebase';
+import { prolificStore } from '$lib/stores/prolificStore';
 
 export const dbController = {
 	async getTargetColor() {
@@ -90,12 +91,13 @@ export const dbController = {
 		}
 	},
 
-	async writeParticipantData(userId, gender, handedness, age) {
+	async writeParticipantData(userId, gender, handedness, age, prolificID) {
 		try {
 			await update(child(dbRef, `users/${userId}`), {
-				gender: gender,
-				age: age,
-				handedness: handedness,
+				gender,
+				age,
+				handedness,
+				prolificID,
 			});
 		} catch (error) {
 			console.error(error);

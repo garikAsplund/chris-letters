@@ -3,6 +3,7 @@
 	import { Accordion, AccordionItem, Stepper, Step, SlideToggle } from '@skeletonlabs/skeleton';
 	import { fade, fly } from 'svelte/transition';
 	import { user } from '$lib/database/firebase';
+	import { prolificStore } from '$lib/stores/prolificStore';
 
 	let locked = false;
 	$: unlocked = !locked;
@@ -29,7 +30,7 @@
 		<div class="w-3/5 p-4 text-lg mb-36 card text-token">
 			<Stepper
 				class="m-5 "
-				buttonCompleteLabel="Sign in with Google"
+				buttonCompleteLabel={$prolificStore.PROLIFIC_PID == null ? 'Sign in with Google' : 'Sign in'}
 				buttonComplete="variant-ghost-warning btn-lg"
 				on:complete={onCompleteHandler}
 			>

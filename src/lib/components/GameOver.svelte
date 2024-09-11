@@ -50,6 +50,16 @@
 	const submitForm = (userId, problemDescription) => {
 		dbController.writeParticipantProblems(userId, problemDescription);
 		$isComplete = true;
+
+		// Redirect to Prolific
+		redirectToProlific();
+	};
+
+	// Redirect to Prolific after form submission
+	const redirectToProlific = () => {
+		setTimeout(() => {
+			window.location.href = "https://app.prolific.com/submissions/complete?cc=C1FFBKNN";
+		}, 1000); // Optional delay of 1 second before redirect
 	};
 
 	onMount(() => {
@@ -62,6 +72,7 @@
 		}, 3000);
 	});
 </script>
+
 
 <div class="flex justify-center text-5xl font-bold translate-y-16" in:blur={{ duration: 1000 }}>
 	<div class="mb-48 space-y-12 text-center">

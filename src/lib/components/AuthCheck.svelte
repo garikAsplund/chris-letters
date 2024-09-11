@@ -9,6 +9,7 @@
 	import { NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
 	import { onMount } from 'svelte';
 	import { dbController } from '$lib/database/dbController';
+	import { prolificStore } from '$lib/stores/prolificStore';
 
 	export let isVAB = false;
 	let numberOfTrials;
@@ -68,7 +69,7 @@
 					console.error(error);
 				});
 
-				dbController.writeParticipantData(user.uid, $gender, $handedness, $age);
+				dbController.writeParticipantData(user.uid, $gender, $handedness, $age, $prolificStore.PROLIFIC_PID);
 
 		} catch (error) {
 			console.error('Error signing in with Google:', error.message);

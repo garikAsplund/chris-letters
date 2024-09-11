@@ -7,6 +7,8 @@
 	import { Toast } from '@skeletonlabs/skeleton';
 	import { dbController } from '$lib/database/dbController';
 	import { user } from '$lib/database/firebase';
+	import { prolificStore } from '$lib/stores/prolificStore';
+    import { onMount } from 'svelte';
 
 	initializeStores();
 
@@ -17,6 +19,22 @@
 			dbController.setScreenParams($user.uid, $refreshRate, window.innerWidth, window.innerHeight);
 		}, false);
 	}, 1000);
+
+    export let data;
+    const { prolificParams } = data;
+  
+    onMount(() => {
+      if (prolificParams.PROLIFIC_PID) {
+		prolificStore.set(prolificParams);
+        console.log('Prolific parameters:', prolificParams);
+        // Store these values or use them as needed in your app
+        // For example, you might want to save them in a Svelte store
+        // or use them directly in your components
+      } else {
+        console.log('Prolific parameters not found in URL');
+        // Handle the case where the parameters are not present
+      }
+    });
 </script>
 
 <Toast position="r" />
