@@ -321,63 +321,41 @@
 	// 	requestAnimationFrame(() => stream(trialType));
 	// }
 
-	// setTimeout version
+	// Just requestAnimationFrame() BEST
 	function stream(trialType) {
-		const startTime = performance.now();
-		const totalDuration = $isPractice && $currentTrial <= 4 ? 3200 : 1600; // Total desired duration in ms
-		const flashDuration = $isPractice && $currentTrial <= 4 ? 100 : 50; // Duration of each flash (on or off) in ms
-		const totalFlashes = 32; // Total number of flashes (on + off)
+		let timeAccumulator = 0;
+		let lastFrameTime = performance.now();
 
-		function flashStep(flashCount) {
-			const elapsed = performance.now() - startTime;
+		// Add timing diagnostics
+		const timings = [];
+		let lastFlashTime = performance.now();
 
-			if (flashCount >= totalFlashes) {
-				// Stream complete
+		const baseInterval = $isPractice && $isPracticeCount <= 4 ? 100 : 50;
+
+		function streamFrame(currentTime) {
+			const deltaTime = currentTime - lastFrameTime;
+			timeAccumulator += deltaTime;
+
+			if ($numberOfFlashes === 32) {
+				// Log timing statistics at the end of stream
+				const intervals = timings.map((t, i) => (i > 0 ? t - timings[i - 1] : 0)).slice(1);
+				const avgInterval = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+				const maxInterval = Math.max(...intervals);
+				const minInterval = Math.min(...intervals);
+				const jitter = intervals.map((i) => Math.abs(i - baseInterval));
+				const avgJitter = jitter.reduce((a, b) => a + b, 0) / jitter.length;
+
+				console.log(`Timing statistics:
+                Target interval: ${baseInterval}ms
+                Average interval: ${avgInterval.toFixed(2)}ms
+                Min interval: ${minInterval.toFixed(2)}ms
+                Max interval: ${maxInterval.toFixed(2)}ms
+                Average jitter: ${avgJitter.toFixed(2)}ms
+                Total duration: ${(currentTime - timings[0]).toFixed(2)}ms
+            `);
+
 				$displayFace = false;
-				$everyStreamDuration.push(Math.round(elapsed));
-				console.log('Stream length: ', $everyStreamDuration[$everyStreamDuration.length - 1]);
-				console.log({ $currentTrial });
-
-				// Check refresh rate accuracy (your existing code)
-				// Check to see if refreshRate is accurate
-				if (
-					$isPractice &&
-					$currentTrial <= 4 &&
-					($everyStreamDuration[$everyStreamDuration.length - 1] < 3100 ||
-						$everyStreamDuration[$everyStreamDuration.length - 1] > 3300)
-				) {
-					console.log('OH NO--WRONG REFRESH RATE. RECALCULATING...');
-
-					getScreenRefreshRate(function (FPS) {
-						$refreshRate = Math.round(FPS / 5) * 5 < 60 ? 60 : Math.round(FPS / 5) * 5;
-						console.log(`${$refreshRate} FPS`);
-						dbController.setScreenParams(
-							$user.uid,
-							$refreshRate,
-							window.innerWidth,
-							window.innerHeight
-						);
-					}, false);
-				}
-				if (
-					$isPractice &&
-					$currentTrial > 4 &&
-					($everyStreamDuration[$everyStreamDuration.length - 1] < 1550 ||
-						$everyStreamDuration[$everyStreamDuration.length - 1] > 1650)
-				) {
-					console.log('OH NO--WRONG REFRESH RATE. RECALCULATING...');
-
-					getScreenRefreshRate(function (FPS) {
-						$refreshRate = Math.round(FPS / 5) * 5 < 60 ? 60 : Math.round(FPS / 5) * 5;
-						console.log(`${$refreshRate} FPS`);
-						dbController.setScreenParams(
-							$user.uid,
-							$refreshRate,
-							window.innerWidth,
-							window.innerHeight
-						);
-					}, false);
-				}
+				$everyStreamDuration.push(Math.round(currentTime - streamTime));
 
 				setTimeout(() => {
 					$startTime = Date.now();
@@ -388,43 +366,159 @@
 				return;
 			}
 
-			const isOn = flashCount % 2 === 0;
-			const flashIndex = Math.floor(flashCount / 2);
+			while (timeAccumulator >= baseInterval) {
+				if ($isOn) {
+					$currentLetter = trialType.letters[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
+					$textColor = trialType.textColors[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
+					$isTarget = trialType.targets[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
 
-			if (isOn) {
-				$currentLetter = trialType.letters[$currentTrial - 1][flashIndex];
-				$textColor = trialType.textColors[$currentTrial - 1][flashIndex];
-				$isTarget = trialType.targets[$currentTrial - 1][flashIndex];
-				if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][flashIndex];
-				if (SiB) $displayFace = trialType.surprise[$currentTrial - 1][flashIndex];
-				if ($displayFace) {
-					const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${
-						Math.floor(surpriseCount++ / 2) + 1
-					}`;
-					$everySurprisePath.push(imageName);
-					surprisePath = imageName;
+					if (CC) {
+						$boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
+					}
+
+					if (SiB) {
+						$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
+						if ($displayFace) {
+							const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${
+								Math.floor(surpriseCount++ / 2) + 1
+							}`;
+							$everySurprisePath.push(imageName);
+							surprisePath = imageName;
+						}
+					}
+
+					if ($isTarget) {
+						$targetLetter += $currentLetter;
+					}
+				} else {
+					$currentLetter = ' ';
+					if (CC) {
+						$boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes + 1) / 2 - 1];
+					}
+					if (SiB) {
+						$displayFace = false;
+					}
 				}
-				if ($isTarget) {
-					$targetLetter += $currentLetter;
-				}
-			} else {
-				$currentLetter = ' ';
-				// console.log(performance.now() - $lastTime);
-				if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][flashIndex];
-				if (SiB) $displayFace = false;
+
+				// Record timing for this flash
+				timings.push(performance.now());
+
+				$isOn = !$isOn;
+				$numberOfFlashes += 1;
+				timeAccumulator -= baseInterval;
 			}
 
-			// Schedule next flash
-			const nextFlashTime = startTime + (flashCount + 1) * flashDuration;
-			const delay = Math.max(0, nextFlashTime - performance.now());
-			// $lastTime = startTime;
-
-			setTimeout(() => flashStep(flashCount + 1), delay);
+			lastFrameTime = currentTime;
+			requestAnimationFrame(streamFrame);
 		}
 
-		// Start the stream
-		flashStep(0);
+		requestAnimationFrame(streamFrame);
 	}
+
+	// setTimeout version
+	// function stream(trialType) {
+	// 	const startTime = performance.now();
+	// 	const totalDuration = $isPractice && $currentTrial <= 4 ? 3200 : 1600; // Total desired duration in ms
+	// 	const flashDuration = $isPractice && $currentTrial <= 4 ? 100 : 50; // Duration of each flash (on or off) in ms
+	// 	const totalFlashes = 32; // Total number of flashes (on + off)
+
+	// 	function flashStep(flashCount) {
+	// 		const elapsed = performance.now() - startTime;
+
+	// 		if (flashCount >= totalFlashes) {
+	// 			// Stream complete
+	// 			$displayFace = false;
+	// 			$everyStreamDuration.push(Math.round(elapsed));
+	// 			console.log('Stream length: ', $everyStreamDuration[$everyStreamDuration.length - 1]);
+	// 			console.log({ $currentTrial });
+
+	// 			// Check refresh rate accuracy (your existing code)
+	// 			// Check to see if refreshRate is accurate
+	// 			if (
+	// 				$isPractice &&
+	// 				$currentTrial <= 4 &&
+	// 				($everyStreamDuration[$everyStreamDuration.length - 1] < 3100 ||
+	// 					$everyStreamDuration[$everyStreamDuration.length - 1] > 3300)
+	// 			) {
+	// 				console.log('OH NO--WRONG REFRESH RATE. RECALCULATING...');
+
+	// 				getScreenRefreshRate(function (FPS) {
+	// 					$refreshRate = Math.round(FPS / 5) * 5 < 60 ? 60 : Math.round(FPS / 5) * 5;
+	// 					console.log(`${$refreshRate} FPS`);
+	// 					dbController.setScreenParams(
+	// 						$user.uid,
+	// 						$refreshRate,
+	// 						window.innerWidth,
+	// 						window.innerHeight
+	// 					);
+	// 				}, false);
+	// 			}
+	// 			if (
+	// 				$isPractice &&
+	// 				$currentTrial > 4 &&
+	// 				($everyStreamDuration[$everyStreamDuration.length - 1] < 1550 ||
+	// 					$everyStreamDuration[$everyStreamDuration.length - 1] > 1650)
+	// 			) {
+	// 				console.log('OH NO--WRONG REFRESH RATE. RECALCULATING...');
+
+	// 				getScreenRefreshRate(function (FPS) {
+	// 					$refreshRate = Math.round(FPS / 5) * 5 < 60 ? 60 : Math.round(FPS / 5) * 5;
+	// 					console.log(`${$refreshRate} FPS`);
+	// 					dbController.setScreenParams(
+	// 						$user.uid,
+	// 						$refreshRate,
+	// 						window.innerWidth,
+	// 						window.innerHeight
+	// 					);
+	// 				}, false);
+	// 			}
+
+	// 			setTimeout(() => {
+	// 				$startTime = Date.now();
+	// 				$inProgress = false;
+	// 				$guessed = false;
+	// 			}, 100);
+
+	// 			return;
+	// 		}
+
+	// 		const isOn = flashCount % 2 === 0;
+	// 		const flashIndex = Math.floor(flashCount / 2);
+
+	// 		if (isOn) {
+	// 			$currentLetter = trialType.letters[$currentTrial - 1][flashIndex];
+	// 			$textColor = trialType.textColors[$currentTrial - 1][flashIndex];
+	// 			$isTarget = trialType.targets[$currentTrial - 1][flashIndex];
+	// 			if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][flashIndex];
+	// 			if (SiB) $displayFace = trialType.surprise[$currentTrial - 1][flashIndex];
+	// 			if ($displayFace) {
+	// 				const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${
+	// 					Math.floor(surpriseCount++ / 2) + 1
+	// 				}`;
+	// 				$everySurprisePath.push(imageName);
+	// 				surprisePath = imageName;
+	// 			}
+	// 			if ($isTarget) {
+	// 				$targetLetter += $currentLetter;
+	// 			}
+	// 		} else {
+	// 			$currentLetter = ' ';
+	// 			// console.log(performance.now() - $lastTime);
+	// 			if (CC) $boxColor = trialType.boxColors[$currentTrial - 1][flashIndex];
+	// 			if (SiB) $displayFace = false;
+	// 		}
+
+	// 		// Schedule next flash
+	// 		const nextFlashTime = startTime + (flashCount + 1) * flashDuration;
+	// 		const delay = Math.max(0, nextFlashTime - performance.now());
+	// 		// $lastTime = startTime;
+
+	// 		setTimeout(() => flashStep(flashCount + 1), delay);
+	// 	}
+
+	// 	// Start the stream
+	// 	flashStep(0);
+	// }
 
 	// hybrid?
 	// function stream(trialType) {
