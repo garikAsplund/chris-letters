@@ -44,109 +44,133 @@
 	import { dbController } from '$lib/database/dbController';
 	import { user } from '$lib/database/firebase';
 	import { fade } from 'svelte/transition';
-	import face1 from '/images/surprise/face_1.jpg';
-	import face2 from '/images/surprise/face_2.jpg';
-	import face3 from '/images/surprise/face_3.jpg';
-	import face4 from '/images/surprise/face_4.jpg';
-	import face5 from '/images/surprise/face_5.jpg';
-	import face6 from '/images/surprise/face_6.jpg';
-	import face7 from '/images/surprise/face_7.jpg';
-	import face8 from '/images/surprise/face_8.jpg';
-	import face9 from '/images/surprise/face_9.jpg';
-	import face10 from '/images/surprise/face_10.jpg';
-	import face11 from '/images/surprise/face_11.jpg';
-	import face12 from '/images/surprise/face_12.jpg';
-	import object1 from '/images/surprise/object_1.jpg';
-	import object2 from '/images/surprise/object_2.jpg';
-	import object3 from '/images/surprise/object_3.jpg';
-	import object4 from '/images/surprise/object_4.jpg';
-	import object5 from '/images/surprise/object_5.jpg';
-	import object6 from '/images/surprise/object_6.jpg';
-	import object7 from '/images/surprise/object_7.jpg';
-	import object8 from '/images/surprise/object_8.jpg';
-	import object9 from '/images/surprise/object_9.jpg';
-	import object10 from '/images/surprise/object_10.jpg';
-	import object11 from '/images/surprise/object_11.jpg';
-	import object12 from '/images/surprise/object_12.jpg';
+	// import face1 from '/images/surprise/face_1.jpg';
+	// import face2 from '/images/surprise/face_2.jpg';
+	// import face3 from '/images/surprise/face_3.jpg';
+	// import face4 from '/images/surprise/face_4.jpg';
+	// import face5 from '/images/surprise/face_5.jpg';
+	// import face6 from '/images/surprise/face_6.jpg';
+	// import face7 from '/images/surprise/face_7.jpg';
+	// import face8 from '/images/surprise/face_8.jpg';
+	// import face9 from '/images/surprise/face_9.jpg';
+	// import face10 from '/images/surprise/face_10.jpg';
+	// import face11 from '/images/surprise/face_11.jpg';
+	// import face12 from '/images/surprise/face_12.jpg';
+	// import object1 from '/images/surprise/object_1.jpg';
+	// import object2 from '/images/surprise/object_2.jpg';
+	// import object3 from '/images/surprise/object_3.jpg';
+	// import object4 from '/images/surprise/object_4.jpg';
+	// import object5 from '/images/surprise/object_5.jpg';
+	// import object6 from '/images/surprise/object_6.jpg';
+	// import object7 from '/images/surprise/object_7.jpg';
+	// import object8 from '/images/surprise/object_8.jpg';
+	// import object9 from '/images/surprise/object_9.jpg';
+	// import object10 from '/images/surprise/object_10.jpg';
+	// import object11 from '/images/surprise/object_11.jpg';
+	// import object12 from '/images/surprise/object_12.jpg';
 
-	import _face1 from '$lib/images/surprise/face_1.avif';
-	import _face2 from '$lib/images/surprise/face_2.avif';
-	import _face3 from '$lib/images/surprise/face_3.avif';
-	import _face4 from '$lib/images/surprise/face_4.avif';
-	import _face5 from '$lib/images/surprise/face_5.avif';
-	import _face6 from '$lib/images/surprise/face_6.avif';
-	import _face7 from '$lib/images/surprise/face_7.avif';
-	import _face8 from '$lib/images/surprise/face_8.avif';
-	import _face9 from '$lib/images/surprise/face_9.avif';
-	import _face10 from '$lib/images/surprise/face_10.avif';
-	import _face11 from '$lib/images/surprise/face_11.avif';
-	import _face12 from '$lib/images/surprise/face_12.avif';
-	import _object1 from '$lib/images/surprise/object_1.avif';
-	import _object2 from '$lib/images/surprise/object_2.avif';
-	import _object3 from '$lib/images/surprise/object_3.avif';
-	import _object4 from '$lib/images/surprise/object_4.avif';
-	import _object5 from '$lib/images/surprise/object_5.avif';
-	import _object6 from '$lib/images/surprise/object_6.avif';
-	import _object7 from '$lib/images/surprise/object_7.avif';
-	import _object8 from '$lib/images/surprise/object_8.avif';
-	import _object9 from '$lib/images/surprise/object_9.avif';
-	import _object10 from '$lib/images/surprise/object_10.avif';
-	import _object11 from '$lib/images/surprise/object_11.avif';
-	import _object12 from '$lib/images/surprise/object_12.avif';
+	// import _face1 from '$lib/images/surprise/face_1.avif';
+	// import _face2 from '$lib/images/surprise/face_2.avif';
+	// import _face3 from '$lib/images/surprise/face_3.avif';
+	// import _face4 from '$lib/images/surprise/face_4.avif';
+	// import _face5 from '$lib/images/surprise/face_5.avif';
+	// import _face6 from '$lib/images/surprise/face_6.avif';
+	// import _face7 from '$lib/images/surprise/face_7.avif';
+	// import _face8 from '$lib/images/surprise/face_8.avif';
+	// import _face9 from '$lib/images/surprise/face_9.avif';
+	// import _face10 from '$lib/images/surprise/face_10.avif';
+	// import _face11 from '$lib/images/surprise/face_11.avif';
+	// import _face12 from '$lib/images/surprise/face_12.avif';
+	// import _object1 from '$lib/images/surprise/object_1.avif';
+	// import _object2 from '$lib/images/surprise/object_2.avif';
+	// import _object3 from '$lib/images/surprise/object_3.avif';
+	// import _object4 from '$lib/images/surprise/object_4.avif';
+	// import _object5 from '$lib/images/surprise/object_5.avif';
+	// import _object6 from '$lib/images/surprise/object_6.avif';
+	// import _object7 from '$lib/images/surprise/object_7.avif';
+	// import _object8 from '$lib/images/surprise/object_8.avif';
+	// import _object9 from '$lib/images/surprise/object_9.avif';
+	// import _object10 from '$lib/images/surprise/object_10.avif';
+	// import _object11 from '$lib/images/surprise/object_11.avif';
+	// import _object12 from '$lib/images/surprise/object_12.avif';
 
 	import { getScreenRefreshRate } from '$lib/logic/refreshRate';
 	import { prolificStore } from '$lib/stores/prolificStore';
 
-	let surpriseImages = {
-		face1,
-		face2,
-		face3,
-		face4,
-		face5,
-		face6,
-		face7,
-		face8,
-		face9,
-		face10,
-		face11,
-		face12,
-		object1,
-		object2,
-		object3,
-		object4,
-		object5,
-		object6,
-		object7,
-		object8,
-		object9,
-		object10,
-		object11,
-		object12,
-		_face1,
-		_face2,
-		_face3,
-		_face4,
-		_face5,
-		_face6,
-		_face7,
-		_face8,
-		_face9,
-		_face10,
-		_face11,
-		_face12,
-		_object1,
-		_object2,
-		_object3,
-		_object4,
-		_object5,
-		_object6,
-		_object7,
-		_object8,
-		_object9,
-		_object10,
-		_object11,
-		_object12
-	};
+	let surpriseImages = [
+		'/images/surprise/face_1.jpg',
+   '/images/surprise/face_2.jpg',
+   '/images/surprise/face_3.jpg',
+   '/images/surprise/face_4.jpg',
+   '/images/surprise/face_5.jpg',
+   '/images/surprise/face_6.jpg',
+   '/images/surprise/face_7.jpg',
+   '/images/surprise/face_8.jpg',
+   '/images/surprise/face_9.jpg',
+   '/images/surprise/face_10.jpg',
+   '/images/surprise/face_11.jpg',
+   '/images/surprise/face_12.jpg',
+   '/images/surprise/object_1.jpg',
+   '/images/surprise/object_2.jpg',
+   '/images/surprise/object_3.jpg',
+   '/images/surprise/object_4.jpg',
+   '/images/surprise/object_5.jpg',
+   '/images/surprise/object_6.jpg',
+   '/images/surprise/object_7.jpg',
+   '/images/surprise/object_8.jpg',
+   '/images/surprise/object_9.jpg',
+   '/images/surprise/object_10.jpg',
+   '/images/surprise/object_11.jpg',
+   '/images/surprise/object_12.jpg'
+	// 	face1,
+	// 	face2,
+	// 	face3,
+	// 	face4,
+	// 	face5,
+	// 	face6,
+	// 	face7,
+	// 	face8,
+	// 	face9,
+	// 	face10,
+	// 	face11,
+	// 	face12,
+	// 	object1,
+	// 	object2,
+	// 	object3,
+	// 	object4,
+	// 	object5,
+	// 	object6,
+	// 	object7,
+	// 	object8,
+	// 	object9,
+	// 	object10,
+	// 	object11,
+	// 	object12,
+		// _face1,
+		// _face2,
+		// _face3,
+		// _face4,
+		// _face5,
+		// _face6,
+		// _face7,
+		// _face8,
+		// _face9,
+		// _face10,
+		// _face11,
+		// _face12,
+		// _object1,
+		// _object2,
+		// _object3,
+		// _object4,
+		// _object5,
+		// _object6,
+		// _object7,
+		// _object8,
+		// _object9,
+		// _object10,
+		// _object11,
+		// _object12
+];
 
 	// console.log({
 	// 	$ABTrials,
