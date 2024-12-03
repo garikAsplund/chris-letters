@@ -685,7 +685,7 @@
 							<picture>
 								<!-- <source srcset={`src/lib/images/surprise/${surprisePath}.avif`} type="image/avif" /> -->
 								<img
-									src={`src/lib/images/surprise/${surprisePath}.jpg`}
+									src={`/images/surprise/${surprisePath}.jpg`}
 									alt="Surprise!!!"
 									class="scale-[0.7]"
 								/>
