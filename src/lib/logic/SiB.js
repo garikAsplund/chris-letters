@@ -12,24 +12,24 @@ export function createSiBTrials(practice = false, second = false) {
 	const SiBTextColors = [];
 	const SiBSurprise = [];
 
-	const surpriseTrials = [];
+	const surpriseTrials = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]; // CHANGE BACK 
 
-	if (!practice) {
-		while (surpriseTrials.length < 12) {
-			// const trial = second ? randomRange(60) + 35 : randomRange(60);
-			const trial = randomRange(95);
+	// if (!practice) {
+	// 	while (surpriseTrials.length < 12) {
+	// 		// const trial = second ? randomRange(60) + 35 : randomRange(60);
+	// 		const trial = randomRange(95);
 
-			if (
-				surpriseTrials.includes(trial) ||
-				surpriseTrials.includes(trial - 1) ||
-				surpriseTrials.includes(trial + 1)
-			) {
-				continue;
-			}
+	// 		if (
+	// 			surpriseTrials.includes(trial) ||
+	// 			surpriseTrials.includes(trial - 1) ||
+	// 			surpriseTrials.includes(trial + 1)
+	// 		) {
+	// 			continue;
+	// 		}
 
-			surpriseTrials.push(trial);
-		}
-	}
+	// 		surpriseTrials.push(trial);
+	// 	}
+	// }
 
 	console.log({ surpriseTrials });
 

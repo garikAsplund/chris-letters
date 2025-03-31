@@ -99,53 +99,53 @@
 
 	let surpriseImages = [
 		'/images/surprise/face_1.jpg',
-   '/images/surprise/face_2.jpg',
-   '/images/surprise/face_3.jpg',
-   '/images/surprise/face_4.jpg',
-   '/images/surprise/face_5.jpg',
-   '/images/surprise/face_6.jpg',
-   '/images/surprise/face_7.jpg',
-   '/images/surprise/face_8.jpg',
-   '/images/surprise/face_9.jpg',
-   '/images/surprise/face_10.jpg',
-   '/images/surprise/face_11.jpg',
-   '/images/surprise/face_12.jpg',
-   '/images/surprise/object_1.jpg',
-   '/images/surprise/object_2.jpg',
-   '/images/surprise/object_3.jpg',
-   '/images/surprise/object_4.jpg',
-   '/images/surprise/object_5.jpg',
-   '/images/surprise/object_6.jpg',
-   '/images/surprise/object_7.jpg',
-   '/images/surprise/object_8.jpg',
-   '/images/surprise/object_9.jpg',
-   '/images/surprise/object_10.jpg',
-   '/images/surprise/object_11.jpg',
-   '/images/surprise/object_12.jpg'
-	// 	face1,
-	// 	face2,
-	// 	face3,
-	// 	face4,
-	// 	face5,
-	// 	face6,
-	// 	face7,
-	// 	face8,
-	// 	face9,
-	// 	face10,
-	// 	face11,
-	// 	face12,
-	// 	object1,
-	// 	object2,
-	// 	object3,
-	// 	object4,
-	// 	object5,
-	// 	object6,
-	// 	object7,
-	// 	object8,
-	// 	object9,
-	// 	object10,
-	// 	object11,
-	// 	object12,
+		'/images/surprise/face_2.jpg',
+		'/images/surprise/face_3.jpg',
+		'/images/surprise/face_4.jpg',
+		'/images/surprise/face_5.jpg',
+		'/images/surprise/face_6.jpg',
+		'/images/surprise/face_7.jpg',
+		'/images/surprise/face_8.jpg',
+		'/images/surprise/face_9.jpg',
+		'/images/surprise/face_10.jpg',
+		'/images/surprise/face_11.jpg',
+		'/images/surprise/face_12.jpg',
+		'/images/surprise/object_1.jpg',
+		'/images/surprise/object_2.jpg',
+		'/images/surprise/object_3.jpg',
+		'/images/surprise/object_4.jpg',
+		'/images/surprise/object_5.jpg',
+		'/images/surprise/object_6.jpg',
+		'/images/surprise/object_7.jpg',
+		'/images/surprise/object_8.jpg',
+		'/images/surprise/object_9.jpg',
+		'/images/surprise/object_10.jpg',
+		'/images/surprise/object_11.jpg',
+		'/images/surprise/object_12.jpg'
+		// 	face1,
+		// 	face2,
+		// 	face3,
+		// 	face4,
+		// 	face5,
+		// 	face6,
+		// 	face7,
+		// 	face8,
+		// 	face9,
+		// 	face10,
+		// 	face11,
+		// 	face12,
+		// 	object1,
+		// 	object2,
+		// 	object3,
+		// 	object4,
+		// 	object5,
+		// 	object6,
+		// 	object7,
+		// 	object8,
+		// 	object9,
+		// 	object10,
+		// 	object11,
+		// 	object12,
 		// _face1,
 		// _face2,
 		// _face3,
@@ -170,7 +170,7 @@
 		// _object10,
 		// _object11,
 		// _object12
-];
+	];
 
 	// console.log({
 	// 	$ABTrials,
@@ -691,32 +691,34 @@
 				<!-- <p class="text-center align-top mt-5 text-white">{trialOrder[trialIndex]}</p>
  -->
 				<div
-					class="flex justify-center"
-					style="border-width: {borderWidth}px; width: {boxText}px; height: {boxText}px; border-color: {$boxColor ===
-					'green'
-						? 'rgb(0, 200, 0)'
-						: $boxColor}"
+					class="relative flex justify-center items-center"
+					style="border-width: {borderWidth}px;
+		   width: {boxText}px;
+		   height: {boxText}px;
+		   border-color: {$boxColor === 'green' ? 'rgb(0, 200, 0)' : $boxColor};"
 				>
+					{#if SiB}
+						<picture class="absolute inset-0 z-0">
+							<img
+								src={`/images/surprise/${surprisePath}.jpg`}
+								alt="Surprise!!!"
+								class="w-full h-full object-cover scale-[0.7]"
+								style="opacity: {$displayFace ? 1 : 0};"
+							/>
+						</picture>
+					{/if}
 					<p
-						class={`self-center font-thin text-center font-courier-new`}
-						style="color: {$isTarget
+						class="relative self-center font-thin text-center font-courier-new z-10"
+						style="color: {$displayFace && SiB
+							? 'transparent'
+							: $isTarget
 							? $targetColor === 'green'
 								? 'rgb(0, 200, 0)'
 								: 'red'
-							: $textColor}; font-size: {boxText}px"
+							: $textColor};
+			   font-size: {boxText}px;"
 					>
-						{#if $displayFace}
-							<picture>
-								<!-- <source srcset={`src/lib/images/surprise/${surprisePath}.avif`} type="image/avif" /> -->
-								<img
-									src={`/images/surprise/${surprisePath}.jpg`}
-									alt="Surprise!!!"
-									class="scale-[0.7]"
-								/>
-							</picture>
-						{:else}
-							{$currentLetter}
-						{/if}
+						{$currentLetter}
 					</p>
 				</div>
 			{/if}
