@@ -5,7 +5,15 @@
 	import ProgressBar from './ProgressBar.svelte';
 	import Admin from './Admin.svelte';
 	import Instructions from './Instructions.svelte';
-	import { currentTrial, isAdmin, isPractice, sessionNumber, age, handedness, gender } from '$lib/stores/GameStore';
+	import {
+		currentTrial,
+		isAdmin,
+		isPractice,
+		sessionNumber,
+		age,
+		handedness,
+		gender
+	} from '$lib/stores/GameStore';
 	import { NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
 	import { onMount } from 'svelte';
 	import { dbController } from '$lib/database/dbController';
@@ -14,7 +22,7 @@
 	export let isVAB = false;
 	let numberOfTrials;
 
-	isVAB ? numberOfTrials = 28 : numberOfTrials = NUMBER_OF_TRIALS;
+	isVAB ? (numberOfTrials = 28) : (numberOfTrials = NUMBER_OF_TRIALS);
 
 	const dbRef = ref(getDatabase());
 
@@ -23,8 +31,9 @@
 	let x = 0;
 	let y = 0;
 
-
 	let rotation = 0;
+
+	console.log('PROLIFIC STORE CONTENTS:', $prolificStore);
 
 	async function signInWithGoogle() {
 		try {
@@ -69,8 +78,7 @@
 					console.error(error);
 				});
 
-				dbController.writeParticipantData(user.uid, $gender, $handedness, $age, $prolificStore.PROLIFIC_PID);
-
+			dbController.createParticipantData(user.uid, $gender, $handedness, $age, $prolificStore);
 		} catch (error) {
 			console.error('Error signing in with Google:', error.message);
 		}
@@ -89,6 +97,8 @@
 				.catch((error) => {
 					console.error(error);
 				});
+
+			dbController.updateParticipantData(currentUser.uid, $prolificStore);
 		}
 	});
 
@@ -130,44 +140,46 @@
 		window.innerWidth < 800 ? (isMobile = true) : (isMobile = false);
 	};
 </script>
-{#if !isMobile}
-{#if !$user}
-	<div class="h-screen w-screen">
-		<h1
-			class=" md:text-6xl text-5xl font-bold text-center items-center transform translate-y-20 m-4"
-		>
-			<span
-				class="experiment text-transparent bg-gradient-to-br to-white from-cyan-300 bg-clip-text box-decoration-clone z-10"
-				>Welcome to our experiment</span
-			> 🧑‍🔬
-		</h1>
-		<div class="invisible lg:visible background">
-			<img
-				class="halcyon"
-				src="/lilhalcyon.svg"
-				height="300"
-				width="300"
-				alt="Halcyon!"
-				style="transform: translate({-40 + x}px, {-40 + y}px) rotate({rotation}deg); z-index: -10;"
-			/>
-		</div>
 
-		<Instructions signIn={signInWithGoogle} />
-	</div>
-{:else}
-	<slot />
-	<div class="fixed bottom-0 left-0 w-full backdrop-blur-3xl text-lg text-white">
-		{#if $user || $isAdmin}
-			<div class="flex flex-col justify-center m-2 space-y-2">
-				{#if $isAdmin}
-					<Admin />
-				{/if}
-				<button class="hover:text-gray-400" on:click={handleSignOut}> Sign out </button>
+{#if !isMobile}
+	{#if !$user}
+		<div class="h-screen w-screen">
+			<h1
+				class=" md:text-6xl text-5xl font-bold text-center items-center transform translate-y-20 m-4"
+			>
+				<span
+					class="experiment text-transparent bg-gradient-to-br to-white from-cyan-300 bg-clip-text box-decoration-clone z-10"
+					>Welcome to our experiment</span
+				> 🧑‍🔬
+			</h1>
+			<div class="invisible lg:visible background">
+				<img
+					class="halcyon"
+					src="/lilhalcyon.svg"
+					height="300"
+					width="300"
+					alt="Halcyon!"
+					style="transform: translate({-40 + x}px, {-40 +
+						y}px) rotate({rotation}deg); z-index: -10;"
+				/>
 			</div>
-		{/if}
-		<ProgressBar current={$currentTrial} total={$isPractice ? 8 : numberOfTrials} />
-	</div>
-{/if}
+
+			<Instructions signIn={signInWithGoogle} />
+		</div>
+	{:else}
+		<slot />
+		<div class="fixed bottom-0 left-0 w-full backdrop-blur-3xl text-lg text-white">
+			{#if $user || $isAdmin}
+				<div class="flex flex-col justify-center m-2 space-y-2">
+					{#if $isAdmin}
+						<Admin />
+					{/if}
+					<button class="hover:text-gray-400" on:click={handleSignOut}> Sign out </button>
+				</div>
+			{/if}
+			<ProgressBar current={$currentTrial} total={$isPractice ? 8 : numberOfTrials} />
+		</div>
+	{/if}
 {:else}
 	<div class="flex flex-col justify-center items-center">
 		<div class="w-3/4 space-y-12 fixed top-1/3 text-primary-50">
@@ -192,15 +204,15 @@
 			filter: hue-rotate(360deg);
 		}
 	}
-		.background {
-			position: absolute;
-			top: 110;
-			left: 110;
-			width: 100%;
-			height: 100%;
-			/* background-image: url('path/to/lilhalcyon.svg'); */
-			background-repeat: no-repeat;
-			background-size: cover;
-			z-index: -1;
-		}
+	.background {
+		position: absolute;
+		top: 110;
+		left: 110;
+		width: 100%;
+		height: 100%;
+		/* background-image: url('path/to/lilhalcyon.svg'); */
+		background-repeat: no-repeat;
+		background-size: cover;
+		z-index: -1;
+	}
 </style>
