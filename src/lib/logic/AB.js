@@ -13,16 +13,12 @@ export function createABTrials(practice = false) {
 
 	if (practice) {
 		const targetOffsets = shuffle(
-			Array.from({ length: 2 }, () => 3).concat(
-				Array.from({ length: 2 }, () => 8)
-			)
-		).concat(shuffle(
-			Array.from({ length: 2 }, () => 3).concat(
-				Array.from({ length: 2 }, () => 8)
-			)
-		));
+			Array.from({ length: 2 }, () => 3).concat(Array.from({ length: 2 }, () => 8))
+		).concat(
+			shuffle(Array.from({ length: 2 }, () => 3).concat(Array.from({ length: 2 }, () => 8)))
+		);
 
-		console.log("ABPractice: ", { targetOffsets });
+		console.log('ABPractice: ', { targetOffsets });
 
 		const T1Indices = shuffle(
 			Array.from({ length: 24 / 3 }, () => 4)
@@ -48,7 +44,14 @@ export function createABTrials(practice = false) {
 					ABTextColorsTrial.push('red');
 				} else {
 					ABTargetsTrial.push(false);
-					ABTextColorsTrial.push(DISTRACTORS[randomRange(6) - 1]);
+					let newColor;
+					do {
+						newColor = DISTRACTORS[randomRange(6) - 1];
+					} while (
+						ABTextColorsTrial.length > 0 &&
+						newColor === ABTextColorsTrial[ABTextColorsTrial.length - 1]
+					);
+					ABTextColorsTrial.push(newColor);
 				}
 
 				ABLettersTrial.push(shuffledLetters[ABLettersTrial.length]);
@@ -98,7 +101,14 @@ export function createABTrials(practice = false) {
 					ABTextColorsTrial.push('red');
 				} else {
 					ABTargetsTrial.push(false);
-					ABTextColorsTrial.push(DISTRACTORS[randomRange(6) - 1]);
+					let newColor;
+					do {
+						newColor = DISTRACTORS[randomRange(6) - 1];
+					} while (
+						ABTextColorsTrial.length > 0 &&
+						newColor === ABTextColorsTrial[ABTextColorsTrial.length - 1]
+					);
+					ABTextColorsTrial.push(newColor);
 				}
 
 				ABLettersTrial.push(shuffledLetters[ABLettersTrial.length]);
