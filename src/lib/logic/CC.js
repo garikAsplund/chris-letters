@@ -56,7 +56,14 @@ export function createCCTrials(practice = false) {
 				CCTextColorsTrial.push('red');
 			} else {
 				CCTargetsTrial.push(false);
-				CCTextColorsTrial.push(DISTRACTORS[randomRange(6) - 1]);
+				let newColor;
+				do {
+					newColor = DISTRACTORS[randomRange(6) - 1];
+				} while (
+					CCTextColorsTrial.length > 0 &&
+					newColor === CCTextColorsTrial[CCTextColorsTrial.length - 1]
+				);
+				CCTextColorsTrial.push(newColor);
 			}
 
 			if (CCTargetsTrial.length === distractorIndex && !practice) {
@@ -81,9 +88,8 @@ export function createCCTrials(practice = false) {
 		boxColors: CCBoxColors,
 		targetOffsets: trials.map(({ targetOffset }) => targetOffset),
 		distractorColor: trials.map(({ distractorColor }) => distractorColor),
-		distractorIndices,
+		distractorIndices
 	};
-	
 
 	console.log({ CCoutput });
 	return CCoutput;
