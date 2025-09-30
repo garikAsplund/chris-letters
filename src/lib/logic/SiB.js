@@ -3,8 +3,8 @@ import {
 	LETTERS,
 	NUMBER_OF_TRIALS,
 	randomRange,
-	shuffle,
-} from "$lib/logic/ConstantsAndHelpers";
+	shuffle
+} from '$lib/logic/ConstantsAndHelpers';
 
 export function createSiBTrials(practice = false, second = false) {
 	const SiBLetters = [];
@@ -12,7 +12,7 @@ export function createSiBTrials(practice = false, second = false) {
 	const SiBTextColors = [];
 	const SiBSurprise = [];
 
-	const surpriseTrials = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]; // CHANGE BACK 
+	const surpriseTrials = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]; // CHANGE BACK
 
 	// if (!practice) {
 	// 	while (surpriseTrials.length < 12) {
@@ -33,14 +33,16 @@ export function createSiBTrials(practice = false, second = false) {
 
 	console.log({ surpriseTrials });
 
-	const targetIndices = shuffle(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 6)
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 7))
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 8))
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 9))
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 10))
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 11))
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 12))
-		.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 13)));
+	const targetIndices = shuffle(
+		Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 6)
+			.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 7))
+			.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 8))
+			.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 9))
+			.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 10))
+			.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 11))
+			.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 12))
+			.concat(Array.from({ length: NUMBER_OF_TRIALS / 8 }, () => 13))
+	);
 
 	for (let i = 0; i < NUMBER_OF_TRIALS; i++) {
 		const SiBLettersTrial = [];
@@ -56,13 +58,20 @@ export function createSiBTrials(practice = false, second = false) {
 		const shuffledLetters = shuffle(LETTERS);
 
 		while (SiBLettersTrial.length < 16) {
-
 			if (SiBTargetsTrial.length === targetIndex) {
 				SiBTargetsTrial.push(true);
-				SiBTextColorsTrial.push("red");
+				SiBTextColorsTrial.push('red');
 			} else {
 				SiBTargetsTrial.push(false);
-				SiBTextColorsTrial.push(DISTRACTORS[randomRange(6) - 1]);
+				let newColor;
+				do {
+					newColor = DISTRACTORS[randomRange(6) - 1];
+				} while (
+					SiBTextColorsTrial.length > 0 &&
+					newColor === SiBTextColorsTrial[SiBTextColorsTrial.length - 1]
+				);
+
+				SiBTextColorsTrial.push(newColor);
 			}
 
 			if (
@@ -88,6 +97,6 @@ export function createSiBTrials(practice = false, second = false) {
 		targets: SiBTargets,
 		textColors: SiBTextColors,
 		surprise: SiBSurprise,
-		targetIndices,
+		targetIndices
 	};
 }

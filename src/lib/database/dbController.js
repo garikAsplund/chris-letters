@@ -249,6 +249,22 @@ export const dbController = {
 		}
 	},
 
+	async writeProgress(userId, sessionNumber, experimentType, currentTrial) {
+		try {
+			const updates = {};
+			updates[`progress/${userId}/${experimentType}`] = {
+				sessionNumber,
+				currentTrial,
+				lastUpdated: Date.now()
+			};
+
+			await update(dbRef, updates);
+			console.log('Progress updated');
+		} catch (err) {
+			console.error('Error writing progress', err);
+		}
+	},
+
 	async writeVAB(
 		userId,
 		everyTarget,

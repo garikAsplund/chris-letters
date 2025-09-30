@@ -339,6 +339,14 @@
 		}
 
 		requestAnimationFrame(streamFrame);
+
+		// Below is to write to db after each stream to keep track of progress
+		if ($isPractice === false) {
+			let experimentType = AB ? 'AB' : CC ? 'CC' : SiB ? 'SiB' : 'Unknown';
+			dbController.writeProgress($user.uid, $sessionNumber, experimentType, $currentTrial - 1);
+			// console.log({ $user }, { $sessionNumber }, { experimentType }, { $currentTrial });
+		}
+		// END
 	}
 
 	function onClick() {
