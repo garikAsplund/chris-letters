@@ -280,6 +280,7 @@
                 Max interval: ${maxInterval.toFixed(2)}ms
                 Average jitter: ${avgJitter.toFixed(2)}ms
                 Total duration: ${(currentTime - timings[0]).toFixed(2)}ms
+				Letters: ${intervals.length}
             `);
 
 				$displayFace = false;
@@ -298,7 +299,7 @@
 				// if ($isOn) {
 
 				const idx = Math.min($numberOfFlashes, trialType.letters[$currentTrial - 1].length - 1);
-				if (idx >= trialType.letters[$currentTrial - 1]) {
+				if (idx > trialType.letters[$currentTrial - 1]) {
 					console.log('Stream finished');
 					return; // stop stream
 				}

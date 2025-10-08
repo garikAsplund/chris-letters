@@ -12,13 +12,14 @@
 
 	initializeStores();
 
-	setTimeout(() => {
-		getScreenRefreshRate(function (FPS) {
-			$refreshRate = Math.round(FPS / 5) * 5 < 60 ? 60 : Math.round(FPS / 5) * 5;
-			console.log(`${$refreshRate} FPS`);
-			dbController.setScreenParams($user?.uid, $refreshRate, window.innerWidth, window.innerHeight);
-		}, false);
-	}, 1000);
+	// setTimeout(() => {
+	// 	getScreenRefreshRate(function (FPS) {
+	// 		$refreshRate = Math.round(FPS / 5) * 5 < 60 ? 60 : Math.round(FPS / 5) * 5;
+	// 		console.log(`${$refreshRate} FPS`);
+	// 		// Move this to StreamBox?
+	// 		// dbController.setScreenParams($user?.uid, $refreshRate, window.innerWidth, window.innerHeight);
+	// 	}, false);
+	// }, 1000);
 
 	export let data;
 	const { prolificParams } = data;

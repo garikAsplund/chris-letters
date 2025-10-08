@@ -19,11 +19,15 @@
 		sessionNumber,
 		age,
 		handedness,
-		gender
+		gender,
+
+		refreshRate
+
 	} from '$lib/stores/GameStore';
 	import { NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
 	import { dbController } from '$lib/database/dbController';
 	import { prolificStore } from '$lib/stores/prolificStore';
+	import { getScreenRefreshRate } from '$lib/logic/refreshRate';
 
 	prolificStore.subscribe((v) => console.log('Prolific params:', v));
 
@@ -47,6 +51,15 @@
 		setTimeout(() => clearInterval(interval), 3333);
 	});
 
+	setTimeout(() => {
+		getScreenRefreshRate(function (FPS) {
+			$refreshRate = Math.round(FPS / 5) * 5 < 60 ? 60 : Math.round(FPS / 5) * 5;
+			console.log(`${$refreshRate} FPS`);
+			// Move this to StreamBox?
+			// dbController.setScreenParams($user?.uid, $refreshRate, window.innerWidth, window.innerHeight);
+		}, false);
+	}, 1000);
+
 	// --- GOOGLE SIGN-IN (admins)
 	async function signInWithGoogle() {
 		try {
@@ -68,26 +81,41 @@
 		}
 	}
 
-	// --- ANONYMOUS SIGN‑IN (Prolific participants)
+	// --- PROCEED TO STUDY (anonymous sign‑in)
+	async function proceedToStudy() {
+		try {
+			// 1️⃣  sign in anonymously
+			const { user: anonUser } = await signInAnonymously(auth);
+			const uid = anonUser.uid;
+
+			// 2️⃣  write the same participant fields you do for Google users
+			await update(ref(db, `users/${uid}`), {
+				gender: $gender ?? null,
+				handedness: $handedness ?? null,
+				age: $age ?? null,
+				prolificIDs: $prolificStore ?? null,
+				created: Date.now()
+			});
+
+			console.log('Anonymous participant created:', uid);
+			dbController.setScreenParams(uid, $refreshRate, window.innerWidth, window.innerHeight);
+			$user = anonUser; // allow rest of app to proceed
+		} catch (err) {
+			console.error('Anonymous sign‑in failed:', err);
+		}
+	}
+
+	// --- AUTO SIGN‑OUT if anon and no Prolific params
 	onMount(async () => {
-		const { PROLIFIC_PID, STUDY_ID, SESSION_ID } = $prolificStore;
-		if (!PROLIFIC_PID) return;
-
-		const { user: anonUser } = await signInAnonymously(auth);
-		const uid = anonUser.uid;
-
-		await update(ref(db, `users/${uid}`), {
-			prolificPID: PROLIFIC_PID,
-			studyID: STUDY_ID,
-			sessionID: SESSION_ID,
-			gender: $gender,
-			handedness: $handedness,
-			age: $age,
-			updated: Date.now()
-		});
-
-		console.log('Participant stored under uid', uid);
-		$user = anonUser; // keep Svelte store in sync
+		await new Promise((resolve) =>
+			onAuthStateChanged(auth, (currentUser) => {
+				if (currentUser?.isAnonymous && !$prolificStore?.PROLIFIC_PID) {
+					console.log('Anon user found without Prolific URL → signing out');
+					signOut(auth).catch((e) => console.error(e));
+				}
+				resolve(true);
+			})
+		);
 	});
 
 	// --- AUTH STATE REACTIONS
@@ -100,8 +128,22 @@
 				$isAdmin = true;
 			}
 
-			if (!$isAdmin && $prolificStore?.PROLIFIC_PID) {
+			const pid: string | undefined = ($prolificStore as any)?.PROLIFIC_PID;
+			const hasPID: boolean = typeof pid === 'string' && pid.trim().length > 0;
+
+			if (!$isAdmin && hasPID && currentUser.uid) {
 				dbController.updateParticipantData(currentUser.uid, $prolificStore);
+				dbController.setScreenParams($user?.uid, $refreshRate, window.innerWidth, window.innerHeight);
+			} else {
+				console.log(
+					'Skipping updateParticipantData —',
+					'isAdmin:',
+					$isAdmin,
+					'uid:',
+					currentUser.uid,
+					'hasPID:',
+					hasPID
+				);
 			}
 		}
 	});
@@ -120,7 +162,7 @@
 </script>
 
 {#if !isMobile}
-	{#if !$user && !$prolificStore?.PROLIFIC_PID}
+	{#if !$user}
 		<div class="h-screen w-screen">
 			<h1 class="md:text-6xl text-5xl font-bold text-center translate-y-20 m-4">
 				<span
@@ -139,7 +181,7 @@
 					style="transform: translate({-40 + x}px, {-40 + y}px) rotate({rotation}deg); z-index:-10;"
 				/>
 			</div>
-			<Instructions signIn={signInWithGoogle} />
+			<Instructions signIn={$prolificStore ? proceedToStudy : signInWithGoogle} />
 		</div>
 	{:else}
 		<slot />

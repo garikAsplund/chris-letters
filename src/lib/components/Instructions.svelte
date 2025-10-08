@@ -30,7 +30,7 @@
 		<div class="w-3/5 p-4 text-lg mb-36 card text-token">
 			<Stepper
 				class="m-5 "
-				buttonCompleteLabel={$prolificStore.PROLIFIC_PID == null ? 'Sign in with Google' : 'Sign in'}
+				buttonCompleteLabel={$prolificStore.PROLIFIC_PID == null ? 'Sign in with Google' : 'Proceed to study'}
 				buttonComplete="variant-ghost-warning btn-lg"
 				on:complete={onCompleteHandler}
 			>
