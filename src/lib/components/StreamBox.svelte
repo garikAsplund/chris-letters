@@ -221,10 +221,10 @@
 	trialOrder = trialOrders[5];
 
 	dbController.getSessionNumber($user.uid).then((number) => {
-		$sessionNumber = number;
-		surpriseCount = (number - 1) * 12;
+		$sessionNumber = number ?? 1;
+		surpriseCount = ($sessionNumber - 1) * 12;
 
-		// console.log({ $sessionNumber, surpriseCount });
+		console.log({ $sessionNumber, surpriseCount });
 	});
 
 	let AB: boolean = false;
@@ -256,13 +256,15 @@
 		const timings = [];
 		let lastFlashTime = performance.now();
 
-		const baseInterval = $isPractice && $isPracticeCount <= 4 ? 100 : 50;
+		// Revert to 100 and 50?
+		const baseInterval = $isPractice && $isPracticeCount <= 4 ? 200 : 100;
 
 		function streamFrame(currentTime) {
 			const deltaTime = currentTime - lastFrameTime;
 			timeAccumulator += deltaTime;
-
-			if ($numberOfFlashes === 32) {
+			
+			// was 32
+			if ($numberOfFlashes === 16) {
 				// Log timing statistics at the end of stream
 				const intervals = timings.map((t, i) => (i > 0 ? t - timings[i - 1] : 0)).slice(1);
 				const avgInterval = intervals.reduce((a, b) => a + b, 0) / intervals.length;
@@ -293,43 +295,48 @@
 			}
 
 			while (timeAccumulator >= baseInterval) {
-				if ($isOn) {
-					$currentLetter = trialType.letters[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
-					$textColor = trialType.textColors[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
-					$isTarget = trialType.targets[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
+				// if ($isOn) {
 
-					if (CC) {
-						$boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
-					}
+				const idx = Math.min($numberOfFlashes, trialType.letters[$currentTrial - 1].length - 1);
+				if (idx >= trialType.letters[$currentTrial - 1]) {
+					console.log('Stream finished');
+					return; // stop stream
+				}
+				$currentLetter = trialType.letters[$currentTrial - 1][idx];
+				$textColor = trialType.textColors[$currentTrial - 1][idx];
+				$isTarget = trialType.targets[$currentTrial - 1][idx];
 
-					if (SiB) {
-						$displayFace = trialType.surprise[$currentTrial - 1][($numberOfFlashes + 2) / 2 - 1];
-						if ($displayFace) {
-							const imageName = `${Math.floor(surpriseCount) % 2 == 0 ? 'face' : 'object'}_${
-								Math.floor(surpriseCount++ / 2) + 1
-							}`;
-							$everySurprisePath.push(imageName);
-							surprisePath = imageName;
-						}
-					}
+				if (CC) {
+					$boxColor = trialType.boxColors[$currentTrial - 1][idx];
+				}
 
-					if ($isTarget) {
-						$targetLetter += $currentLetter;
-					}
-				} else {
-					$currentLetter = ' ';
-					if (CC) {
-						$boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes + 1) / 2 - 1];
-					}
-					if (SiB) {
-						$displayFace = false;
+				if (SiB) {
+					$displayFace = trialType.surprise[$currentTrial - 1][idx];
+					if ($displayFace) {
+						const imageName = `${surpriseCount % 2 === 0 ? 'face' : 'object'}_${
+							Math.floor(surpriseCount++ / 2) + 1
+						}`;
+						$everySurprisePath.push(imageName);
+						surprisePath = imageName;
 					}
 				}
+
+				if ($isTarget) $targetLetter += $currentLetter;
+				// }
+				// else {
+				// 	$currentLetter = ' ';
+				// 	if (CC) {
+				// 		$boxColor = trialType.boxColors[$currentTrial - 1][($numberOfFlashes + 1) / 2 - 1];
+				// 	}
+				// 	if (SiB) {
+				// 		$displayFace = false;
+				// 	}
+				// }
 
 				// Record timing for this flash
 				timings.push(performance.now());
 
-				$isOn = !$isOn;
+				// $isOn = !$isOn;
 				$numberOfFlashes += 1;
 				timeAccumulator -= baseInterval;
 			}

@@ -57,4 +57,13 @@ function userStore() {
 	};
 }
 
-export const user = userStore();
+const user = writable<User | null>(null);
+
+if (globalThis.window) {
+  const authInstance = getAuth(app);
+  onAuthStateChanged(authInstance, (firebaseUser) => {
+    user.set(firebaseUser);
+  });
+}
+
+export { user };

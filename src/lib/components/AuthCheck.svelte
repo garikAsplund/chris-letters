@@ -1,7 +1,14 @@
-<script>
+<script lang="ts">
 	import { db, auth, user } from '$lib/database/firebase';
-	import { getDatabase, ref, set, child, get } from 'firebase/database';
-	import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'firebase/auth';
+	import { ref, set, child, get, update, getDatabase } from 'firebase/database';
+	import {
+		GoogleAuthProvider,
+		signInWithPopup,
+		signInAnonymously,
+		onAuthStateChanged,
+		signOut
+	} from 'firebase/auth';
+	import { onMount } from 'svelte';
 	import ProgressBar from './ProgressBar.svelte';
 	import Admin from './Admin.svelte';
 	import Instructions from './Instructions.svelte';
@@ -15,142 +22,112 @@
 		gender
 	} from '$lib/stores/GameStore';
 	import { NUMBER_OF_TRIALS } from '$lib/logic/ConstantsAndHelpers';
-	import { onMount } from 'svelte';
 	import { dbController } from '$lib/database/dbController';
 	import { prolificStore } from '$lib/stores/prolificStore';
 
+	prolificStore.subscribe((v) => console.log('Prolific params:', v));
+
 	export let isVAB = false;
-	let numberOfTrials;
-
-	isVAB ? (numberOfTrials = 28) : (numberOfTrials = NUMBER_OF_TRIALS);
-
-	const dbRef = ref(getDatabase());
+	let numberOfTrials = isVAB ? 28 : NUMBER_OF_TRIALS;
 
 	const googleProvider = new GoogleAuthProvider();
+	const dbRef = ref(getDatabase());
 
-	let x = 0;
-	let y = 0;
+	// --- Animate background (unchanged)
+	let x = 0,
+		y = 0,
+		rotation = 0;
+	function updateHalcyon() {
+		x = Math.random() * 2 - 1;
+		y = Math.random() * 2 - 1;
+		rotation = Math.random() * 1 - 11;
+	}
+	onMount(() => {
+		const interval = setInterval(updateHalcyon, 50);
+		setTimeout(() => clearInterval(interval), 3333);
+	});
 
-	let rotation = 0;
-
-	console.log('PROLIFIC STORE CONTENTS:', $prolificStore);
-
+	// --- GOOGLE SIGN-IN (admins)
 	async function signInWithGoogle() {
 		try {
 			const result = await signInWithPopup(auth, googleProvider);
-			const user = result.user;
+			const userObj = result.user;
 
-			const userAlreadyExists = await get(child(dbRef, `users/${user.uid}`))
-				.then((snapshot) => {
-					if (!snapshot.exists()) {
-						console.log('No data available, creating user');
-						if (user && user.displayName) {
-							writeUserData(user.uid, user.displayName);
-						}
-					}
-				})
-				.catch((error) => {
-					console.error(error);
+			const snapshot = await get(child(dbRef, `users/${userObj.uid}`));
+			if (!snapshot.exists()) {
+				await set(ref(db, `users/${userObj.uid}`), {
+					displayName: userObj.displayName,
+					admin: false,
+					sessionNumber: 1
 				});
+			}
 
-			get(child(dbRef, `users/${user.uid}/admin`))
-				.then((snapshot) => {
-					if (snapshot.exists()) {
-						$isAdmin = snapshot.val();
-					} else {
-						console.log('No admin status available');
-					}
-				})
-				.catch((error) => {
-					console.error(error);
-				});
-
-			get(child(dbRef, `users/${user.uid}/sessionNumber`))
-				.then((snapshot) => {
-					if (snapshot.exists()) {
-						$sessionNumber = snapshot.val();
-						console.log({ $sessionNumber });
-					} else {
-						console.log('No sessionNumber available');
-					}
-				})
-				.catch((error) => {
-					console.error(error);
-				});
-
-			dbController.createParticipantData(user.uid, $gender, $handedness, $age, $prolificStore);
-		} catch (error) {
-			console.error('Error signing in with Google:', error.message);
+			dbController.createParticipantData(userObj.uid, $gender, $handedness, $age, $prolificStore);
+		} catch (err) {
+			console.error('Google sign-in error:', err);
 		}
 	}
 
+	// --- ANONYMOUS SIGN‑IN (Prolific participants)
+	onMount(async () => {
+		const { PROLIFIC_PID, STUDY_ID, SESSION_ID } = $prolificStore;
+		if (!PROLIFIC_PID) return;
+
+		const { user: anonUser } = await signInAnonymously(auth);
+		const uid = anonUser.uid;
+
+		await update(ref(db, `users/${uid}`), {
+			prolificPID: PROLIFIC_PID,
+			studyID: STUDY_ID,
+			sessionID: SESSION_ID,
+			gender: $gender,
+			handedness: $handedness,
+			age: $age,
+			updated: Date.now()
+		});
+
+		console.log('Participant stored under uid', uid);
+		$user = anonUser; // keep Svelte store in sync
+	});
+
+	// --- AUTH STATE REACTIONS
 	onAuthStateChanged(auth, (currentUser) => {
 		$isAdmin = false;
 
 		if (currentUser) {
-			get(child(dbRef, `users/${currentUser.uid}/admin`))
-				.then((snapshot) => {
-					if (snapshot.exists()) {
-						$isAdmin = snapshot.val();
-					}
-				})
-				.catch((error) => {
-					console.error(error);
-				});
+			const prov = currentUser.providerData[0]?.providerId;
+			if (prov === 'google.com' && !currentUser.isAnonymous) {
+				$isAdmin = true;
+			}
 
-			dbController.updateParticipantData(currentUser.uid, $prolificStore);
+			if (!$isAdmin && $prolificStore?.PROLIFIC_PID) {
+				dbController.updateParticipantData(currentUser.uid, $prolificStore);
+			}
 		}
 	});
 
 	async function handleSignOut() {
 		try {
 			await signOut(auth);
-		} catch (error) {
-			console.error('Error signing out:', error.message);
+		} catch (err) {
+			console.error('Sign‑out error:', err);
 		}
 	}
 
-	function writeUserData(userId, displayName) {
-		set(ref(db, `users/${userId}`), {
-			displayName: displayName,
-			admin: false,
-			sessionNumber: 1
-		});
-	}
-
-	function updateHalcyon() {
-		x = Math.random() * 2 - 1;
-		y = Math.random() * 2 - 1;
-		rotation = Math.random() * 1 - 11;
-	}
-
-	onMount(() => {
-		const interval = setInterval(updateHalcyon, 50);
-
-		setTimeout(() => {
-			clearInterval(interval);
-		}, 3333);
-	});
-
-	let isMobile = window.innerWidth < 800 ? true : false;
-
-	addEventListener('resize', (event) => {});
-
-	onresize = () => {
-		window.innerWidth < 800 ? (isMobile = true) : (isMobile = false);
-	};
+	// --- Responsive check (unchanged)
+	let isMobile = window.innerWidth < 800;
+	onresize = () => (isMobile = window.innerWidth < 800);
 </script>
 
 {#if !isMobile}
-	{#if !$user}
+	{#if !$user && !$prolificStore?.PROLIFIC_PID}
 		<div class="h-screen w-screen">
-			<h1
-				class=" md:text-6xl text-5xl font-bold text-center items-center transform translate-y-20 m-4"
-			>
+			<h1 class="md:text-6xl text-5xl font-bold text-center translate-y-20 m-4">
 				<span
-					class="experiment text-transparent bg-gradient-to-br to-white from-cyan-300 bg-clip-text box-decoration-clone z-10"
-					>Welcome to our experiment</span
-				> 🧑‍🔬
+					class="experiment text-transparent bg-gradient-to-br to-white from-cyan-300 bg-clip-text"
+				>
+					Welcome to our experiment
+				</span> 🧑‍🔬
 			</h1>
 			<div class="invisible lg:visible background">
 				<img
@@ -158,12 +135,10 @@
 					src="/lilhalcyon.svg"
 					height="300"
 					width="300"
-					alt="Halcyon!"
-					style="transform: translate({-40 + x}px, {-40 +
-						y}px) rotate({rotation}deg); z-index: -10;"
+					alt="Halcyon"
+					style="transform: translate({-40 + x}px, {-40 + y}px) rotate({rotation}deg); z-index:-10;"
 				/>
 			</div>
-
 			<Instructions signIn={signInWithGoogle} />
 		</div>
 	{:else}
@@ -174,7 +149,7 @@
 					{#if $isAdmin}
 						<Admin />
 					{/if}
-					<button class="hover:text-gray-400" on:click={handleSignOut}> Sign out </button>
+					<button class="hover:text-gray-400" on:click={handleSignOut}>Sign out</button>
 				</div>
 			{/if}
 			<ProgressBar current={$currentTrial} total={$isPractice ? 8 : numberOfTrials} />
@@ -195,7 +170,6 @@
 	.experiment {
 		animation: hueShift 80s infinite linear;
 	}
-
 	@keyframes hueShift {
 		0% {
 			filter: hue-rotate(0deg);
@@ -210,7 +184,6 @@
 		left: 110;
 		width: 100%;
 		height: 100%;
-		/* background-image: url('path/to/lilhalcyon.svg'); */
 		background-repeat: no-repeat;
 		background-size: cover;
 		z-index: -1;

@@ -1,4 +1,4 @@
-<script>
+<script lang=ts>
 	import { emojisplosions } from 'emojisplosion';
 	import { blur, fly } from 'svelte/transition';
 	import {
@@ -47,11 +47,10 @@
 		setTimeout(cancel, 750);
 	}
 
-	const submitForm = (userId, problemDescription) => {
+	const submitForm = (userId: string | undefined, problemDescription: string) => {
 		dbController.writeParticipantProblems(userId, problemDescription);
 		$isComplete = true;
 
-		// Redirect to Prolific
 		redirectToProlific();
 	};
 
