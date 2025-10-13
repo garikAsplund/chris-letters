@@ -46,7 +46,7 @@ export const targetLetter = writable("");
 export const boxColor = writable("white");
 export const displayFace = writable(false);
 export const currentTrial = writable(0);
-export const isPractice = writable(false); // CHANGE BACK
+export const isPractice = writable(true); // CHANGE BACK TO TRUE
 export const isPracticeCount = writable(0);
 export const targetColor = writable("");
 

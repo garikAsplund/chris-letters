@@ -183,6 +183,29 @@
 	// 	$SiBPractice
 	// });
 
+	import AttentionCheck from '$lib/components/AttentionCheck.svelte';
+
+	let showCheck = false;
+	let isPaused = false;
+	let isCheckCompleted = false;
+
+	function halfway() {
+		showCheck = true;
+	}
+
+	function handleCheckComplete(res) {
+		console.log('attention result', res);
+
+		setTimeout(() => {
+			showCheck = false;
+			isPaused = false; // ▶️ unpause
+			isCheckCompleted = true;
+			begin();
+		}, 1500);
+		// begin();
+		// continue experiment…
+	}
+
 	const targets = ['red', 'green'];
 	dbController
 		.getTargetColor()
@@ -208,17 +231,18 @@
 
 	// REVERT
 
-	// dbController
-	// 	.getTrialOrder()
-	// 	.then((index) => {
-	// 		trialOrder = trialOrders[index];
-	// 		console.log({trialOrder});
-	// 	})
-	// 	.catch((error) => {
-	// 		console.error('An error occurred:', error);
-	// 	});
+	dbController
+		.getTrialOrder()
+		.then((index) => {
+			trialOrder = trialOrders[index];
+			console.log({trialOrder});
+		})
+		.catch((error) => {
+			console.error('An error occurred:', error);
+		});
 
-	trialOrder = trialOrders[5];
+	// Hardcoded to test SiB images
+	// trialOrder = trialOrders[5];
 
 	dbController.getSessionNumber($user.uid).then((number) => {
 		$sessionNumber = number ?? 1;
@@ -262,7 +286,7 @@
 		function streamFrame(currentTime) {
 			const deltaTime = currentTime - lastFrameTime;
 			timeAccumulator += deltaTime;
-			
+
 			// was 32
 			if ($numberOfFlashes === 16) {
 				// Log timing statistics at the end of stream
@@ -412,6 +436,12 @@
 				$inProgress = false;
 				clicked = false;
 			}
+			return;
+		}
+
+		if ($currentTrial === NUMBER_OF_TRIALS / 2 && !isCheckCompleted) {
+			isPaused = true;
+			halfway();
 			return;
 		}
 
@@ -703,7 +733,7 @@
 					{/if}
 				</div>
 			{/if}
-			{#if $inProgress && clicked}
+			{#if $inProgress && clicked && !showCheck}
 				<!-- <p class="text-center align-top mt-5 text-white">{trialOrder[trialIndex]}</p>
  -->
 				<div
@@ -737,6 +767,10 @@
 						{$currentLetter}
 					</p>
 				</div>
+			{/if}
+
+			{#if showCheck}
+				<AttentionCheck onComplete={handleCheckComplete} />
 			{/if}
 
 			{#if AB && !$guessed}
